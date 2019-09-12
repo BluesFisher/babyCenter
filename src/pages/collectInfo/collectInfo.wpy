@@ -12,11 +12,16 @@
                     <view class="collect-operate artical-item-operate">
                         <view class="collect-operate-author">
                             <image src="{{item.author.icon}}" alt="" />
-                            <view class="collect-operate-author-name">{{item.author.name}}</view>
+                            <view class="collect-operate-author-name">
+                                <text>{{item.author.name}}</text>
+                                <text>{{item.content.date}}</text>
+                            </view>
                         </view>
 
                         <view class="artical-operate-icon artical-operate-like">
-                            <image src="/assets/images/common/like.png" alt="" />
+                            <image
+                                src="{{item.content.isLike ? '/assets/images/common/like-active.png' : '/assets/images/common/like.png'}}"
+                                alt="" />
                             <view>{{item.operate.like}}</view>
                         </view>
 
@@ -30,8 +35,11 @@
                             <view>{{item.operate.transmit}}</view>
                         </view>
 
-                        <view class="artical-operate-icon artical-operate-collect">
-                            <image src="/assets/images/common/collect-active.png" alt="" />
+                        <view
+                            class="artical-operate-icon {{item.content.isCollect ? 'artical-operate-collect' : 'artical-operate-uncollect'}}">
+                            <image
+                                src="{{item.content.isCollect ? '/assets/images/common/collect-active.png' : '/assets/images/common/collect.png'}}"
+                                alt="" />
                         </view>
                     </view>
                 </view>
@@ -53,8 +61,7 @@ const ARTICAL_ITEMS = [
     {
         author: {
             icon: '../../assets/images/common/user-icon.png',
-            name: '萌娃妈妈',
-            isFocus: false
+            name: '萌娃妈妈'
         },
         picShow: [
             '../../assets/images/baby1.png',
@@ -63,7 +70,9 @@ const ARTICAL_ITEMS = [
         ],
         content: {
             title: '我的宝宝今天会走路啦！',
-            date: '2019-08-16'
+            date: '2019-08-16',
+            isCollect: false,
+            isLike: false
         },
         operate: {
             like: 125,
@@ -75,8 +84,7 @@ const ARTICAL_ITEMS = [
     {
         author: {
             icon: '../../assets/images/common/user-icon.png',
-            name: '萌娃爸爸',
-            isFocus: true
+            name: '萌娃爸爸'
         },
         picShow: [
             '../../assets/images/baby1.png',
@@ -85,7 +93,9 @@ const ARTICAL_ITEMS = [
         ],
         content: {
             title: '我的宝宝今天会蹦极啦，你说厉不厉害！',
-            date: '2019-01-16'
+            date: '2019-01-16',
+            isCollect: true,
+            isLike: true
         },
         operate: {
             like: 1125,

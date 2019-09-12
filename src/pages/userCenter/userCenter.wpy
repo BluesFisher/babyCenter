@@ -59,7 +59,8 @@ const BASE_OPERATE = [
     {
         label: '收藏',
         icon: '',
-        value: 12
+        value: 12,
+        url: '/pages/collectInfo/collectInfo'
     },
     {
         label: '我的积分',
