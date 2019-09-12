@@ -1,0 +1,141 @@
+<template>
+    <view class='container'>
+        <baseContainer title="我的关注">
+            <view slot="content-detail" class="attention-info base-content">
+                <view class="attention-header-nav">
+                    <baseTab :navbarList.sync="btnGroup" userClass="btn-group"
+                        :initIndex.sync="initTabIndex" :needBottomLine.sync="needTabBottomLine"
+                        @tabChange.user="tabChange" />
+                </view>
+                <baseNotice wx:if="{{attetionList.length <= 0}}" showNotice="亲爱的，您未关注任何人，快去关注吧" />
+                <view wx:else class="attention-list">
+                    <view class="attention-list-container"
+                        style="margin-left: {{listContainerLeft}}">
+                        <view class="my-attention-list" wx:for="{{attentionShow}}"
+                            wx:for-item="listItem" wx:for-index="listIndex" wx:key="{{listIndex}}">
+                            <view class="attention-info-item" wx:for="{{listItem}}"
+                                wx:for-item="item" wx:for-index="index" wx:key="{{index}}"
+                                data-item="{{item}}" data-index="{{index}}">
+                                <image class="attention-info-icon" src="{{item.icon}}" alt="" />
+                                <view class="attention-info-detail">
+                                    <view class="attention-info-name">{{item.name}}</view>
+                                    <view wx:if="{{item.title}}" class="attention-info-title">
+                                        {{item.title}}
+                                    </view>
+                                    <view class="attention-info-fans">粉丝数：{{item.fansNum}}</view>
+                                </view>
+                                <view class="author-focus {{item.isFocus ? 'author-focused' : ''}}"
+                                    data-list-index="{{listIndex}}" data-index="{{index}}"
+                                    @tap="focusTap">
+                                    {{item.isFocus ? '已关注' : '关注'}}
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </baseContainer>
+    </view>
+</template>
+
+<style lang="less" src="./myAttention.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+// import CommonFunc from 'utils/common-func';
+import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
+import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
+import BaseTab from 'components/Base/BaseTab/BaseTab';
+
+const defaultUserIcon = '../../assets/images/common/default-user.png';
+const HEAD_NAV_GROUP = [
+    {
+        name: '关注',
+        dataKey: 'attention',
+        formatFunc: () => {}
+    },
+    {
+        name: '粉丝',
+        dataKey: 'fans',
+        formatFunc: () => {}
+    }
+];
+const CONTAINER_OFFSET = -100; // %
+
+export default class MyAttention extends wepy.page {
+    config = {
+        navigationBarTitleText: 'Home',
+        disableScroll: true
+    };
+    components = {
+        baseContainer: BaseContainer,
+        baseNotice: BaseNotice,
+        baseTab: BaseTab
+    };
+    data = {
+        listContainerLeft: 0,
+        initTabIndex: 0,
+        attetionList: [
+            {
+                icon: defaultUserIcon,
+                name: 'tencent',
+                fansNum: '1.2万',
+                title: '腾讯计算机',
+                isFocus: true
+            },
+            {
+                icon: defaultUserIcon,
+                name: '宝宝树',
+                fansNum: '2.1万',
+                title: '',
+                isFocus: true
+            }
+        ],
+        fansList: [
+            {
+                icon: defaultUserIcon,
+                name: '阿里',
+                fansNum: '1.1万',
+                title: '阿里巴巴',
+                isFocus: false
+            }
+        ],
+        btnGroup: HEAD_NAV_GROUP,
+        needTabBottomLine: true
+    };
+
+    onLoad(options) {
+        const { type } = options;
+
+        this.initTabIndex = type === 'fans' ? 1 : 0;
+        this.listContainerLeft = `${this.initTabIndex * CONTAINER_OFFSET}%`;
+        this.btnGroup[0].name = `关注 (${this.attetionList.length})`;
+        this.btnGroup[1].name = `粉丝 (${this.fansList.length})`;
+    }
+
+    async onShow() {}
+
+    async onHide() {}
+
+    onUnload() {}
+
+    computed = {
+        attentionShow() {
+            return [this.attetionList, this.fansList];
+        }
+    };
+
+    methods = {
+        tabChange(changeItem) {
+            const { index } = changeItem;
+            this.listContainerLeft = `${index * CONTAINER_OFFSET}%`;
+        },
+        focusTap(e) {
+            const { listIndex, index } = e.currentTarget.dataset;
+            const aim = listIndex === 0 ? this.attetionList : this.fansList;
+            aim[index].isFocus = !aim[index].isFocus;
+        }
+    };
+}
+</script>

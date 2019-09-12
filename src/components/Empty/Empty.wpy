@@ -1,0 +1,65 @@
+<style lang="less" src="./Empty.less"></style>
+
+<template>
+    <view wx:if="{{loaded}}" class="common__empty" style="{{style}}">
+        <image src="{{img.src}}" style="width:{{img.width}}rpx; height:{{img.height}}rpx;" class="common__empty__icon" />
+        <view class="common__empty__desc">{{desc}}</view>
+    </view>
+</template>
+<script>
+/*
+    e.g: <empty emptyType="net" desc="网络异常"></empty>
+*/
+
+import wepy from 'wepy';
+
+const emptyObj = {
+    report: {
+        src: '../assets/images/noreport.png',
+        width: 317,
+        height: 281
+    },
+    record: {
+        src: '../assets/images/icon-queryCharge-none.png',
+        width: 240,
+        height: 240
+    },
+    net: {
+        src: '../assets/images/net-error.png',
+        width: 317,
+        height: 299
+    },
+    build: {
+        src: '../assets/images/build.png',
+        width: 283,
+        height: 330
+    }
+};
+export default class Epmty extends wepy.component {
+    data = {
+        img: emptyObj.net,
+        loaded: false
+    };
+    props = {
+        emptyType: String,
+        desc: String,
+        style: {
+            type: String,
+            default: ''
+        },
+        pre: {
+            type: String,
+            default: ''
+        }
+    };
+    methods = {};
+    onLoad() {
+        if (emptyObj[this.emptyType]) {
+            this.img = emptyObj[this.emptyType] || { src: '' };
+            this.img.src = this.pre + this.img.src;
+            this.loaded = true;
+            this.$apply();
+        }
+    }
+}
+</script>

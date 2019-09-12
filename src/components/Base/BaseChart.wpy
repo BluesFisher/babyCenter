@@ -1,0 +1,137 @@
+<template>
+
+    <view class="line-chart-container">
+        <canvas class="ec-canvas" canvas-id="ec-canvas" bindinit="init"
+            bindtouchstart="{{ ec.disableTouch ? '' : 'touchStart' }}"
+            bindtouchmove="{{ ec.disableTouch ? '' : 'touchMove' }}"
+            bindtouchend="{{ ec.disableTouch ? '' : 'touchEnd' }}">
+        </canvas>
+        <cover-view class="chart-tips" style="top: {{top}}; left: {{left}}; display: {{display}}">
+            <cover-view class="chart-tips-content">
+                <cover-view>{{date}}</cover-view>
+                <cover-view class="line-item" wx:for="{{tipsItem}}" wx:for-item="item"
+                    wx:for-index="index" wx:key="{{index}}">
+                    <cover-view class="mark-color" style="background: {{item.markColor}}">
+                    </cover-view>
+                    <cover-view>{{item.show}}</cover-view>
+                </cover-view>
+            </cover-view>
+            <cover-view class="chart-tips-shadow"></cover-view>
+        </cover-view>
+    </view>
+</template>
+
+<style lang="less" scoped>
+.line-chart-container,
+.ec-canvas {
+    height: 100%;
+    width: 100%;
+}
+
+.line-chart-container {
+    position: relative;
+
+    .chart-tips-shadow {
+        height: 93%;
+    }
+
+    .line-item {
+        display: flex;
+        align-items: center;
+
+        .mark-color {
+            display: inline-block;
+            height: 8rpx;
+            width: 8rpx;
+            border-radius: 50%;
+            margin-right: 10rpx;
+            margin-bottom: 0;
+        }
+    }
+}
+</style>
+
+<script>
+import wepy from 'wepy';
+import EchartMixin from 'mixins/mix-echart';
+import CommonMixin from 'mixins/mix-common';
+
+export default class BaseChart extends wepy.component {
+    mixins = [EchartMixin, CommonMixin];
+    props = {
+        legendData: {
+            type: Object,
+            default: {}
+        }
+    };
+
+    data = {
+        canvasId: 'ec-canvas',
+        tipsItem: [],
+        date: '',
+        top: '',
+        left: '',
+        display: 'none',
+        isIos: true
+    };
+
+    onLoad() {
+        this.mixEchartOnLoad();
+        const { globalData } = this.mixGetApp().$root.$parent;
+        const { system } = globalData.sysInfo;
+        this.isIos = system.toLowerCase().indexOf('ios') !== -1;
+    }
+
+    setOption(chartParams, legendData = this.legendData) {
+        if (!this.chartDemo) return;
+
+        const { xAxisData, optionIn } = chartParams;
+        let option = {
+            grid: this.mixCommonOption().grid,
+            tooltip: {
+                ...this.mixToolTip,
+                formatter: params => {
+                    this.setFormatterShow(params);
+                    !this.isIos && this.mixSetToolTipHideTimer();
+                    return '';
+                }
+            },
+            legend: {
+                ...this.mixCommonLegend,
+                data: legendData.data || [],
+                selected: legendData.selected || {}
+            },
+            yAxis: this.mixCommonYAxis(),
+            xAxis: this.mixCommonXAxis(xAxisData),
+            series: []
+        };
+
+        this.chartDemo.setOption({ ...option, ...optionIn });
+    }
+
+    setFormatterShow(params) {
+        if (!params || params.length <= 0) {
+            this.display = 'none';
+            this.$apply();
+            return;
+        }
+        const tipsItem = [];
+        const date = params[0].name.replace('\n', '.');
+        this.date = `时间：${date}`;
+        params.map(item => {
+            tipsItem.push({
+                show: `${item.seriesName}：${item.value}`,
+                markColor: item.color
+            });
+        });
+        const { globalData } = this.mixGetApp().$root.$parent;
+
+        this.left =
+            100 + (params[0].dataIndex * globalData.windowWidth) / 7 + 'rpx';
+        this.top = '60rpx';
+        this.tipsItem = tipsItem;
+        this.display = 'block';
+        this.$apply();
+    }
+}
+</script>

@@ -1,0 +1,271 @@
+<template>
+    <view class='container' @tap="containerTap">
+        <baseContainer title="宝宝信息">
+            <view slot="content-detail" class="baby-info">
+                <view class="baby-info-item" style="margin-left: {{babyItemleft[index]}}"
+                    wx:for="{{babyInfo}}" wx:for-item="item" wx:for-index="index" wx:key="{{index}}"
+                    data-item="{{item}}" data-index="{{index}}" catchtap="handleInfoItem"
+                    bindtouchstart="itemTouchStart" bindtouchend="itemTouchEnd">
+                    <image class="baby-info-icon" src="{{item.icon}}" alt="" />
+                    <view class="baby-info-detail">
+                        <view class="baby-info-name">
+                            <text>{{item.name}}</text>
+                            <image
+                                src="{{item.gender === '女' ? '/assets/images/common/female.png' : '/assets/images/common/male.png'}}"
+                                alt="" />
+                        </view>
+                        <view class="baby-info-birthday">出生日期：{{item.birthday}}</view>
+                    </view>
+                    <view class="down-arrow menu-arrow"></view>
+                    <view class="baby-info-delete" data-index="{{index}}" catchtap="delBabyItem">删除
+                    </view>
+                </view>
+                <baseNotice wx:if="{{babyInfo.length <= 0}}" showNotice="亲爱的，您还没有添加宝宝信息" />
+                <view class="add-baby" @tap="addBabyInfo">
+                    <image src="/assets/images/common/add.png" alt="" />
+                    <text>点击添加</text>
+                </view>
+            </view>
+        </baseContainer>
+        <view wx:if="{{isPopEditShow}}" id="pop-edit" class="pop-edit" @tap="popEditTap">
+            <view class="pop-edit-content">
+                <view class="pop-edit-title">宝宝信息</view>
+                <view class='pop-edit-icon' @tap="chooseIcon">
+                    <image src='{{editIcon}}' alt='' />
+                    <text>点击设置头像</text>
+                </view>
+                <view class="user-menu">
+                    <view class="base-menu-item" wx:for="{{babyEdit}}" wx:for-item="item"
+                        wx:for-index="index" wx:key="{{index}}">
+                        <view class="base-menu-label">{{item.label}}</view>
+                        <picker wx:if="{{item.type === 'pickerDate'}}" mode="date"
+                            data-index="{{index}}" data-item="{{item}}" value="{{item.value}}"
+                            end="{{nowDate}}" @change="bindCommonChange">
+                            <text class="base-menu-value">{{ item.value }}</text>
+                        </picker>
+
+                        <picker wx:elif="{{item.type === 'pickerGender'}}" data-index="{{index}}"
+                            data-item="{{item}}" value="{{item.value}}" range="{{genderPicker}}"
+                            @change="bindCommonChange">
+                            <text class="base-menu-value">{{ item.value }}</text>
+                        </picker>
+
+                        <input wx:elif="{{item.type==='input'}}" value="{{item.value}}"
+                            placeholder="" data-index="{{index}}" data-item="{{item}}"
+                            bindinput="bindCommonChange" />
+
+                        <view wx:else class="base-menu-value">{{item.value}}</view>
+                        <view class="down-arrow menu-arrow"></view>
+                    </view>
+                </view>
+                <view></view>
+                <view id="pop-operate" class="pop-edit-confirm" @tap="popEditOperate(e, true)">确定
+                </view>
+                <view id="pop-operate" class="pop-edit-cancel" @tap="popEditOperate">取消</view>
+            </view>
+        </view>
+    </view>
+</template>
+
+<style lang="less" src="./babyInfo.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+// import dayjs from 'dayjs';
+import CommonFunc from 'utils/common-func';
+import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
+import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
+
+const defaultUserIcon = '../../assets/images/common/default-user.png';
+const BABY_EDIT = [
+    {
+        label: '宝宝姓名',
+        value: '',
+        code: 'name',
+        type: 'input'
+    },
+    {
+        label: '宝宝生日',
+        value: '',
+        code: 'birthday',
+        type: 'pickerDate'
+    },
+    {
+        label: '宝宝性别',
+        value: '',
+        code: 'gender',
+        type: 'pickerGender'
+    }
+];
+
+export default class BabyInfo extends wepy.page {
+    config = {
+        navigationBarTitleText: 'Home',
+        disableScroll: true
+    };
+    components = {
+        baseContainer: BaseContainer,
+        baseNotice: BaseNotice
+    };
+    data = {
+        isPopEditShow: false,
+        genderPicker: ['男', '女'],
+        touchDetail: [],
+        babyItemleft: [0],
+        babyInfo: [
+            {
+                icon: defaultUserIcon,
+                name: '哈尼',
+                birthday: '2018-10-03',
+                gender: '女',
+                relationShip: []
+            }
+        ],
+        babyEdit: CommonFunc.deepCopy(BABY_EDIT),
+        editIndex: null,
+        editIcon: null
+    };
+
+    onLoad() {}
+
+    async onShow() {}
+
+    async onHide() {}
+
+    onUnload() {}
+
+    methods = {
+        containerTap(e) {
+            this.babyItemleft = this.babyItemleft.map(item => 0);
+        },
+        bindCommonChange(e) {
+            const { index, item } = e.currentTarget.dataset;
+            const { value } = e.detail;
+
+            if (item.type === 'pickerGender') {
+                this.babyEdit[index].value = this.genderPicker[value];
+            } else {
+                this.babyEdit[index].value = value;
+            }
+
+            item.type !== 'input' && this.$apply();
+        },
+        async chooseIcon() {
+            const { res } = await CommonFunc.wepyFunc('chooseImage', {
+                count: 1,
+                sizeType: ['original', 'compressed'],
+                sourceType: ['album', 'camera']
+            });
+            const tempFilePaths = res.tempFilePaths;
+            this.editIcon = tempFilePaths[0];
+            this.$apply();
+        },
+        popEditTap(e) {
+            if (e.target.id === 'pop-operate') return;
+
+            this.isPopEditShow = e.target.id !== 'pop-edit';
+        },
+        handleInfoItem(e) {
+            const { index, item } = e.currentTarget.dataset;
+            this.editIndex = index;
+            this.editIcon = item.icon || '';
+            this.babyEdit = CommonFunc.deepCopy(BABY_EDIT);
+
+            this.babyEdit.map(
+                babyItem => (babyItem.value = item[babyItem.code] || '')
+            );
+
+            this.isPopEditShow = true;
+        },
+        popEditOperate(e, isConfirm = false) {
+            if (isConfirm) {
+                const editValue = {
+                    icon: this.editIcon || defaultUserIcon,
+                    name: '',
+                    birthday: '',
+                    gender: '',
+                    relationShip: []
+                };
+
+                this.babyEdit.map(
+                    babyItem => (editValue[babyItem.code] = babyItem.value)
+                );
+                if (
+                    !editValue.name ||
+                    !editValue.birthday ||
+                    !editValue.gender
+                ) {
+                    CommonFunc.showFailedTip('信息不完整');
+                    return;
+                }
+
+                if (this.editIndex !== null) {
+                    this.babyInfo[this.editIndex] = editValue;
+                    this.babyItemleft[this.editIndex] = 0;
+                } else {
+                    this.babyInfo.push(editValue);
+                    this.babyItemleft.push(0);
+                }
+            }
+
+            this.editIndex = null;
+            this.editIcon = null;
+            this.isPopEditShow = false;
+        },
+        addBabyInfo() {
+            this.editIndex = null;
+            this.editIcon = defaultUserIcon;
+            this.isPopEditShow = true;
+            this.babyEdit = CommonFunc.deepCopy(BABY_EDIT);
+        },
+        async delBabyItem(e) {
+            const { index } = e.currentTarget.dataset;
+            if (!this.babyInfo[index]) return;
+
+            const options = {
+                title: '提示',
+                cancelText: '否',
+                confirmText: '是',
+                content: '是否确认删除宝宝信息'
+            };
+
+            const { res } = await CommonFunc.wepyFunc('showModal', options);
+
+            if (res.confirm) {
+                this.babyInfo.splice(index, 1);
+                this.babyItemleft.splice(index, 1);
+                this.$apply();
+            }
+        },
+        itemTouchStart(e) {
+            const { index } = e.currentTarget.dataset;
+            this.touchDetail[index] = {
+                x: e.touches[0].pageX,
+                y: e.touches[0].pageY
+            };
+        },
+        itemTouchEnd(e) {
+            const { index } = e.currentTarget.dataset;
+
+            if (!this.touchDetail[index]) return;
+
+            const { pageX, pageY } = e.changedTouches[0];
+            const { x, y } = this.touchDetail[index];
+            if (Math.abs(pageY - y) > 180) return;
+            if (x - pageX > 20) {
+                this.setBabyItemleft(index);
+            } else if (x - pageX < -20) {
+                this.setBabyItemleft(index, 0);
+            }
+        }
+    };
+
+    setBabyItemleft(index, left = '-210rpx') {
+        const itemleftTemp = JSON.parse(JSON.stringify(this.babyItemleft));
+        itemleftTemp[index] = left;
+
+        this.babyItemleft = itemleftTemp;
+    }
+}
+</script>

@@ -1,0 +1,76 @@
+<template>
+    <view class="content-container">
+        <view class="content-header"
+            style="background: {{background}}; height: {{contentHeight}}rpx">
+            <view class="content-title" style="color: {{titleColor}}; margin-top: {{titleTop}}rpx">
+                {{ title }}</view>
+        </view>
+
+        <view class="menu-center" style="top: {{menuTop}}rpx">
+            <image src='/assets/images/common/back.png' alt="" @tap="goBack" />
+            <image style="padding-left: 20rpx" src='/assets/images/common/home.png' alt=""
+                @tap="goHome" />
+        </view>
+
+        <view class="content-detail" style="margin-top: {{contentHeight}}rpx">
+            <slot name="content-detail"></slot>
+        </view>
+    </view>
+</template>
+
+<style lang="less" src="./BaseContainer.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+
+export default class BaseContainer extends wepy.component {
+    props = {
+        title: {
+            type: String,
+            default: ''
+        },
+        background: {
+            type: String,
+            default: '#2f8cf7'
+        },
+        titleColor: {
+            type: String,
+            default: '#fff'
+        }
+    };
+    data = {
+        contentHeight: 140,
+        titleTop: 30,
+        menuTop: 50
+    };
+
+    onLoad() {
+        const { statusBarHeight } = wepy.getSystemInfoSync();
+        const rpxHeight = statusBarHeight / 2;
+
+        this.contentHeight += rpxHeight;
+        statusBarHeight > 40 && (this.menuTop += 30 + rpxHeight);
+        this.titleTop += rpxHeight;
+        this.$apply();
+    }
+
+    methods = {
+        goBack() {
+            wepy.navigateBack({
+                delta: 1,
+                fail: () => {
+                    wepy.navigateTo({
+                        url: '/pages/homePage/homePage'
+                    });
+                }
+            });
+        },
+        goHome() {
+            wepy.navigateTo({
+                url: '/pages/homePage/homePage'
+            });
+        }
+    };
+}
+</script>

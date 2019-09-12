@@ -1,0 +1,157 @@
+<template>
+    <view class='container'>
+        <baseContainer title="个人信息" background="#0a40b3">
+            <view slot="content-detail" class="user-info">
+                <view class="user-info-header">
+                    <image class='user-info-icon' src='{{avatarUrl}}' alt=''
+                        @tap="chooseUserIcon" />
+
+                    <view class="user-level">Lv1</view>
+
+                    <view class="user-info-operate">
+                        <view class="base-operate-item" wx:for="{{baseOperate}}" wx:for-item="item"
+                            wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
+                            @tap="bindOperate">
+                            <view class="base-operate-label">{{item.label}}</view>
+                            <view class="base-operate-value">{{item.value}}</view>
+                        </view>
+                    </view>
+                </view>
+
+                <view class="user-menu">
+                    <view class="base-menu-item" wx:for="{{userMenu}}" wx:for-item="item"
+                        wx:for-index="index" wx:key="{{index}}">
+                        <view class="base-menu-label">{{item.label}}</view>
+                        <picker wx:if="{{item.type === 'pickerDate'}}" mode="date"
+                            data-index="{{index}}" data-item="{{item}}" value="{{item.value}}"
+                            end="{{nowDate}}" @change="bindUserMenuChange">
+                            <text class="base-menu-value">{{ item.value }}</text>
+                        </picker>
+
+                        <input wx:elif="{{item.type==='input'}}" value="{{item.value}}"
+                            placeholder="" data-index="{{index}}" data-item="{{item}}"
+                            bindinput="bindUserMenuChange" />
+
+                        <picker wx:elif="{{item.type==='pcikerRegion'}}" mode="region"
+                            @change="bindRegionChange" value="{{region}}" data-index="{{index}}"
+                            data-item="{{item}}" custom-item="{{customItem}}">
+                            <text class="base-menu-value">{{item.value}}</text>
+                        </picker>
+
+                        <view wx:else class="base-menu-value">{{item.value}}</view>
+                        <view class="down-arrow menu-arrow"></view>
+                    </view>
+                </view>
+            </view>
+        </baseContainer>
+    </view>
+</template>
+
+<style lang="less" src="./userInfo.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import dayjs from 'dayjs';
+import CommonFunc from 'utils/common-func';
+import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
+
+const avatarUrl =
+    'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLicnOHTicNpPGPd25fJKCJwKTHTFk7fvrCeoalxd5z0FicVicO9jicooeqsmL6IWK3I5MrmZXJRqCcHUA/132';
+const BASE_OPERATE = [
+    {
+        label: '获赞',
+        icon: '',
+        value: 1
+    },
+    {
+        label: '粉丝',
+        icon: '',
+        value: 1,
+        url: '/pages/myAttention/myAttention?type=fans'
+    },
+    {
+        label: '文章',
+        icon: '',
+        value: 12
+    }
+];
+
+const USER_MENU = [
+    {
+        label: '昵称',
+        value: 'BLUSE',
+        type: 'input'
+    },
+    {
+        label: '所在地',
+        value: '',
+        type: 'pcikerRegion'
+    },
+    {
+        label: '我的生日',
+        value: '',
+        type: 'pickerDate'
+    },
+    {
+        label: '结婚日期',
+        value: '',
+        type: 'pickerDate'
+    }
+];
+
+export default class UserInfo extends wepy.page {
+    config = {
+        navigationBarTitleText: 'Home',
+        disableScroll: true
+    };
+    components = {
+        baseContainer: BaseContainer
+    };
+    data = {
+        avatarUrl,
+        baseOperate: BASE_OPERATE,
+        userMenu: USER_MENU,
+        nowDate: dayjs()
+            .add(-1, 'day')
+            .format('YYYY-MM-DD'),
+
+        region: ['广东省', '深圳市', '南山区'],
+        customItem: '全部'
+    };
+
+    onLoad() {}
+
+    async onShow() {}
+
+    async onHide() {}
+
+    onUnload() {}
+
+    methods = {
+        bindUserMenuChange(e) {
+            const { index, item } = e.currentTarget.dataset;
+            this.userMenu[index].value = e.detail.value;
+            item.type !== 'input' && this.$apply();
+        },
+        bindRegionChange(e) {
+            const { index } = e.currentTarget.dataset;
+            this.userMenu[index].value = e.detail.value.join(' ');
+        },
+        async chooseUserIcon() {
+            const { res } = await CommonFunc.wepyFunc('chooseImage', {
+                count: 1,
+                sizeType: ['original', 'compressed'],
+                sourceType: ['album', 'camera']
+            });
+            const tempFilePaths = res.tempFilePaths;
+            this.avatarUrl = tempFilePaths[0];
+            this.$apply();
+        },
+        bindOperate(e) {
+            const { item } = e.currentTarget.dataset;
+            item.url && wepy.navigateTo({ url: item.url });
+        }
+    };
+}
+</script>

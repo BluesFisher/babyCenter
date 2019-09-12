@@ -1,0 +1,43 @@
+
+<template>
+    <toast reveal="{{true}}"></toast>
+</template>
+
+<script>
+import wepy from 'wepy';
+import mta from 'assets/js/mta_analysis';
+import Vtoast from 'components/Vtoast/Vtoast';
+import CommonMixin from 'mixins/mix-common';
+
+export default class Index extends wepy.page {
+    config = {
+        navigationBarTitleText: ''
+    };
+    components = {
+        toast: Vtoast
+    };
+    mixins = [CommonMixin];
+
+    async onLoad(options) {
+        // this.mixShowLoading();
+
+        mta.Page.init();
+        mta.Event.stat('index_page_init', { id: 1 });
+
+        // 缓存入口options
+        let { globalData } = this.mixGetApp();
+        const sysInfo = wepy.getSystemInfoSync();
+
+        globalData['indexOptions'] = options;
+        globalData['windowWidth'] = sysInfo.windowWidth;
+        globalData['sysInfo'] = sysInfo;
+
+        this.toPage();
+    }
+
+    async toPage() {
+        // this.$redirect(`homePage/homePage`);
+        this.$redirect(`collectInfo/collectInfo`);
+    }
+}
+</script>

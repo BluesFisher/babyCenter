@@ -1,0 +1,96 @@
+<template>
+    <cover-view class="base-text-loading {{type !== 'content' ? 'center':''}}"
+        hidden="{{!isLoading}}">
+
+        <cover-view wx:if="{{type === 'circle'}}"
+            class="loading-circle {{stepIndex ? 'animation-load': ''}}">
+            <cover-view class="loading-circle-inner"></cover-view>
+        </cover-view>
+
+        <cover-view wx:if="{{type === 'content'}}" class="loading-item" wx:for="{{loadItem}}"
+            wx:for-item="item" wx:for-index="index" wx:key="{{index}}">
+            <cover-view class="item-text {{stepIndex === index % 2 ? 'animation-load': ''}}">
+            </cover-view>
+        </cover-view>
+
+        <cover-view wx:if="{{type === 'bar'}}" class="loading-bar">
+            <cover-view class="loading-bar-xaxis"></cover-view>
+            <cover-view class="loading-bar-yaxis"></cover-view>
+            <cover-view class="loading-bar-item bar1 {{barIndex === 0 ? 'animation-load': ''}}">
+            </cover-view>
+            <cover-view class="loading-bar-item bar2 {{barIndex === 1 ? 'animation-load': ''}}">
+            </cover-view>
+            <cover-view class="loading-bar-item bar3 {{barIndex === 2 ? 'animation-load': ''}}">
+            </cover-view>
+        </cover-view>
+    </cover-view>
+</template>
+
+<style lang="less" src="./BaseLoading.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+const SET_INTERVAL = true;
+
+export default class BaseLoading extends wepy.component {
+    props = {
+        loadItemNum: {
+            type: Number,
+            default: 10
+        },
+        isLoading: {
+            type: Boolean,
+            default: true
+        },
+        type: {
+            type: String,
+            default: 'circle' // ['content', 'circle', 'bar']
+        }
+    };
+
+    data = {
+        loadItem: new Array(10),
+        interval: null,
+        stepIndex: 0,
+        barIndex: 0
+    };
+
+    watch = {
+        loadItemNum(newVal) {
+            this.loadItem = new Array(newVal);
+            this.$apply();
+        },
+        isLoading(newVal) {
+            if (newVal) {
+                this.setLoading();
+            } else {
+                this.interval && clearInterval(this.interval);
+            }
+        }
+        // type(newVal) {
+        //     if (newVal) {
+        //         this.interval && clearInterval(this.interval);
+        //     }
+        // }
+    };
+
+    onLoad() {
+        this.loadItem = new Array(this.loadItemNum);
+        this.setLoading();
+        this.$apply();
+    }
+
+    setLoading() {
+        if (!SET_INTERVAL) return;
+        this.interval && clearInterval(this.interval);
+        this.interval = setInterval(() => {
+            this.stepIndex = (this.stepIndex + 1) % 2;
+            this.barIndex = (this.barIndex + 1) % 3;
+            this.$apply();
+        }, 600);
+    }
+
+    methods = {};
+}
+</script>

@@ -1,0 +1,230 @@
+<template>
+    <view class='container'>
+        <view class="user-center" style="top: {{userCenterTop}}rpx">
+            <image src='/assets/images/common/user-center.png' alt="" @tap="toUserCenter" />
+        </view>
+        <image class='home-back' src='/assets/images/common/home-bak.png' alt="" />
+        <view class="home-header">
+            <view class="home-header-tips">
+                <view class="home-header-time">
+                    {{headerDate}}
+                </view>
+                <view class="home-header-date">
+                    <view>{{headerMonth}}</view>
+                    <view>成长记</view>
+                </view>
+            </view>
+            <view class="home-header-top">我的萌娃我做主</view>
+        </view>
+        <view class="home-header-inform">
+            <image src='/assets/images/common/info.png' alt="" />
+            <view class="inform-title">
+                <text style="margin-left: {{informMargin}}px" id="inforTitleDetail"
+                    class="inform-title-detail">快来邀请萌娃的家人一起记录宝宝的成长吧！</text>
+            </view>
+            <view class="inform-btn">去邀请</view>
+        </view>
+        <view class="home-header-mask"></view>
+        <view class="home-content">
+            <view class="home-content-container">
+                <view class="home-content-nav">
+                    <baseTab :navbarList.sync="btnGroup" userClass="btn-group"
+                        :needBottomLine.sync="needTabBottomLine" @tabChange.user="tabChange" />
+                </view>
+                <view class="home-content-artical">
+                    <view class="home-artical-item" wx:for="{{articalItems}}" wx:for-item="item"
+                        wx:for-index="index" wx:key="{{index}}">
+                        <view class="home-artical-item-header">
+                            <view class="artical-author-name">
+                                <image class="artical-author-icon" src="{{item.author.icon}}"
+                                    alt="" />
+                                {{item.author.name}}
+                            </view>
+                            <view
+                                class="author-focus {{item.author.isFocus ? 'author-focused' : ''}}">
+                                {{item.author.isFocus ? '已关注' : '关注'}}</view>
+                        </view>
+                        <view class="home-artical-item-pic">
+                            <view class="artical-pic-left">
+                                <image src="{{item.picShow[0]}}" alt="" />
+                            </view>
+                            <view class="artical-pic-right">
+                                <image src="{{item.picShow[1]}}" alt="" />
+                                <image src="{{item.picShow[2]}}" alt="" />
+                            </view>
+                        </view>
+                        <view class="home-artical-item-content">
+                            <view class="artical-content-title">
+                                {{item.content.title}}
+                            </view>
+                            <view class="artical-content-detail">...全文</view>
+                        </view>
+                        <view class="artical-item-operate">
+                            <view class="artical-operate-icon artical-operate-like">
+                                <image src="/assets/images/common/like.png" alt="" />
+                                <view>{{item.operate.like}}</view>
+                            </view>
+
+                            <view class="artical-operate-icon artical-operate-comment">
+                                <image src="/assets/images/common/comment.png" alt="" />
+                                <view>{{item.operate.comment}}</view>
+                            </view>
+
+                            <view class="artical-operate-icon artical-operate-transmit">
+                                <image src="/assets/images/common/transmit.png" alt="" />
+                                <view>{{item.operate.transmit}}</view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</template>
+
+<style lang="less" src="./homePage.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import BaseTab from 'components/Base/BaseTab/BaseTab';
+
+const INFOR_MOVE_STEP = 2; // px
+const INFOR_INIT_POS = 230; // px
+const HEAD_NAV_GROUP = [
+    {
+        name: '萌娃相册',
+        dataKey: 'photo',
+        formatFunc: () => {}
+    },
+    {
+        name: '成长记录',
+        dataKey: 'log',
+        formatFunc: () => {}
+    },
+    {
+        name: '大事记',
+        dataKey: 'events',
+        formatFunc: () => {}
+    },
+    {
+        name: '亲友团',
+        dataKey: 'relative',
+        formatFunc: () => {}
+    }
+];
+
+const ARTICAL_ITEMS = [
+    {
+        author: {
+            icon: '../../assets/images/common/user-icon.png',
+            name: '萌娃妈妈',
+            isFocus: false
+        },
+        picShow: [
+            '../../assets/images/baby1.png',
+            '../../assets/images/baby2.png',
+            '../../assets/images/baby3.png'
+        ],
+        content: {
+            title: '我的宝宝今天会走路啦！'
+        },
+        operate: {
+            like: 125,
+            comment: 10,
+            transmit: 12
+        }
+    },
+
+    {
+        author: {
+            icon: '../../assets/images/common/user-icon.png',
+            name: '萌娃爸爸',
+            isFocus: true
+        },
+        picShow: [
+            '../../assets/images/baby1.png',
+            '../../assets/images/baby2.png',
+            '../../assets/images/baby3.png'
+        ],
+        content: {
+            title: '我的宝宝今天会蹦极啦，你说厉不厉害！'
+        },
+        operate: {
+            like: 1125,
+            comment: 310,
+            transmit: 412
+        }
+    }
+];
+
+export default class HomePage extends wepy.page {
+    config = {
+        navigationBarTitleText: 'Home',
+        disableScroll: true
+    };
+    components = {
+        baseTab: BaseTab
+    };
+    data = {
+        userCenterTop: 50,
+
+        informMargin: 0,
+        informDetailScrollTimer: null,
+
+        btnGroup: HEAD_NAV_GROUP,
+        needTabBottomLine: true,
+
+        articalItems: ARTICAL_ITEMS,
+
+        headerMonth: `0${new Date().getMonth() + 1}`.slice(-2),
+        headerDate: `0${new Date().getDate()}`.slice(-2)
+    };
+
+    onLoad() {
+        const { statusBarHeight } = wepy.getSystemInfoSync();
+        const rpxHeight = statusBarHeight / 2;
+
+        statusBarHeight > 40 && (this.userCenterTop += 30 + rpxHeight);
+        this.$apply();
+    }
+
+    async onShow() {
+        this.setInforScroll();
+    }
+
+    async onHide() {
+        this.informDetailScrollTimer &&
+            clearInterval(this.informDetailScrollTimer);
+    }
+
+    onUnload() {}
+
+    methods = {
+        tabChange(changeItem) {
+            console.log(changeItem);
+        },
+        toUserCenter() {
+            wepy.navigateTo({
+                url: '/pages/userCenter/userCenter'
+            });
+        }
+    };
+
+    setInforScroll() {
+        const query = wx.createSelectorQuery();
+        query
+            .select('#inforTitleDetail')
+            .boundingClientRect(rect => {
+                this.informDetailScrollTimer = setInterval(() => {
+                    this.informMargin -= INFOR_MOVE_STEP;
+                    if (this.informMargin < -rect.width) {
+                        this.informMargin = INFOR_INIT_POS;
+                    }
+                    this.$apply();
+                }, 160);
+            })
+            .exec();
+    }
+}
+</script>

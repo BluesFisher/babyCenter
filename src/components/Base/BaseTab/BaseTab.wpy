@@ -1,0 +1,67 @@
+<template>
+    <view class="tab-bar {{userClass}}">
+        <view wx:for="{{navbarList}}" wx:for-item="item" wx:for-index="index" wx:key="{{index}}"
+            class="tab-item {{currentTabIndex === index ? 'tab-active' : ''}}" @tap="bindNavbarTap"
+            data-index="{{index}}" data-item="{{item}}">
+            {{ item.name }}
+            <view wx:if="{{needBottomLine && currentTabIndex === index}}" class="tab-border" />
+        </view>
+    </view>
+</template>
+
+<style lang="less" src="./BaseTab.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+
+export default class BaseTab extends wepy.component {
+    props = {
+        navbarList: {
+            type: Array,
+            default: []
+        },
+        userClass: {
+            type: String,
+            default: ''
+        },
+        needBottomLine: {
+            type: Boolean,
+            default: true
+        },
+        initIndex: {
+            type: Number,
+            default: 0
+        }
+    };
+
+    data = {
+        currentTabIndex: 0
+    };
+
+    onLoad() {
+        this.currentTabIndex = this.initIndex;
+        this.$apply();
+    }
+
+    watch = {
+        initIndex(newVal) {
+            this.currentTabIndex = this.initIndex;
+            this.$apply();
+        }
+    };
+
+    methods = {
+        bindNavbarTap(e) {
+            const data = e.currentTarget.dataset;
+            if (data.item.disabled) return;
+            this.currentTabIndex = data.index || 0;
+
+            this.$emit('tabChange', {
+                index: data.index,
+                item: this.navbarList[data.index]
+            });
+        }
+    };
+}
+</script>

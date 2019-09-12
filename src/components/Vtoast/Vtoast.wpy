@@ -1,0 +1,93 @@
+
+
+<style lang="less" src="./Vtoast.less"></style>
+
+<template>
+    <view class="vtoast-container {{reveal ? ' vtoast-show' : ''}} {{type}}">
+        <view class="vtoast">
+            <view class="vtoast-mask"></view>
+            <view class="vtoast-loading" animation="{{loadingAnimationData}}">
+                <image class="vtoast-loading-gif" src="../../assets/images/common/load.gif" />
+            </view>
+            <view class="vtoast-toast" animation="{{toastAnimationData}}">
+                <image class="vtoast-toast-img"
+                    src="../../assets/images/common/failure_toast.png" />
+                <view class="vtoast-toast-title">{{title}}</view>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class Vtoast extends wepy.component {
+    props = {
+        reveal: {
+            type: Boolean,
+            default: false
+        }
+    };
+
+    data = {
+        title: '载入中...',
+        titleClassName: '',
+        loadingAnimationData: '',
+        toastAnimationData: '',
+        type: 'loading',
+        toastIcon: '../../assets/images/common/failure_toast.png'
+    };
+
+    methods = {};
+
+    onLoad() {
+        this.hasPromise = typeof Promise !== 'undefined';
+    }
+
+    setAnimation(opacity = 1) {
+        let animation = wepy.createAnimation();
+        animation.opacity(opacity).step();
+        return animation.export();
+    }
+
+    dealTimeOut(callback, time) {
+        let timer = setTimeout(() => {
+            callback && callback();
+            clearTimeout(timer);
+        }, time);
+    }
+
+    showToast(title = '操作失败', time = 2000) {
+        this.reveal = true;
+        this.type = 'toast';
+        this.title = title;
+
+        this.dealTimeOut(() => {
+            this.toastAnimationData = this.setAnimation();
+            this.$apply();
+        }, 30);
+        this.dealTimeOut(() => this.hideToast(), time);
+    }
+
+    hideToast() {
+        this.toastAnimationData = this.setAnimation(0);
+        this.reveal = false;
+        this.$apply();
+    }
+
+    showLoading() {
+        this.reveal = true;
+        this.type = 'loading';
+
+        this.dealTimeOut(() => {
+            this.loadingAnimationData = this.setAnimation();
+            this.$apply();
+        }, 30);
+    }
+
+    hideLoading() {
+        this.loadingAnimationData = this.setAnimation(0);
+        this.reveal = false;
+    }
+}
+</script>

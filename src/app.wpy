@@ -1,0 +1,83 @@
+<style lang="less" src="./assets/css/app.less"></style>
+
+<script>
+import wepy from 'wepy';
+import 'wepy-async-function';
+// import { G_CONFIG } from 'utils/config';
+import mta from 'assets/js/mta_analysis';
+import { setStore } from 'wepy-redux';
+import configStore from './store';
+import CommonFunc from 'utils/common-func';
+
+const Raven = require('assets/js/raven-weapp-wepy');
+const store = configStore();
+setStore(store);
+
+export default class extends wepy.app {
+    config = {
+        window: {
+            backgroundTextStyle: 'light',
+            navigationBarTitleText: '',
+            navigationBarBackgroundColor: 'transparent',
+            navigationBarTextStyle: 'white',
+            backgroundColorTop: 'transparent',
+            navigationStyle: 'custom'
+        },
+        networkTimeout: {
+            request: 15000
+        },
+        functionalPages: {
+            independent: true
+        },
+        navigateToMiniProgramAppIdList: [
+            'wx8abaf00ee8c3202e' // 吐槽小程序
+        ],
+        pages: [
+            'pages/index',
+            'pages/webView',
+            'pages/homePage/homePage',
+            'pages/userCenter/userCenter', // 我的
+            'pages/userInfo/userInfo', // 个人信息
+            'pages/babyInfo/babyInfo', // 宝宝信息
+            'pages/myAttention/myAttention', // 我的关注
+            'pages/collectInfo/collectInfo' // 我的收藏
+        ]
+    };
+
+    globalData = {
+        scene: '',
+        indexOptions: {}, // 缓存首页入参
+        adtag: ''
+    };
+
+    constructor() {
+        super();
+        this.use('requestfix');
+    }
+
+    async onLaunch(options) {
+        // let _raven = G_CONFIG.raven;
+        // mta.App.init({ ...G_CONFIG.mta, lauchOpts: options });
+        // Raven.config(_raven.url, _raven.config).install();
+    }
+
+    async onShow(options) {
+        // 扫描小程序二维码进入
+        if (options.scene === 1047) {
+            mta.Event.stat('qrcode_scan', { roletypeid: '', phone: '' });
+        }
+    }
+
+    onHide() {
+        CommonFunc.deleteRequestTask();
+    }
+
+    onError(msg = '') {
+        Raven.captureException(new Error(msg) || new Error('error happen'));
+    }
+
+    reportPv() {
+        Raven.capturePv();
+    }
+}
+</script>

@@ -1,0 +1,64 @@
+.attention-info {
+
+    .attention-header-nav {
+        width: 300rpx;
+        height: 84rpx;
+    }
+
+    .attention-list {
+        width: 100%;
+        height: calc(100% - 84rpx);
+        overflow: hidden;
+
+        .attention-list-container {
+            width: 200%;
+            height: 100%;
+            display: flex;
+            transition: all .4s ease;
+        }
+
+        .my-attention-list {
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: 100%;
+            width: 50%;
+            padding-bottom: 100rpx;
+
+            .attention-info-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                padding: 30rpx 0;
+                border-bottom: 1rpx solid #eee;
+
+                .attention-info-icon {
+                    height: 100rpx;
+                    width: 100rpx;
+                    border-radius: 50%;
+                    margin-right: 30rpx;
+                }
+
+                .attention-info-detail {
+                    flex: 1;
+
+                    .attention-info-name {
+                        font-size: 30rpx;
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    .attention-info-title {
+                        font-size: 24rpx;
+                        color: #aaa;
+                    }
+
+                    .attention-info-fans {
+                        font-size: 23rpx;
+                        color: #aaa;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,56 @@
+.chart-tips {
+    position: absolute;
+    font-size: 18rpx;
+    color: #3f4659;
+    padding: 4rpx;
+    z-index: 110;
+
+    .chart-tips-content {
+        padding: 10rpx 30rpx 10rpx 20rpx;
+        background: #FFF;
+        z-index: 20;
+        border-radius: 12rpx;
+    }
+
+    .chart-tips-shadow {
+        z-index: 0;
+        position: absolute;
+        top: 2rpx;
+        width: 110%;
+        height: 90%;
+        background: rgba(182, 180, 180, 0.2);
+        left: -12rpx;
+        border-radius: 22rpx;
+    }
+
+    .tips-name {
+        width: auto;
+        display: inline-block;
+        height: 26rpx;
+        margin-bottom: 6rpx;
+
+        cover-view {
+            margin-bottom: 0;
+        }
+    }
+
+    .title-mark {
+        position: absolute;
+        width: 100%;
+        height: 18rpx;
+        background: #e4ecff;
+        border-radius: 20rpx;
+        top: 7rpx;
+        z-index: 1;
+    }
+
+    cover-view {
+        margin-bottom: 10rpx;
+        position: relative;
+        z-index: 10;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}

@@ -1,0 +1,48 @@
+<template>
+    <view class="base-table-content">
+        <view class="table-header">
+            <view wx:for="{{tableHeader}}" wx:for-item="item" wx:for-index="index"
+                wx:key="{{item.name}}" class="header-item" wx:if="{{item.isShow}}">
+                <view class="ceil-content">{{item.name}}</view>
+            </view>
+        </view>
+        <view class="table-body">
+            <!-- <view wx:if="{{tableData.length <= 0}}" class="none-data">暂无数据</view> -->
+            <view class="table-items {{index % 2 !== 0 ? '' : 'odd-line'}}" wx:for="{{tableData}}"
+                wx:for-item="item" wx:for-index="index" wx:key="{{index}}">
+                <view wx:for="{{tableHeader}}" wx:for-item="ceil" wx:for-index="ceilIndex"
+                    wx:key="{{ceil.key}}" class="body-item" wx:if="{{ceil.isShow}}">
+                    <view wx:if="{{ceil.tag}}" class="body-ceil-tag"
+                        style="background: {{item.tagColor}}"></view>
+                    <view class="ceil-content">{{ item[ceil.key] }}</view>
+                </view>
+            </view>
+        </view>
+    </view>
+</template>
+
+<style lang="less" src="./BaseTable.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+
+export default class BaseTable extends wepy.component {
+    props = {
+        tableHeader: {
+            type: Array,
+            default: []
+        },
+        tableData: {
+            type: Array,
+            default: []
+        }
+    };
+
+    data = {};
+
+    onLoad() {}
+
+    methods = {};
+}
+</script>

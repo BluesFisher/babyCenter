@@ -1,0 +1,96 @@
+@import '../../assets/css/common.less';
+
+.user-center {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .user-detail-header {
+        display: flex;
+        align-self: center;
+        position: relative;
+        width: 100%;
+        padding: 40rpx;
+        background: #2f8cf7;
+        color: #fff;
+        align-items: center;
+        height: 200rpx;
+
+        .user-icon {
+            height: 100rpx;
+            width: 100rpx;
+            border-radius: 50%;
+            margin-right: 30rpx;
+        }
+
+        .user-detail-info {
+
+            .user-level {
+                font-size: 24rpx;
+                background: #f7b12f;
+                border: 1rpx solid #fff;
+                border-radius: 28rpx;
+                display: inline-block;
+                padding: 4rpx 14rpx;
+                line-height: 24rpx;
+            }
+        }
+
+        .user-config {
+            position: absolute;
+            height: 30rpx;
+            width: 30rpx;
+            right: 40rpx;
+            transform: rotate(180deg);
+        }
+    }
+
+    .user-base-operate {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30rpx 0rpx;
+    }
+
+    .user-base-operate {
+        .content-gap;
+
+        .base-operate-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-right: 1rpx solid #eee;
+            flex: 1;
+
+            &:last-child {
+                border-right: none;
+            }
+
+            .base-operate-label {
+                font-size: 28rpx;
+                color: #bbb;
+            }
+
+            .base-operate-value {
+                font-size: 34rpx;
+            }
+        }
+    }
+
+    .user-menu {
+        button {
+            height: 40rpx;
+            flex: 1;
+            background: transparent;
+            padding: 0 40rpx;
+            color: #aaa;
+            font-size: 28rpx;
+            line-height: 40rpx;
+            text-align: left;
+
+            &::after {
+                border: none;
+            }
+        }
+    }
+}

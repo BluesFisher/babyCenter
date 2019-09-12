@@ -1,0 +1,92 @@
+.base-text-loading {
+    padding: 24rpx;
+    background: #FFF;
+    transition: all .6s ease;
+    z-index: 200;
+
+    .animation-load {
+        background: rgba(0, 0, 0, 0.06) !important;
+        transition: all .6s ease-in;
+    }
+
+    .loading-item {
+        width: 100%;
+        height: 66rpx;
+        background: #F5F5F5;
+        border-radius: 4rpx;
+        border-radius: 4rpx;
+        margin-bottom: 19rpx;
+
+        .item-text {
+            width: 100%;
+            height: 100%;
+            transition: all .6s ease-in;
+        }
+    }
+
+    .loading-circle {
+        height: 480rpx;
+        width: 480rpx;
+        border-radius: 50%;
+        background: #F5F5F5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all .6s ease-in;
+
+        .loading-circle-inner {
+            height: 75%;
+            width: 75%;
+            background: #FFF;
+            border-radius: 50%;
+
+        }
+    }
+
+    .loading-bar {
+        position: relative;
+
+        cover-view {
+            background: #F5F5F5;
+            border-radius: 4rpx;
+            border-radius: 4rpx;
+        }
+
+        .loading-bar-xaxis {
+            height: 377rpx;
+            width: 28rpx;
+        }
+
+        .loading-bar-yaxis {
+            width: 395rpx;
+            height: 28rpx;
+
+        }
+
+        .loading-bar-item {
+            width: 56rpx;
+            position: absolute;
+            bottom: 71rpx;
+        }
+
+        .bar1 {
+            height: 240rpx;
+            left: 82rpx;
+        }
+
+        .bar2 {
+            height: 330rpx;
+            left: 183rpx;
+        }
+
+        .bar3 {
+            height: 150rpx;
+            left: 284rpx;
+        }
+    }
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}

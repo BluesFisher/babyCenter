@@ -1,0 +1,123 @@
+<template>
+    <view class='container'>
+        <baseContainer title="我的收藏">
+            <view slot="content-detail" class="base-content collect-info">
+                <baseNotice wx:if="{{collectList.length <= 0}}" showNotice="亲爱的，您未收藏任何内容" />
+                <view class="collect-artical-item" wx:for="{{collectList}}" wx:for-item="item"
+                    wx:for-index="index" wx:key="{{index}}">
+                    <view class="collect-detail">
+                        <view class="collect-detail-title">{{item.content.title}}</view>
+                        <image class="collect-detail-pic" src="{{item.picShow[0]}}"></image>
+                    </view>
+                    <view class="collect-operate artical-item-operate">
+                        <view class="collect-operate-author">
+                            <image src="{{item.author.icon}}" alt="" />
+                            <view class="collect-operate-author-name">{{item.author.name}}</view>
+                        </view>
+
+                        <view class="artical-operate-icon artical-operate-like">
+                            <image src="/assets/images/common/like.png" alt="" />
+                            <view>{{item.operate.like}}</view>
+                        </view>
+
+                        <view class="artical-operate-icon artical-operate-comment">
+                            <image src="/assets/images/common/comment.png" alt="" />
+                            <view>{{item.operate.comment}}</view>
+                        </view>
+
+                        <view class="artical-operate-icon artical-operate-transmit">
+                            <image src="/assets/images/common/transmit.png" alt="" />
+                            <view>{{item.operate.transmit}}</view>
+                        </view>
+
+                        <view class="artical-operate-icon artical-operate-collect">
+                            <image src="/assets/images/common/collect-active.png" alt="" />
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </baseContainer>
+    </view>
+</template>
+
+<style lang="less" src="./collectInfo.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+// import CommonFunc from 'utils/common-func';
+import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
+import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
+
+const ARTICAL_ITEMS = [
+    {
+        author: {
+            icon: '../../assets/images/common/user-icon.png',
+            name: '萌娃妈妈',
+            isFocus: false
+        },
+        picShow: [
+            '../../assets/images/baby1.png',
+            '../../assets/images/baby2.png',
+            '../../assets/images/baby3.png'
+        ],
+        content: {
+            title: '我的宝宝今天会走路啦！',
+            date: '2019-08-16'
+        },
+        operate: {
+            like: 125,
+            comment: 10,
+            transmit: 12
+        }
+    },
+
+    {
+        author: {
+            icon: '../../assets/images/common/user-icon.png',
+            name: '萌娃爸爸',
+            isFocus: true
+        },
+        picShow: [
+            '../../assets/images/baby1.png',
+            '../../assets/images/baby2.png',
+            '../../assets/images/baby3.png'
+        ],
+        content: {
+            title: '我的宝宝今天会蹦极啦，你说厉不厉害！',
+            date: '2019-01-16'
+        },
+        operate: {
+            like: 1125,
+            comment: 310,
+            transmit: 412
+        }
+    }
+];
+
+export default class CollectInfo extends wepy.page {
+    config = {
+        navigationBarTitleText: 'Home',
+        disableScroll: true
+    };
+    components = {
+        baseContainer: BaseContainer,
+        baseNotice: BaseNotice
+    };
+    data = {
+        collectList: ARTICAL_ITEMS
+    };
+
+    onLoad(options) {}
+
+    async onShow() {}
+
+    async onHide() {}
+
+    onUnload() {}
+
+    computed = {};
+
+    methods = {};
+}
+</script>

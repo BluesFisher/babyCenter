@@ -1,0 +1,32 @@
+<template>
+    <view class="base-notice">
+        <image class="notice-image"
+            src="https://yiliao-1254237151.cos.ap-shanghai.myqcloud.com/wxa/abnormal-bak.png"
+            alt="">
+        </image>
+        <view class="notice-content">{{ showNotice }}</view>
+    </view>
+</template>
+
+<style lang="less" src="./BaseNotice.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import { NOTICE_CONST } from 'utils/const-list';
+
+export default class BaseNotice extends wepy.component {
+    props = {
+        showNotice: {
+            type: String,
+            default: NOTICE_CONST.networkError
+        }
+    };
+
+    data = {};
+
+    onLoad() {}
+
+    methods = {};
+}
+</script>

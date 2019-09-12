@@ -1,0 +1,55 @@
+@import '../../../assets/css/common.less';
+
+.base-table-content {
+    background: #FFFFFF;
+    font-size: 24rpx;
+    padding-top: 12rpx;
+    padding-bottom: 40rpx;
+
+    .table-header,
+    .table-items {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 40rpx;
+        color: #16172A;
+        background: #F9FAFC;
+        border-bottom: 1rpx solid #EBEBEB;
+        height: 80rpx;
+        line-height: 80rpx;
+
+        .header-item,
+        .body-item {
+            flex: 1;
+            display: inline-block;
+            padding-right: 20rpx;
+            box-sizing: border-box;
+            .ellipsis;
+        }
+    }
+
+    .odd-line {
+        background: #FFFFFF;
+    }
+
+    .table-header {
+        font-family: PingFangSC-Medium;
+        font-weight: 800;
+
+        .header-item {
+            display: flex;
+        }
+    }
+
+    .body-item {
+        display: flex !important;
+        align-items: center;
+
+        .body-ceil-tag {
+            height: 16rpx;
+            width: 16rpx;
+            margin-right: 16rpx;
+            border-radius: 50%;
+        }
+    }
+
+}

@@ -1,0 +1,63 @@
+
+<template>
+    <cover-view class="chart-tips" style="top: {{top}}; left: {{left}}">
+        <cover-view class="chart-tips-content">
+            <cover-view class="tips-name">
+                <cover-view>{{name}}</cover-view>
+                <cover-view class="title-mark"></cover-view>
+            </cover-view>
+            <cover-view>{{value}}</cover-view>
+            <cover-view>{{percent}}</cover-view>
+        </cover-view>
+        <cover-view class="chart-tips-shadow"></cover-view>
+    </cover-view>
+</template>
+
+<style lang="less" src='./BaseChartTips.less'></style>
+
+<script>
+import wepy from 'wepy';
+import CommonMixin from 'mixins/mix-common';
+
+export default class BaseChartTips extends wepy.component {
+    mixins = [CommonMixin];
+
+    data = {
+        name: '',
+        value: '',
+        percent: '',
+        top: '',
+        left: ''
+    };
+
+    clickFunc(params) {
+        const {
+            name,
+            value,
+            percent,
+            event,
+            valueName,
+            barValue,
+            dataIndex
+        } = params;
+        const valueShow = barValue ? barValue[dataIndex] : value;
+        const percentShow = barValue ? value : percent;
+        if (!event) {
+            const { globalData } = this.mixGetApp().$root.$parent;
+            const index = barValue.length === 1 ? 0.5 : dataIndex;
+            this.left =
+                100 +
+                (index * globalData.windowWidth) / barValue.length +
+                'rpx';
+            this.top = '100rpx';
+        } else {
+            this.left = event.offsetX + 100 + 'rpx';
+            this.top = event.offsetY - 100 + 'rpx';
+        }
+        this.name = name || '';
+        this.value = `${valueName || '值'}：${valueShow || '--'}`;
+        this.percent = `占比：${(percentShow || 0).toFixed(2)}%`;
+        this.$apply();
+    }
+}
+</script>

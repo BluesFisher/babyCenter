@@ -1,0 +1,84 @@
+// UI rules, Common style
+@container-offset: 24rpx;
+@margin-padding-offset: 20rpx;
+
+.ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.common-btn {
+    height: 94rpx;
+    width: 666rpx;
+    background: #2054D0;
+    border-radius: 10rpx;
+    font-size: 36rpx;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 94rpx;
+}
+
+.common-btn[disabled],
+.common-btn-disabled {
+    background: rgba(32, 84, 209, 0.5);
+}
+
+.none-data {
+    margin-top: 40rpx;
+    font-size: 28rpx;
+    margin-left: 42%;
+    background: #FFF !important;
+}
+
+.common-detail-style {
+    width: calc(100% + 48rpx);
+    transform: translateX(-24rpx);
+    padding-top: @margin-padding-offset;
+    background: #F5F5F5;
+}
+
+.data-update-time {
+    font-family: PingFangSC-Light;
+    font-size: 16rpx;
+    color: #3F4659;
+    line-height: 44rpx;
+    padding-left: @container-offset;
+    background: #FFF;
+}
+
+.content-gap {
+    border-bottom: 12rpx solid rgb(221, 221, 221, .4);
+}
+
+// 下箭头
+.down-arrow {
+    display: inline-block;
+    position: relative;
+    width: 30rpx;
+    height: 30rpx;
+}
+
+.down-arrow::after {
+    display: inline-block;
+    content: " ";
+    height: 10rpx;
+    width: 10rpx;
+    border-width: 0 3rpx 3rpx 0;
+    border-color: #979797;
+    border-style: solid;
+    transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+    transform-origin: center;
+    transition: transform .3s;
+    position: absolute;
+    top: 50%;
+    right: 10rpx;
+    margin-top: -10rpx;
+}
+
+// 加上active旋转成 上箭头
+.down-arrow.active::after {
+    transform-origin: center;
+    transform: rotate(-135deg);
+    transition: transform .3s;
+}

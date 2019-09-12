@@ -1,0 +1,31 @@
+<template>
+    <view>
+        <web-view wx:if="{{show}}" src="{{url}}" binderror="loaderror"></web-view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import mta from 'assets/js/mta_analysis';
+
+export default class webView extends wepy.page {
+    data = {
+        show: true,
+        url: ''
+    };
+
+    async onLoad(options) {
+        mta.Page.init();
+        const { url } = options;
+        this.url = decodeURIComponent(url);
+
+        this.$apply();
+    }
+
+    methods = {
+        loaderror(e) {
+            console.log('webview 打开失败', e);
+        }
+    };
+}
+</script>
