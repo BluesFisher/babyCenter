@@ -200,4 +200,74 @@ page {
     .content-detail {
         height: calc(100% - 140rpx);
     }
+
+    .pop-edit {
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(65, 65, 65, .4);
+
+
+        .pop-edit-content {
+            width: 80%;
+            background: #fff;
+            border-radius: 10rpx;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30rpx 0;
+
+            .pop-edit-title {
+                width: 100%;
+                padding: 0 30rpx 30rpx 30rpx;
+            }
+
+            .base-menu-label {
+                color: #444;
+            }
+
+            .base-menu-unit {
+                margin-right: 10rpx;
+            }
+
+            .pop-edit-icon {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                font-size: 26rpx;
+                color: #aaa;
+
+                image {
+                    height: 160rpx;
+                    width: 160rpx;
+                    border-radius: 50%;
+                    margin-bottom: 10rpx;
+                }
+            }
+
+            .pop-edit-confirm,
+            .pop-edit-cancel {
+                height: 80rpx;
+                width: 400rpx;
+                background: #2054D1;
+                color: #fff;
+                border-radius: 10rpx;
+                font-size: 28rpx;
+                text-align: center;
+                line-height: 80rpx;
+            }
+
+            .pop-edit-confirm {
+                margin-top: 30rpx;
+            }
+
+            .pop-edit-cancel {
+                background: transparent;
+                color: #aaa;
+            }
+        }
+    }
 }
