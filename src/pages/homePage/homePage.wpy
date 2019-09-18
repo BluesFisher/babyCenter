@@ -100,6 +100,7 @@ const HEAD_NAV_GROUP = [
     {
         name: '成长记录',
         dataKey: 'log',
+        url: '/pages/growLog/growLog',
         formatFunc: () => {}
     },
     {
@@ -202,7 +203,11 @@ export default class HomePage extends wepy.page {
 
     methods = {
         tabChange(changeItem) {
-            console.log(changeItem);
+            const { item } = changeItem;
+            item.url &&
+                wepy.navigateTo({
+                    url: item.url
+                });
         },
         toUserCenter() {
             wepy.navigateTo({

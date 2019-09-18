@@ -36,8 +36,8 @@ export default class Index extends wepy.page {
     }
 
     async toPage() {
-        // this.$redirect(`homePage/homePage`);
-        this.$redirect(`growLog/growLog`);
+        this.$redirect(`homePage/homePage`);
+        // this.$redirect(`growLog/growLog`);
     }
 }
 </script>
