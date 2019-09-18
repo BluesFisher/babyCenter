@@ -1,0 +1,271 @@
+<template>
+    <view class="grow-log-container" @tap="containerTap">
+
+        <view class="grow-log-header">
+            <text>共{{growInfo.length}}条记录</text>
+            <text class="add-log-btn" @tap="handleAddLog">添加</text>
+        </view>
+        <baseNotice wx:if="{{growInfo.length <= 0}}" showNotice="亲爱的，您还没有添加成长记录" />
+
+        <view class="grow-log-item" style="margin-left: {{growLogItemleft[index]}}"
+            wx:for="{{growInfo}}" wx:for-item="item" wx:for-index="index" wx:key="{{index}}"
+            data-item="{{item}}" data-index="{{index}}" catchtap="handleLogItem"
+            bindtouchstart="itemTouchStart" bindtouchend="itemTouchEnd">
+            <view class="log-caontainer">
+                <view class="log-time">{{item.date}} {{item.age}}</view>
+                <view class="log-tips">{{item.tips}}</view>
+                <view class="log-info">
+                    <view class="log-info-item" wx:for="{{logInfoKeys}}" wx:for-item="keyItem"
+                        wx:for-index="keyIndex" wx:key="{{keyIndex}}">
+                        <view>
+                            <text class="log-info-value">{{item[keyItem] || '--'}}</text>
+                            <text class="log-info-unit">{{logInfoDetail[keyItem].unit}}</text>
+                        </view>
+                        <view class="log-info-name">{{logInfoDetail[keyItem].name}}
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+            <view class="grow-log-delete" data-index="{{index}}" catchtap="delLogItem">
+                删除
+            </view>
+        </view>
+
+        <view wx:if="{{isPopEditShow}}" id="pop-edit" class="pop-edit" @tap="popEditTap">
+            <view class="pop-edit-content">
+                <view class="pop-edit-title">{{popTitle}}</view>
+                <view class="user-menu">
+                    <view class="base-menu-item" wx:for="{{growLogEdit}}" wx:for-item="item"
+                        wx:for-index="index" wx:key="{{index}}">
+                        <view class="base-menu-label">{{item.label}}</view>
+                        <picker wx:if="{{item.type === 'pickerDate'}}" mode="date"
+                            data-index="{{index}}" data-item="{{item}}" value="{{item.value}}"
+                            end="{{nowDate}}" @change="bindCommonChange">
+                            <text class="base-menu-value">{{ item.value }}</text>
+                        </picker>
+
+                        <input wx:elif="{{item.type==='input'}}" value="{{item.value}}"
+                            placeholder="{{item.placeholder}}" data-index="{{index}}"
+                            data-item="{{item}}" bindinput="bindCommonChange" />
+
+                        <view wx:else class="base-menu-value">{{item.value}}</view>
+
+                        <view wx:if="{{item.unit}}" class="base-menu-unit">{{item.unit}}</view>
+                        <view wx:else class="down-arrow menu-arrow"></view>
+                    </view>
+                </view>
+                <view></view>
+                <view id="pop-operate" class="pop-edit-confirm" @tap="popEditOperate(e, true)">确定
+                </view>
+                <view id="pop-operate" class="pop-edit-cancel" @tap="popEditOperate">取消</view>
+            </view>
+        </view>
+    </view>
+</template>
+
+<style lang="less" src="./GrowLogList.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import dayjs from 'dayjs';
+import CommonFunc from 'utils/common-func';
+import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
+
+const GROW_LOG_EDIT = [
+    {
+        label: '身高',
+        value: '',
+        unit: 'cm',
+        placeholder: '请输入身高',
+        code: 'height',
+        type: 'input'
+    },
+    {
+        label: '体重',
+        value: '',
+        unit: 'kg',
+        placeholder: '请输入体重',
+        code: 'weight',
+        type: 'input'
+    },
+    {
+        label: '头围',
+        value: '',
+        unit: 'cm',
+        placeholder: '请输入头围',
+        code: 'head',
+        type: 'input'
+    },
+    {
+        label: '日期',
+        value: '',
+        code: 'date',
+        type: 'pickerDate'
+    }
+];
+const LOG_INFO_DETAIL = {
+    height: { unit: 'cm', key: 'height', name: '身高' },
+    weight: { unit: 'kg', key: 'weight', name: '体重' },
+    head: { unit: 'cm', key: 'head', name: '头围' }
+};
+
+export default class GrowLogList extends wepy.component {
+    config = {
+        navigationBarTitleText: 'Home',
+        disableScroll: true
+    };
+    components = {
+        baseNotice: BaseNotice
+    };
+    data = {
+        isPopEditShow: false,
+        popTitle: '增加成长记录',
+        logInfoDetail: LOG_INFO_DETAIL,
+        logInfoKeys: Object.keys(LOG_INFO_DETAIL),
+        growInfo: [
+            {
+                date: '2019-09-18',
+                age: '11个月7天',
+                tips: '身高偏低，体重偏低，头围偏小，注意补充营养',
+                height: '2.0',
+                weight: '2.0',
+                head: '2.0'
+            },
+
+            {
+                date: '2019-09-17',
+                age: '11个月7天',
+                tips: '宝宝长的很壮哦，身高偏低，头围偏小',
+                height: '12.0',
+                weight: '12.0',
+                head: '12.0'
+            }
+        ],
+        touchDetail: [],
+        growLogItemleft: [0],
+        growLogEdit: CommonFunc.deepCopy(GROW_LOG_EDIT),
+        editIndex: null
+    };
+
+    onLoad() {}
+
+    methods = {
+        containerTap(e) {
+            this.growLogItemleft = this.growLogItemleft.map(item => 0);
+        },
+        itemTouchStart(e) {
+            const { index } = e.currentTarget.dataset;
+            this.touchDetail[index] = {
+                x: e.touches[0].pageX,
+                y: e.touches[0].pageY
+            };
+        },
+        itemTouchEnd(e) {
+            const { index } = e.currentTarget.dataset;
+
+            if (!this.touchDetail[index]) return;
+
+            const { pageX, pageY } = e.changedTouches[0];
+            const { x, y } = this.touchDetail[index];
+            if (Math.abs(pageY - y) > 180) return;
+            if (x - pageX > 20) {
+                this.setGrowLogItemleft(index);
+            } else if (x - pageX < -20) {
+                this.setGrowLogItemleft(index, 0);
+            }
+        },
+        handleAddLog() {
+            this.popTitle = '增加成长记录';
+            this.editIndex = null;
+            this.growLogEdit = CommonFunc.deepCopy(GROW_LOG_EDIT);
+            this.growLogEdit[3].value = dayjs().format('YYYY-MM-DD');
+            this.isPopEditShow = true;
+        },
+        async delLogItem(e) {
+            const { index } = e.currentTarget.dataset;
+            if (!this.growInfo[index]) return;
+
+            const options = {
+                title: '提示',
+                cancelText: '否',
+                confirmText: '是',
+                content: '是否确认删除此条成长记录'
+            };
+
+            const { res } = await CommonFunc.wepyFunc('showModal', options);
+
+            if (res.confirm) {
+                this.growInfo.splice(index, 1);
+                this.growLogItemleft.splice(index, 1);
+                this.$apply();
+            }
+        },
+        popEditTap(e) {
+            if (e.target.id === 'pop-operate') return;
+
+            this.isPopEditShow = e.target.id !== 'pop-edit';
+        },
+        handleLogItem(e) {
+            const { index, item } = e.currentTarget.dataset;
+            this.popTitle = '修改成长记录';
+            this.editIndex = index;
+            this.growLogEdit = CommonFunc.deepCopy(GROW_LOG_EDIT);
+
+            this.growLogEdit.map(
+                logItem => (logItem.value = item[logItem.code] || '')
+            );
+
+            this.isPopEditShow = true;
+        },
+        bindCommonChange(e) {
+            const { index, item } = e.currentTarget.dataset;
+            const { value } = e.detail;
+
+            this.growLogEdit[index].value = value;
+
+            item.type !== 'input' && this.$apply();
+        },
+        popEditOperate(e, isConfirm = false) {
+            if (isConfirm) {
+                const editValue = {
+                    date: '',
+                    age: '',
+                    tips: '',
+                    height: '',
+                    weight: '',
+                    head: ''
+                };
+
+                this.growLogEdit.map(
+                    logItem => (editValue[logItem.code] = logItem.value)
+                );
+
+                if (!editValue.date) {
+                    CommonFunc.showFailedTip('请填写日期');
+                    return;
+                }
+
+                if (this.editIndex !== null) {
+                    this.growInfo[this.editIndex] = editValue;
+                    this.growLogItemleft[this.editIndex] = 0;
+                } else {
+                    this.growInfo.unshift(editValue);
+                    this.growLogItemleft.push(0);
+                }
+            }
+
+            this.editIndex = null;
+            this.editIcon = null;
+            this.isPopEditShow = false;
+        }
+    };
+    setGrowLogItemleft(index, left = '-210rpx') {
+        const itemleftTemp = JSON.parse(JSON.stringify(this.growLogItemleft));
+        itemleftTemp[index] = left;
+
+        this.growLogItemleft = itemleftTemp;
+    }
+}
+</script>
