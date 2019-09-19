@@ -5,6 +5,8 @@
                 <baseTab :navbarList.sync="btnGroup" userClass="btn-group"
                     :needBottomLine.sync="needTabBottomLine" @tabChange.user="tabChange" />
                 <growLogList wx:if="{{currentTab === 'growList'}}" />
+                <heightCurve wx:else :currentTabCode.sync="currentTab" :yAxisName.sync="yAxisName"
+                    @setCurrentTab.user="setCurrentTab" />
             </view>
         </baseContainer>
 
@@ -22,7 +24,9 @@ import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 import BaseTab from 'components/Base/BaseTab/BaseTab';
 import GrowLogList from 'components/Business/GrowLogList/GrowLogList';
+import GrowLogCurve from 'components/Business/GrowLogCurve/GrowLogCurve';
 
+const GROW_LOG_BTN_KEY = ['growList', 'height', 'weight', 'head'];
 const GROW_LOG_BTN = [
     {
         name: '记录列表',
@@ -32,16 +36,19 @@ const GROW_LOG_BTN = [
     {
         name: '身高曲线',
         dataKey: 'height',
+        yAxisName: '身高(cm)',
         formatFunc: () => {}
     },
     {
         name: '体重曲线',
         dataKey: 'weight',
+        yAxisName: '体重(kg)',
         formatFunc: () => {}
     },
     {
         name: '头围曲线',
         dataKey: 'head',
+        yAxisName: '头围(cm)',
         formatFunc: () => {}
     }
 ];
@@ -55,12 +62,14 @@ export default class GrowLog extends wepy.page {
         baseContainer: BaseContainer,
         baseNotice: BaseNotice,
         baseTab: BaseTab,
-        growLogList: GrowLogList
+        growLogList: GrowLogList,
+        heightCurve: GrowLogCurve
     };
     data = {
         btnGroup: GROW_LOG_BTN,
         needTabBottomLine: true,
-        currentTab: 'growList'
+        currentTab: 'growList',
+        yAxisName: '身高(cm)'
     };
 
     onLoad() {}
@@ -75,6 +84,14 @@ export default class GrowLog extends wepy.page {
         tabChange(changeItem) {
             const { item } = changeItem;
             this.currentTab = item.dataKey;
+            this.yAxisName = item.yAxisName;
+        },
+        setCurrentTab(currentTabCode = 'growList') {
+            const index = GROW_LOG_BTN_KEY.indexOf(currentTabCode) || 0;
+
+            this.currentTab = currentTabCode;
+            this.yAxisName = GROW_LOG_BTN[index].yAxisName;
+            this.$invoke('baseTab', 'setInitIndex', index);
         }
     };
 }

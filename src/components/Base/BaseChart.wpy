@@ -1,5 +1,4 @@
 <template>
-
     <view class="line-chart-container">
         <canvas class="ec-canvas" canvas-id="ec-canvas" bindinit="init"
             bindtouchstart="{{ ec.disableTouch ? '' : 'touchStart' }}"
@@ -55,8 +54,12 @@
 import wepy from 'wepy';
 import EchartMixin from 'mixins/mix-echart';
 import CommonMixin from 'mixins/mix-common';
+import BaseChartTips from 'components/Base/BaseChartTips/BaseChartTips';
 
 export default class BaseChart extends wepy.component {
+    components = {
+        baseChartTips: BaseChartTips
+    };
     mixins = [EchartMixin, CommonMixin];
     props = {
         legendData: {
@@ -85,23 +88,42 @@ export default class BaseChart extends wepy.component {
     setOption(chartParams, legendData = this.legendData) {
         if (!this.chartDemo) return;
 
-        const { xAxisData, optionIn } = chartParams;
+        const { xAxisData, optionIn, yAxisName } = chartParams;
         let option = {
             grid: this.mixCommonOption().grid,
             tooltip: {
                 ...this.mixToolTip,
+                triggerOn: 'click',
                 formatter: params => {
                     this.setFormatterShow(params);
-                    !this.isIos && this.mixSetToolTipHideTimer();
+                    // !this.isIos && this.mixSetToolTipHideTimer();
                     return '';
                 }
             },
             legend: {
-                ...this.mixCommonLegend,
+                ...this.mixCommonLegend(),
                 data: legendData.data || [],
                 selected: legendData.selected || {}
             },
-            yAxis: this.mixCommonYAxis(),
+            dataZoom: [
+                {
+                    id: 'dataZoomX',
+                    type: 'inside',
+                    xAxisIndex: [0],
+                    filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+                    startValue: 0,
+                    endValue: 6
+                },
+                {
+                    id: 'dataZoomY',
+                    type: 'inside',
+                    yAxisIndex: [0],
+                    filterMode: 'empty',
+                    startValue: 0,
+                    endValue: 30
+                }
+            ],
+            yAxis: this.mixCommonYAxis(yAxisName),
             xAxis: this.mixCommonXAxis(xAxisData),
             series: []
         };
@@ -128,7 +150,7 @@ export default class BaseChart extends wepy.component {
 
         this.left =
             100 + (params[0].dataIndex * globalData.windowWidth) / 7 + 'rpx';
-        this.top = '60rpx';
+        this.top = '340rpx';
         this.tipsItem = tipsItem;
         this.display = 'block';
         this.$apply();

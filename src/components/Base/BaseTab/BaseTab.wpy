@@ -46,7 +46,7 @@ export default class BaseTab extends wepy.component {
 
     watch = {
         initIndex(newVal) {
-            this.currentTabIndex = this.initIndex;
+            this.currentTabIndex = newVal;
             this.$apply();
         }
     };
@@ -61,6 +61,9 @@ export default class BaseTab extends wepy.component {
                 index: data.index,
                 item: this.navbarList[data.index]
             });
+        },
+        setInitIndex(index) {
+            this.currentTabIndex = index;
         }
     };
 }

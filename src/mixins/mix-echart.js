@@ -2,6 +2,28 @@ import wepy from 'wepy';
 import * as echarts from 'assets/js/echarts';
 import WxCanvas from 'assets/js/wx-canvas';
 
+const AXIS_COMMON_CONFIG = {
+    axisTick: {
+        show: false
+    },
+    axisLine: {
+        show: true,
+        lineStyle: {
+            color: '#E5E5E5',
+            width: '1'
+        }
+    },
+    splitLine: {
+        show: true,
+        lineStyle: {
+            color: '#E5E5E5',
+            width: '1',
+            type: 'dashed'
+        }
+    },
+    splitNumber: 2
+};
+
 export default class EchartMixin extends wepy.mixin {
     data = {
         ec: {
@@ -17,7 +39,7 @@ export default class EchartMixin extends wepy.mixin {
         triggerOn: 'mousemove',
         backgroundColor: '#efefef',
         textStyle: {
-            color: '#3F4659',
+            color: '#000', // '#3F4659',
             fontSize: 6,
             fontFamily: 'PingFangSC-Regular'
         },
@@ -39,7 +61,7 @@ export default class EchartMixin extends wepy.mixin {
             tooltip: this.mixToolTip,
             grid: {
                 left: '2%',
-                right: '2%',
+                right: '4%',
                 bottom: '12%',
                 top: '6%',
                 containLabel: true
@@ -50,16 +72,14 @@ export default class EchartMixin extends wepy.mixin {
     mixCommonXAxis(xAxisData) {
         return [
             {
+                ...AXIS_COMMON_CONFIG,
                 type: 'category',
-                axisTick: { show: false },
+                boundaryGap: false,
                 data: xAxisData,
-                axisLine: {
-                    show: false
-                },
                 axisLabel: {
                     show: true,
                     textStyle: {
-                        color: '#BCBCBC',
+                        color: '#000',
                         fontSize: '8'
                     }
                 }
@@ -67,48 +87,46 @@ export default class EchartMixin extends wepy.mixin {
         ];
     }
 
-    mixCommonYAxis(isPercent = false) {
+    mixCommonYAxis(yAxisName = '', isPercent = false) {
         return [
             {
-                axisLine: {
-                    show: false
+                ...AXIS_COMMON_CONFIG,
+                name: yAxisName,
+                nameLocation: 'end',
+                nameTextStyle: {
+                    color: '#000',
+                    fontSize: '10'
                 },
-                axisTick: {
-                    show: false
-                },
+                nameGap: '10',
                 axisLabel: {
                     show: true,
                     textStyle: {
-                        color: '#BCBCBC',
+                        color: '#000',
                         fontSize: '10'
                     },
                     formatter: isPercent ? '{value}%' : '{value}'
-                },
-                splitLine: {
-                    lineStyle: {
-                        color: '#E5E5E5',
-                        width: '1'
-                    }
-                },
-                splitNumber: 2
+                }
             }
         ];
     }
-    mixCommonLegend = {
-        bottom: 0,
-        left: 'center',
-        z: 100,
-        textStyle: {
-            color: '#3F4659',
-            fontSize: 10,
-            fontFamily: 'PingFangSC-Regular'
-        },
-        inactiveColor: '#BCBCBC',
-        icon: 'recrt',
-        itemWidth: 10, // 设置宽度
-        itemHeight: 2, // 设置高度
-        itemGap: 20 // 设置间距
-    };
+
+    mixCommonLegend() {
+        return {
+            bottom: 20,
+            left: 'center',
+            z: 100,
+            textStyle: {
+                color: '#3F4659',
+                fontSize: 10,
+                fontFamily: 'PingFangSC-Regular'
+            },
+            inactiveColor: '#BCBCBC',
+            icon: 'recrt',
+            itemWidth: 10, // 设置宽度
+            itemHeight: 2, // 设置高度
+            itemGap: 20 // 设置间距
+        };
+    }
 
     mixEchartOnLoad() {
         this.ec['onInit'] = (canvas, width, height, chartParams) =>
@@ -133,6 +151,7 @@ export default class EchartMixin extends wepy.mixin {
     }
 
     initChart(canvas, width, height, chartParams) {
+        wepy.showLoading();
         this.chartDemo = echarts.init(canvas, null, {
             width: width,
             height: height
@@ -149,6 +168,8 @@ export default class EchartMixin extends wepy.mixin {
                     !this.isIos && this.mixSetToolTipHideTimer();
                 }
             });
+
+        wepy.hideLoading();
 
         return this.chartDemo;
     }
@@ -247,6 +268,7 @@ export default class EchartMixin extends wepy.mixin {
                 });
                 handler.processGesture(this.wrapTouch(e), 'change');
             }
+            this.hideTips && this.hideTips();
         },
 
         touchEnd(e) {
@@ -264,7 +286,7 @@ export default class EchartMixin extends wepy.mixin {
                 handler.processGesture(this.wrapTouch(e), 'end');
             }
 
-            this.isIos && this.hideTips && this.hideTips();
+            // this.isIos && this.hideTips && this.hideTips();
         }
     };
 }

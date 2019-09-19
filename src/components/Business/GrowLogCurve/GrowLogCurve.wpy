@@ -1,0 +1,212 @@
+<template>
+    <view class="grow-log-curve">
+        <view class="curve-header">
+            <view class="curve-header-tips">
+                温馨提示：每个孩子都有自己的生长发育规律，只要在3%~97%范围内，且趋势大致平行于参考曲线，就是正常的。
+            </view>
+        </view>
+        <view class="curve-chart">
+            <baseChart :legendData.sync="legendData" />
+        </view>
+        <view class="curve-footer">
+            <view class="curve-footer-add" @tap="backtoGrowLog">
+                添加/查询记录
+            </view>
+        </view>
+    </view>
+</template>
+
+<style lang="less" scoped src="./GrowLogCurve.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import BaseChart from 'components/Base/BaseChart';
+
+const YAXIS_NAME = '身高(cm)';
+
+const getSeriesStyle = (color = '') => ({
+    label: {
+        color: '#fff',
+        normal: {
+            show: false,
+            position: 'top'
+        }
+    },
+    itemStyle: {
+        normal: {
+            color
+        }
+    },
+    smooth: true,
+    areaStyle: {
+        opacity: 0.2
+    },
+    lineStyle: {
+        opacity: 0.4
+    }
+});
+
+export default class GrowLogCurve extends wepy.component {
+    props = {
+        currentTabCode: {
+            type: String,
+            default: ''
+        },
+        yAxisName: {
+            type: String,
+            default: ''
+        }
+    };
+    components = {
+        baseChart: BaseChart
+    };
+    data = {
+        retmsg: '',
+        isLoading: true,
+        dataInit: false,
+
+        legendData: {
+            data: ['上限(97%)', '平均值', '下限(3%)'],
+            selected: {
+                // 用卡人数: false,
+                // 用卡次数: false
+            }
+        },
+        echartTimer: null,
+        xAxisData: [
+            '出生',
+            '1月',
+            '2月',
+            '3月',
+            '4月',
+            '5月',
+            '6月',
+            '7月',
+            '8月',
+            '9月',
+            '10月',
+            '11月',
+            '1岁'
+        ],
+        optionIn: {},
+        valueList: {},
+        checkValueList: []
+    };
+
+    async onLoad() {
+        this.initData();
+    }
+
+    watch = {
+        async currentTabCode(newVal) {
+            if (newVal === 'height') {
+                this.echartTimer = setTimeout(() => {
+                    this.echartTimer && clearTimeout(this.echartTimer);
+                    this.$invoke('baseChart', 'init', {
+                        xAxisData: this.xAxisData,
+                        optionIn: this.optionIn,
+                        yAxisName: this.yAxisName || YAXIS_NAME
+                    });
+                }, 500);
+            }
+        },
+        yAxisName(newVal) {
+            this.initChart(newVal);
+        }
+    };
+
+    methods = {
+        backtoGrowLog() {
+            this.$emit('setCurrentTab', 'growList');
+        }
+    };
+
+    async initData() {
+        this.setChartData();
+    }
+
+    initChart(yAxisName = this.yAxisName || YAXIS_NAME) {
+        wepy.showLoading();
+        this.echartTimer = setTimeout(() => {
+            this.echartTimer && clearTimeout(this.echartTimer);
+            this.$invoke('baseChart', 'init', {
+                xAxisData: this.xAxisData,
+                optionIn: this.optionIn,
+                yAxisName
+            });
+            wepy.hideLoading();
+        }, 500);
+    }
+
+    setChartData(valueList = {}, drawChart = false) {
+        this.optionIn = {
+            series: [
+                {
+                    name: '下限(3%)',
+                    type: 'line',
+                    stack: '身高',
+                    data: valueList['下限'] || [
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        11,
+                        22,
+                        33,
+                        44,
+                        55,
+                        66
+                    ],
+                    ...getSeriesStyle('#EF6B6B')
+                },
+                {
+                    name: '平均值',
+                    type: 'line',
+                    stack: '身高',
+                    data: valueList['平均'] || [
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        12,
+                        23,
+                        34,
+                        45,
+                        56,
+                        67
+                    ],
+                    ...getSeriesStyle('#007AFF')
+                },
+                {
+                    name: '上限(97%)',
+                    type: 'line',
+                    stack: '身高',
+                    data: valueList['上限'] || [
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        13,
+                        24,
+                        35,
+                        46,
+                        57,
+                        68
+                    ],
+                    ...getSeriesStyle('#1CE7BA')
+                }
+            ]
+        };
+
+        if (drawChart) {
+            this.initChart();
+        }
+
+        this.$apply();
+    }
+}
+</script>
