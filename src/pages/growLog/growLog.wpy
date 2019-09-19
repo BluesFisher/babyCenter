@@ -1,10 +1,10 @@
 <template>
-    <view class='container' @tap="containerTap">
+    <view class='container'>
         <baseContainer title="成长记录">
             <view slot="content-detail" class="grow-log">
                 <baseTab :navbarList.sync="btnGroup" userClass="btn-group"
                     :needBottomLine.sync="needTabBottomLine" @tabChange.user="tabChange" />
-                <growLogList wx:if="{{currentTab === 'gorwList'}}" />
+                <growLogList wx:if="{{currentTab === 'growList'}}" />
             </view>
         </baseContainer>
 
@@ -26,7 +26,7 @@ import GrowLogList from 'components/Business/GrowLogList/GrowLogList';
 const GROW_LOG_BTN = [
     {
         name: '记录列表',
-        dataKey: 'gorwList',
+        dataKey: 'growList',
         formatFunc: () => {}
     },
     {
@@ -60,7 +60,7 @@ export default class GrowLog extends wepy.page {
     data = {
         btnGroup: GROW_LOG_BTN,
         needTabBottomLine: true,
-        currentTab: 'gorwList'
+        currentTab: 'growList'
     };
 
     onLoad() {}

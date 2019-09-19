@@ -7,9 +7,9 @@
         </view>
         <baseNotice wx:if="{{growInfo.length <= 0}}" showNotice="亲爱的，您还没有添加成长记录" />
 
-        <view class="grow-log-item" style="margin-left: {{growLogItemleft[index]}}"
-            wx:for="{{growInfo}}" wx:for-item="item" wx:for-index="index" wx:key="{{index}}"
-            data-item="{{item}}" data-index="{{index}}" catchtap="handleLogItem"
+        <view class="grow-log-item" wx:for="{{growInfo}}"
+            style="margin-left: {{growLogItemleft[index]}}" wx:for-item="item" wx:for-index="index"
+            wx:key="{{index}}" data-item="{{item}}" data-index="{{index}}" catchtap="handleLogItem"
             bindtouchstart="itemTouchStart" bindtouchend="itemTouchEnd">
             <view class="log-caontainer">
                 <view class="log-time">{{item.date}} {{item.age}}</view>
