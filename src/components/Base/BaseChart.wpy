@@ -96,7 +96,7 @@ export default class BaseChart extends wepy.component {
                 triggerOn: 'click',
                 formatter: params => {
                     this.setFormatterShow(params);
-                    // !this.isIos && this.mixSetToolTipHideTimer();
+                    !this.isIos && this.mixSetToolTipHideTimer();
                     return '';
                 }
             },

@@ -100,6 +100,7 @@ export default class GrowLogCurve extends wepy.component {
 
     watch = {
         async currentTabCode(newVal) {
+            this.hideTips && this.hideTips();
             if (newVal === 'height') {
                 this.echartTimer = setTimeout(() => {
                     this.echartTimer && clearTimeout(this.echartTimer);

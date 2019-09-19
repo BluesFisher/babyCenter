@@ -286,7 +286,9 @@ export default class EchartMixin extends wepy.mixin {
                 handler.processGesture(this.wrapTouch(e), 'end');
             }
 
-            // this.isIos && this.hideTips && this.hideTips();
+            this.isIos &&
+                this.mixSetToolTipHideTimer &&
+                this.mixSetToolTipHideTimer();
         }
     };
 }
