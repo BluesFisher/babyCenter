@@ -3,7 +3,8 @@
 
         <view class="grow-log-header">
             <text>共{{growInfo.length}}条记录</text>
-            <text class="add-log-btn" @tap="handleAddLog">添加</text>
+            <text class="add-log-btn" style="background: {{themeColor}}"
+                @tap="handleAddLog">添加</text>
         </view>
         <baseNotice wx:if="{{growInfo.length <= 0}}" showNotice="亲爱的，您还没有添加成长记录" />
 
@@ -56,7 +57,8 @@
                     </view>
                 </view>
                 <view></view>
-                <view id="pop-operate" class="pop-edit-confirm" @tap="popEditOperate(e, true)">确定
+                <view id="pop-operate" class="pop-edit-confirm" style="background: {{themeColor}}"
+                    @tap="popEditOperate(e, true)">确定
                 </view>
                 <view id="pop-operate" class="pop-edit-cancel" @tap="popEditOperate">取消</view>
             </view>
@@ -69,6 +71,7 @@
 
 <script>
 import wepy from 'wepy';
+import { connect } from 'wepy-redux';
 import dayjs from 'dayjs';
 import CommonFunc from 'utils/common-func';
 import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
@@ -111,6 +114,14 @@ const LOG_INFO_DETAIL = {
     head: { unit: 'cm', key: 'head', name: '头围' }
 };
 
+@connect(
+    {
+        gender(state) {
+            return state.userInfo.gender;
+        }
+    },
+    {}
+)
 export default class GrowLogList extends wepy.component {
     config = {
         navigationBarTitleText: 'Home',
@@ -120,6 +131,7 @@ export default class GrowLogList extends wepy.component {
         baseNotice: BaseNotice
     };
     data = {
+        themeColor: '#ff85bc',
         isPopEditShow: false,
         popTitle: '增加成长记录',
         logInfoDetail: LOG_INFO_DETAIL,
@@ -149,7 +161,17 @@ export default class GrowLogList extends wepy.component {
         editIndex: null
     };
 
-    onLoad() {}
+    onLoad() {
+        this.themeColor = CommonFunc.setThemeColor(this.gender);
+        this.$apply();
+    }
+
+    watch = {
+        gender(newVal) {
+            this.themeColor = CommonFunc.setThemeColor(newVal);
+            this.$apply();
+        }
+    };
 
     methods = {
         containerTap(e) {

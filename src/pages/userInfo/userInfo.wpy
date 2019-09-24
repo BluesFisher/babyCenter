@@ -29,7 +29,7 @@
                         </picker>
 
                         <view wx:elif="{{item.type==='image'}}" class='user-info-icon'
-                            @tap="chooseUserIcon">
+                            data-index="{{index}}" data-item="{{item}}" @tap="bindUserMenuChange">
                             <image src='{{item.value}}' alt='' />
                         </view>
 
@@ -40,6 +40,12 @@
                         <picker wx:elif="{{item.type==='pcikerRegion'}}" mode="region"
                             @change="bindRegionChange" value="{{region}}" data-index="{{index}}"
                             data-item="{{item}}" custom-item="{{customItem}}">
+                            <text class="base-menu-value">{{item.value}}</text>
+                        </picker>
+
+                        <picker wx:elif="{{item.type==='pickerGender'}}"
+                            @change="bindUserMenuChange" range="{{item.range}}" range-key="label"
+                            data-index="{{index}}" data-item="{{item}}">
                             <text class="base-menu-value">{{item.value}}</text>
                         </picker>
 
@@ -57,10 +63,22 @@
 
 <script>
 import wepy from 'wepy';
+import { connect } from 'wepy-redux';
+import { GENDER_INFO } from 'store/reducers/user-info';
 import dayjs from 'dayjs';
 import CommonFunc from 'utils/common-func';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 
+const genderItems = [
+    {
+        value: '0',
+        label: '男'
+    },
+    {
+        value: '1',
+        label: '女'
+    }
+];
 const avatarUrl =
     'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLicnOHTicNpPGPd25fJKCJwKTHTFk7fvrCeoalxd5z0FicVicO9jicooeqsmL6IWK3I5MrmZXJRqCcHUA/132';
 const BASE_OPERATE = [
@@ -94,6 +112,12 @@ const USER_MENU = [
         type: 'input'
     },
     {
+        label: '性别',
+        value: '',
+        range: genderItems,
+        type: 'pickerGender'
+    },
+    {
         label: '所在地',
         value: '',
         type: 'pcikerRegion'
@@ -109,7 +133,16 @@ const USER_MENU = [
         type: 'pickerDate'
     }
 ];
+const GENDER_INDEX = 2;
 
+@connect(
+    {
+        gender(state) {
+            return state.userInfo.gender;
+        }
+    },
+    { GENDER_INFO }
+)
 export default class UserInfo extends wepy.page {
     config = {
         navigationBarTitleText: 'Home',
@@ -130,7 +163,10 @@ export default class UserInfo extends wepy.page {
         customItem: '全部'
     };
 
-    onLoad() {}
+    onLoad() {
+        this.userMenu[GENDER_INDEX].value = this.gender;
+        this.$apply();
+    }
 
     async onShow() {}
 
@@ -141,27 +177,42 @@ export default class UserInfo extends wepy.page {
     methods = {
         bindUserMenuChange(e) {
             const { index, item } = e.currentTarget.dataset;
-            this.userMenu[index].value = e.detail.value;
+
+            if (item.type === 'image') {
+                this.chooseUserIcon(e);
+                return;
+            }
+            const { value } = e.detail;
+            this.userMenu[index].value = item.range
+                ? item.range[value].label
+                : value;
+            item.type === 'pickerGender' &&
+                this.methods.GENDER_INFO({
+                    gender: this.userMenu[index].value
+                });
             item.type !== 'input' && this.$apply();
         },
         bindRegionChange(e) {
             const { index } = e.currentTarget.dataset;
             this.userMenu[index].value = e.detail.value.join(' ');
         },
-        async chooseUserIcon() {
-            const { res } = await CommonFunc.wepyFunc('chooseImage', {
-                count: 1,
-                sizeType: ['original', 'compressed'],
-                sourceType: ['album', 'camera']
-            });
-            const tempFilePaths = res.tempFilePaths;
-            this.avatarUrl = tempFilePaths[0];
-            this.$apply();
-        },
         bindOperate(e) {
             const { item } = e.currentTarget.dataset;
             item.url && wepy.navigateTo({ url: item.url });
         }
     };
+
+    async chooseUserIcon(e) {
+        const { index } = e.currentTarget.dataset;
+        const { res } = await CommonFunc.wepyFunc('chooseImage', {
+            count: 1,
+            sizeType: ['original', 'compressed'],
+            sourceType: ['album', 'camera']
+        });
+        const tempFilePaths = res.tempFilePaths;
+        this.avatarUrl = tempFilePaths[0];
+        this.userMenu[index].value = tempFilePaths[0];
+        this.$apply();
+    }
 }
 </script>

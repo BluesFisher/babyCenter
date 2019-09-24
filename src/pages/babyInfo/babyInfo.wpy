@@ -59,7 +59,8 @@
                     </view>
                 </view>
                 <view></view>
-                <view id="pop-operate" class="pop-edit-confirm" @tap="popEditOperate(e, true)">确定
+                <view id="pop-operate" class="pop-edit-confirm" style="background: {{themeColor}}"
+                    @tap="popEditOperate(e, true)">确定
                 </view>
                 <view id="pop-operate" class="pop-edit-cancel" @tap="popEditOperate">取消</view>
             </view>
@@ -72,7 +73,7 @@
 
 <script>
 import wepy from 'wepy';
-// import dayjs from 'dayjs';
+import { connect } from 'wepy-redux';
 import CommonFunc from 'utils/common-func';
 import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
@@ -99,6 +100,14 @@ const BABY_EDIT = [
     }
 ];
 
+@connect(
+    {
+        gender(state) {
+            return state.userInfo.gender;
+        }
+    },
+    {}
+)
 export default class BabyInfo extends wepy.page {
     config = {
         navigationBarTitleText: 'Home',
@@ -109,6 +118,7 @@ export default class BabyInfo extends wepy.page {
         baseNotice: BaseNotice
     };
     data = {
+        themeColor: '#ff85bc',
         isPopEditShow: false,
         genderPicker: ['男', '女'],
         touchDetail: [],
@@ -127,7 +137,17 @@ export default class BabyInfo extends wepy.page {
         editIcon: null
     };
 
-    onLoad() {}
+    onLoad() {
+        this.themeColor = CommonFunc.setThemeColor(this.gender);
+        this.$apply();
+    }
+
+    watch = {
+        gender(newVal) {
+            this.themeColor = CommonFunc.setThemeColor(newVal);
+            this.$apply();
+        }
+    };
 
     async onShow() {}
 

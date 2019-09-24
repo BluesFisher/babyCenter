@@ -1,7 +1,7 @@
 <template>
     <view class="content-container">
         <view class="content-header"
-            style="background: {{background}}; height: {{contentHeight}}rpx">
+            style="background: {{backgroundSelf}}; height: {{contentHeight}}rpx">
             <view class="content-title" style="color: {{titleColor}}; margin-top: {{titleTop}}rpx">
                 {{ title }}</view>
         </view>
@@ -23,7 +23,17 @@
 
 <script>
 import wepy from 'wepy';
+import { connect } from 'wepy-redux';
+import CommonFunc from 'utils/common-func';
 
+@connect(
+    {
+        gender(state) {
+            return state.userInfo.gender;
+        }
+    },
+    {}
+)
 export default class BaseContainer extends wepy.component {
     props = {
         title: {
@@ -32,7 +42,7 @@ export default class BaseContainer extends wepy.component {
         },
         background: {
             type: String,
-            default: 'rgb(255, 133, 188)' // '#2f8cf7'
+            default: '#ff85bc' // '#2f8cf7'
         },
         titleColor: {
             type: String,
@@ -40,6 +50,7 @@ export default class BaseContainer extends wepy.component {
         }
     };
     data = {
+        backgroundSelf: '#ff85bc',
         contentHeight: 140,
         titleTop: 30,
         menuTop: 50
@@ -52,8 +63,17 @@ export default class BaseContainer extends wepy.component {
         this.contentHeight += rpxHeight;
         statusBarHeight > 40 && (this.menuTop += 30 + rpxHeight);
         this.titleTop += rpxHeight;
+        this.backgroundSelf = CommonFunc.setThemeColor(this.gender);
+
         this.$apply();
     }
+
+    watch = {
+        gender(newVal) {
+            this.backgroundSelf = CommonFunc.setThemeColor(newVal);
+            this.$apply();
+        }
+    };
 
     methods = {
         goBack() {

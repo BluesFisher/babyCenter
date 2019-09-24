@@ -2,7 +2,8 @@
     <view class='container'>
         <baseContainer title="我的">
             <view slot="content-detail" class="user-center">
-                <view class="user-detail-header" @tap="goUserInfo">
+                <view class="user-detail-header" @tap="goUserInfo"
+                    style="background: {{backgroundHeader}}">
                     <image class='user-icon' src='{{avatarUrl}}' alt='' @tap.stop="bindUserIcon" />
                     <view class="user-detail-info">
                         <view class="user-name">BLUES</view>
@@ -39,6 +40,7 @@
 
 <script>
 import wepy from 'wepy';
+import { connect } from 'wepy-redux';
 import CommonFunc from 'utils/common-func';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 
@@ -96,6 +98,14 @@ const USER_MENU = [
     }
 ];
 
+@connect(
+    {
+        gender(state) {
+            return state.userInfo.gender;
+        }
+    },
+    {}
+)
 export default class UserCenter extends wepy.page {
     config = {
         navigationBarTitleText: 'Home',
@@ -105,6 +115,7 @@ export default class UserCenter extends wepy.page {
         baseContainer: BaseContainer
     };
     data = {
+        backgroundHeader: '#ff85bc',
         avatarUrl,
         baseOperate: BASE_OPERATE,
         userMenu: USER_MENU
@@ -112,6 +123,9 @@ export default class UserCenter extends wepy.page {
 
     async onLoad() {
         const { res } = await CommonFunc.wepyFunc('login');
+        this.backgroundHeader = CommonFunc.setThemeColor(this.gender);
+
+        this.$apply();
         console.log('login', res);
     }
 
@@ -120,6 +134,13 @@ export default class UserCenter extends wepy.page {
     async onHide() {}
 
     onUnload() {}
+
+    watch = {
+        gender(newVal) {
+            this.backgroundHeader = CommonFunc.setThemeColor(newVal);
+            this.$apply();
+        }
+    };
 
     methods = {
         goUserInfo() {

@@ -229,6 +229,10 @@ const CommonFunc = {
         });
     },
 
+    setThemeColor(gender = '男') {
+        return gender === '男' ? '#80d7fe' : '#ff85bc';
+    },
+
     backToPage: objIn => {
         let obj = !objIn ? {} : objIn;
         // eslint-disable-next-line no-undef
