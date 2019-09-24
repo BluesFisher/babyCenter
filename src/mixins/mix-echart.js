@@ -39,7 +39,7 @@ export default class EchartMixin extends wepy.mixin {
         triggerOn: 'mousemove',
         backgroundColor: '#efefef',
         textStyle: {
-            color: '#000', // '#3F4659',
+            color: '#333', // '#3F4659',
             fontSize: 6,
             fontFamily: 'PingFangSC-Regular'
         },
@@ -79,7 +79,7 @@ export default class EchartMixin extends wepy.mixin {
                 axisLabel: {
                     show: true,
                     textStyle: {
-                        color: '#000',
+                        color: '#333',
                         fontSize: '8'
                     }
                 }
@@ -94,14 +94,14 @@ export default class EchartMixin extends wepy.mixin {
                 name: yAxisName,
                 nameLocation: 'end',
                 nameTextStyle: {
-                    color: '#000',
+                    color: '#333',
                     fontSize: '10'
                 },
                 nameGap: '10',
                 axisLabel: {
                     show: true,
                     textStyle: {
-                        color: '#000',
+                        color: '#333',
                         fontSize: '10'
                     },
                     formatter: isPercent ? '{value}%' : '{value}'

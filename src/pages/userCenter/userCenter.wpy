@@ -3,7 +3,7 @@
         <baseContainer title="我的">
             <view slot="content-detail" class="user-center">
                 <view class="user-detail-header" @tap="goUserInfo">
-                    <image class='user-icon' src='{{avatarUrl}}' alt='' />
+                    <image class='user-icon' src='{{avatarUrl}}' alt='' @tap.stop="bindUserIcon" />
                     <view class="user-detail-info">
                         <view class="user-name">BLUES</view>
                         <view class="user-level">Lv1</view>
@@ -20,8 +20,9 @@
                 </view>
 
                 <view class="user-menu">
-                    <view class="base-menu-item" wx:for="{{userMenu}}" wx:for-item="item"
-                        wx:for-index="index" wx:key="{{index}}">
+                    <view wx:for="{{userMenu}}" wx:for-item="item" wx:for-index="index"
+                        wx:key="{{index}}" data-item="{{item}}" @tap="bindOperate"
+                        class="base-menu-item {{item.needBottom ? 'base-border-bottom' : ''}}">
                         <view class="base-menu-label">{{item.label}}</view>
                         <button wx:if="{{item.type === 'openBtn'}}" open-type="{{item.openType}}"
                             bindgetphonenumber="bindgetphonenumber">{{item.value}}</button>
@@ -57,19 +58,27 @@ const BASE_OPERATE = [
         url: '/pages/myAttention/myAttention'
     },
     {
-        label: '收藏',
+        label: '粉丝',
         icon: '',
         value: 12,
-        url: '/pages/collectInfo/collectInfo'
+        url: '/pages/myAttention/myAttention?type=fans'
     },
     {
-        label: '我的积分',
+        label: '积分',
         icon: '',
         value: 20
     }
 ];
 
 const USER_MENU = [
+    {
+        label: '我的文章'
+    },
+    {
+        label: '我的收藏',
+        url: '/pages/collectInfo/collectInfo',
+        needBottom: true
+    },
     {
         label: '绑定手机号',
         value: '13612817762',
@@ -118,8 +127,20 @@ export default class UserCenter extends wepy.page {
                 url: '/pages/userInfo/userInfo'
             });
         },
+        async bindUserIcon(e) {
+            try {
+                await CommonFunc.wepyFunc('previewImage', {
+                    current: avatarUrl,
+                    urls: [avatarUrl]
+                });
+            } catch (error) {
+                CommonFunc.showFailedTip('预览失败，请稍后再试');
+            }
+        },
         bindOperate(e) {
             const { item } = e.currentTarget.dataset;
+            console.log(item);
+
             item.url && wepy.navigateTo({ url: item.url });
         },
         bindgetphonenumber(e) {

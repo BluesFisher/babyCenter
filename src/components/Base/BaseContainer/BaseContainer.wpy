@@ -32,7 +32,7 @@ export default class BaseContainer extends wepy.component {
         },
         background: {
             type: String,
-            default: '#2f8cf7'
+            default: 'rgb(255, 133, 188)' // '#2f8cf7'
         },
         titleColor: {
             type: String,

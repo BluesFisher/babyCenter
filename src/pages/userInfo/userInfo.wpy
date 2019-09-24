@@ -1,8 +1,8 @@
 <template>
     <view class='container'>
-        <baseContainer title="个人信息" background="#0a40b3">
+        <baseContainer title="个人信息">
             <view slot="content-detail" class="user-info">
-                <view class="user-info-header">
+                <!-- <view class="user-info-header">
                     <image class='user-info-icon' src='{{avatarUrl}}' alt=''
                         @tap="chooseUserIcon" />
 
@@ -16,7 +16,7 @@
                             <view class="base-operate-value">{{item.value}}</view>
                         </view>
                     </view>
-                </view>
+                </view> -->
 
                 <view class="user-menu">
                     <view class="base-menu-item" wx:for="{{userMenu}}" wx:for-item="item"
@@ -27,6 +27,11 @@
                             end="{{nowDate}}" @change="bindUserMenuChange">
                             <text class="base-menu-value">{{ item.value }}</text>
                         </picker>
+
+                        <view wx:elif="{{item.type==='image'}}" class='user-info-icon'
+                            @tap="chooseUserIcon">
+                            <image src='{{item.value}}' alt='' />
+                        </view>
 
                         <input wx:elif="{{item.type==='input'}}" value="{{item.value}}"
                             placeholder="" data-index="{{index}}" data-item="{{item}}"
@@ -78,6 +83,11 @@ const BASE_OPERATE = [
 ];
 
 const USER_MENU = [
+    {
+        label: '头像',
+        value: avatarUrl,
+        type: 'image'
+    },
     {
         label: '昵称',
         value: 'BLUSE',
