@@ -3,6 +3,7 @@
         <view class="tab-page-container">
             <homePage wx:if="{{currentTabIndex === 0}}" :currentPage.sync="currentPage" />
             <growLog wx:if="{{currentTabIndex === 1}}" :currentPage.sync="currentPage" />
+            <zoom wx:if="{{currentTabIndex === 2}}" :currentPage.sync="currentPage" />
             <userCenter wx:if="{{currentTabIndex === 3}}" :currentPage.sync="currentPage" />
         </view>
         <cover-view class="bottom-tab-bar">
@@ -26,9 +27,10 @@
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
 import BaseTab from 'components/Base/BaseTab/BaseTab';
-import GrowLog from 'components/Business/GrowLog/GrowLog';
-import UserCenter from 'components/Business/UserCenter/UserCenter';
 import HomePage from 'components/Business/HomePage/HomePage';
+import GrowLog from 'components/Business/GrowLog/GrowLog';
+import Zoom from 'components/Business/Zoom/Zoom';
+import UserCenter from 'components/Business/UserCenter/UserCenter';
 
 const HEAD_NAV_GROUP = [
     {
@@ -82,7 +84,8 @@ export default class NavPage extends wepy.page {
         baseTab: BaseTab,
         growLog: GrowLog,
         userCenter: UserCenter,
-        homePage: HomePage
+        homePage: HomePage,
+        zoom: Zoom
     };
     data = {
         currentTabIndex: 0,

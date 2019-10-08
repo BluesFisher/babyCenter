@@ -1,0 +1,109 @@
+@header-image-height: 520rpx;
+
+.container {
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+
+    .zoom-content {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 130rpx;
+
+        .zoom-content-container {
+            background: #fff;
+            border-top-left-radius: 30rpx;
+            border-top-right-radius: 30rpx;
+            display: flex;
+            flex-direction: column;
+
+            .zoom-content-artical {
+                display: flex;
+                flex-direction: column;
+                padding-bottom: 30rpx;
+
+                .zoom-artical-item {
+                    display: flex;
+                    flex-direction: column;
+                    padding: 30rpx 30rpx 0 30rpx;
+                    border-bottom: 12rpx solid rgba(221, 221, 221, .8);
+
+                    .zoom-artical-item-header,
+                    .zoom-artical-item-pic,
+                    .zoom-artical-item-content,
+                    .artical-author-name {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 30rpx;
+                    }
+
+                    .zoom-artical-item-header {
+                        font-size: 28rpx;
+                        justify-content: space-between;
+
+                        .artical-author-name {
+                            margin-bottom: 0;
+
+                            .artical-author-icon {
+                                height: 80rpx;
+                                width: 80rpx;
+                                background: #eee;
+                                margin-right: 20rpx;
+                            }
+                        }
+                    }
+
+                    .zoom-artical-item-pic {
+                        height: 400rpx;
+                        width: 100%;
+
+                        image {
+                            height: 100%;
+                            width: 100%;
+                        }
+
+                        .artical-pic-left {
+                            height: 100%;
+                            flex: 0 0 60%;
+                            padding-right: 10rpx;
+
+                        }
+
+                        .artical-pic-right {
+                            height: 100%;
+                            flex: 1;
+                            display: flex;
+                            flex-direction: column;
+
+                            image {
+                                padding-top: 5rpx;
+
+                                &:first-child {
+                                    padding-bottom: 5rpx;
+                                    padding-top: 0;
+
+                                }
+                            }
+                        }
+                    }
+
+                    .zoom-artical-item-content {
+                        font-size: 28rpx;
+                        background: rgba(240, 240, 240, .6);
+                        padding: 20rpx;
+                        align-items: flex-end;
+
+                        .artical-content-detail {
+                            color: #bbb;
+                            font-size: 26rpx;
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
