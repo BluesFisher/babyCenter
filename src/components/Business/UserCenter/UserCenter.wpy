@@ -35,7 +35,7 @@
     </view>
 </template>
 
-<style lang="less" src="./userCenter.less"></style>
+<style lang="less" src="./UserCenter.less"></style>
 
 
 <script>
@@ -106,7 +106,7 @@ const USER_MENU = [
     },
     {}
 )
-export default class UserCenter extends wepy.page {
+export default class UserCenter extends wepy.component {
     config = {
         navigationBarTitleText: 'Home',
         disableScroll: true

@@ -13,7 +13,7 @@
     </view>
 </template>
 
-<style lang="less" src="./growLog.less"></style>
+<style lang="less" src="./GrowLog.less"></style>
 
 
 <script>
@@ -23,8 +23,8 @@ import wepy from 'wepy';
 import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 import BaseTab from 'components/Base/BaseTab/BaseTab';
-import GrowLogList from 'components/Business/GrowLogList/GrowLogList';
-import GrowLogCurve from 'components/Business/GrowLogCurve/GrowLogCurve';
+import GrowLogList from './GrowLogList/GrowLogList';
+import GrowLogCurve from './GrowLogCurve/GrowLogCurve';
 
 const GROW_LOG_BTN_KEY = ['growList', 'height', 'weight', 'head'];
 const GROW_LOG_BTN = [
@@ -53,10 +53,12 @@ const GROW_LOG_BTN = [
     }
 ];
 
-export default class GrowLog extends wepy.page {
-    config = {
-        navigationBarTitleText: 'Home',
-        disableScroll: true
+export default class GrowLog extends wepy.component {
+    props = {
+        currentPage: {
+            type: String,
+            default: ''
+        }
     };
     components = {
         baseContainer: BaseContainer,
@@ -74,11 +76,15 @@ export default class GrowLog extends wepy.page {
 
     onLoad() {}
 
-    async onShow() {}
-
-    async onHide() {}
-
-    onUnload() {}
+    watch = {
+        async currentPage(newVal) {
+            if (newVal === 'growLog') {
+                this.currentTab = 'growList';
+                this.$invoke('baseTab', 'setInitIndex', 0);
+                this.$apply();
+            }
+        }
+    };
 
     methods = {
         tabChange(changeItem) {

@@ -1,6 +1,6 @@
 <template>
     <view class='container'>
-        <baseContainer title="我的收藏">
+        <baseContainer title="我的收藏" :needMenuCenter.sync="needMenuCenter">
             <view slot="content-detail" class="base-content collect-info">
                 <baseNotice wx:if="{{collectList.length <= 0}}" showNotice="亲爱的，您未收藏任何内容" />
                 <view class="collect-artical-item" wx:for="{{collectList}}" wx:for-item="item"
@@ -290,6 +290,7 @@ export default class CollectInfo extends wepy.page {
         baseNotice: BaseNotice
     };
     data = {
+        needMenuCenter: true,
         collectList: ARTICAL_ITEMS
     };
 

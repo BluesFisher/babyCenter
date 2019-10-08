@@ -1,6 +1,6 @@
 <template>
     <view class='container'>
-        <baseContainer title="我的关注">
+        <baseContainer title="我的关注" :needMenuCenter.sync="needMenuCenter">
             <view slot="content-detail" class="attention-info base-content">
                 <view class="attention-header-nav">
                     <baseTab :navbarList.sync="btnGroup" userClass="btn-group"
@@ -74,6 +74,7 @@ export default class MyAttention extends wepy.page {
         baseTab: BaseTab
     };
     data = {
+        needMenuCenter: true,
         listContainerLeft: 0,
         initTabIndex: 0,
         attetionList: [

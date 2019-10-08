@@ -6,7 +6,7 @@
                 {{ title }}</view>
         </view>
 
-        <view class="menu-center" style="top: {{menuTop}}rpx">
+        <view wx:if="{{needMenuCenter}}" class="menu-center" style="top: {{menuTop}}rpx">
             <image src='/assets/images/common/back.png' alt="" @tap="goBack" />
             <image style="padding-left: 20rpx" src='/assets/images/common/home.png' alt=""
                 @tap="goHome" />
@@ -47,6 +47,10 @@ export default class BaseContainer extends wepy.component {
         titleColor: {
             type: String,
             default: '#fff'
+        },
+        needMenuCenter: {
+            type: Boolean,
+            default: false
         }
     };
     data = {
@@ -81,14 +85,14 @@ export default class BaseContainer extends wepy.component {
                 delta: 1,
                 fail: () => {
                     wepy.navigateTo({
-                        url: '/pages/homePage/homePage'
+                        url: '/pages/navPage/navPage'
                     });
                 }
             });
         },
         goHome() {
             wepy.navigateTo({
-                url: '/pages/homePage/homePage'
+                url: '/pages/navPage/navPage'
             });
         }
     };

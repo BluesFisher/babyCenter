@@ -1,6 +1,6 @@
 <template>
     <view class='container'>
-        <baseContainer title="个人信息">
+        <baseContainer title="个人信息" :needMenuCenter.sync="needMenuCenter">
             <view slot="content-detail" class="user-info">
                 <!-- <view class="user-info-header">
                     <image class='user-info-icon' src='{{avatarUrl}}' alt=''
@@ -152,6 +152,7 @@ export default class UserInfo extends wepy.page {
         baseContainer: BaseContainer
     };
     data = {
+        needMenuCenter: true,
         avatarUrl,
         baseOperate: BASE_OPERATE,
         userMenu: USER_MENU,

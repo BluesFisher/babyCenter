@@ -1,6 +1,6 @@
 <template>
     <view class='container' @tap="containerTap">
-        <baseContainer title="宝宝信息">
+        <baseContainer title="宝宝信息" :needMenuCenter.sync="needMenuCenter">
             <view slot="content-detail" class="baby-info">
                 <view class="baby-info-item" style="margin-left: {{babyItemleft[index]}}"
                     wx:for="{{babyInfo}}" wx:for-item="item" wx:for-index="index" wx:key="{{index}}"
@@ -118,6 +118,7 @@ export default class BabyInfo extends wepy.page {
         baseNotice: BaseNotice
     };
     data = {
+        needMenuCenter: true,
         themeColor: '#ff85bc',
         isPopEditShow: false,
         genderPicker: ['男', '女'],
