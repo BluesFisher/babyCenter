@@ -79,6 +79,8 @@ import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 
 const defaultUserIcon = '../../assets/images/common/default-user.png';
+const defaultFemaleIcon = '../../assets/images/common/default-female.png';
+const defaultMaleIcon = '../../assets/images/common/default-male.png';
 const BABY_EDIT = [
     {
         label: '宝宝姓名',
@@ -126,7 +128,7 @@ export default class BabyInfo extends wepy.page {
         babyItemleft: [0],
         babyInfo: [
             {
-                icon: defaultUserIcon,
+                icon: defaultFemaleIcon,
                 name: '哈尼',
                 birthday: '2018-10-03',
                 gender: '女',
@@ -202,7 +204,7 @@ export default class BabyInfo extends wepy.page {
         popEditOperate(e, isConfirm = false) {
             if (isConfirm) {
                 const editValue = {
-                    icon: this.editIcon || defaultUserIcon,
+                    icon: this.editIcon || '',
                     name: '',
                     birthday: '',
                     gender: '',
@@ -220,6 +222,12 @@ export default class BabyInfo extends wepy.page {
                     CommonFunc.showFailedTip('信息不完整');
                     return;
                 }
+
+                editValue.icon =
+                    this.editIcon ||
+                    (editValue.gender === '男'
+                        ? defaultMaleIcon
+                        : defaultFemaleIcon);
 
                 if (this.editIndex !== null) {
                     this.babyInfo[this.editIndex] = editValue;

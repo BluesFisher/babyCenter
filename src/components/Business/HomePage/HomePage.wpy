@@ -67,7 +67,7 @@ import wepy from 'wepy';
 import { connect } from 'wepy-redux';
 // import CommonFunc from 'utils/common-func';
 
-const defaultUserIcon = '../../assets/images/common/default-user.png';
+const defaultUserIcon = '../../assets/images/common/default-female.png';
 const INFOR_MOVE_STEP = 2; // px
 const INFOR_INIT_POS = 230; // px
 
