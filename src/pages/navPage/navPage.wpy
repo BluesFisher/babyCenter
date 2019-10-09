@@ -2,9 +2,9 @@
     <view class='container'>
         <view class="tab-page-container">
             <homePage wx:if="{{currentTabIndex === 0}}" :currentPage.sync="currentPage" />
-            <growLog wx:if="{{currentTabIndex === 1}}" :currentPage.sync="currentPage" />
-            <zoom wx:if="{{currentTabIndex === 2}}" :currentPage.sync="currentPage" />
-            <userCenter wx:if="{{currentTabIndex === 3}}" :currentPage.sync="currentPage" />
+            <!-- <growLog wx:if="{{currentTabIndex === 1}}" :currentPage.sync="currentPage" /> -->
+            <zoom wx:if="{{currentTabIndex === 1}}" :currentPage.sync="currentPage" />
+            <userCenter wx:if="{{currentTabIndex === 2}}" :currentPage.sync="currentPage" />
         </view>
         <cover-view class="bottom-tab-bar">
             <cover-view
@@ -41,14 +41,14 @@ const HEAD_NAV_GROUP = [
         srcDefault: '/assets/images/navtab/home-default.png',
         formatFunc: () => {}
     },
-    {
-        name: '成长记录',
-        dataKey: 'growLog',
-        srcFemale: '/assets/images/navtab/log-female.png',
-        srcMale: '/assets/images/navtab/log-male.png',
-        srcDefault: '/assets/images/navtab/log-default.png',
-        formatFunc: () => {}
-    },
+    // {
+    //     name: '成长记录',
+    //     dataKey: 'growLog',
+    //     srcFemale: '/assets/images/navtab/log-female.png',
+    //     srcMale: '/assets/images/navtab/log-male.png',
+    //     srcDefault: '/assets/images/navtab/log-default.png',
+    //     formatFunc: () => {}
+    // },
     {
         name: '圈子',
         dataKey: 'zoom',
@@ -92,6 +92,13 @@ export default class NavPage extends wepy.page {
         currentPage: 'baseData',
         tabBar: HEAD_NAV_GROUP
     };
+
+    onShareAppMessage(res) {
+        return {
+            title: 'babyCenter',
+            path: '/pages/index'
+        };
+    }
 
     onLoad() {
         const { statusBarHeight } = wepy.getSystemInfoSync();

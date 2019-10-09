@@ -1,0 +1,150 @@
+
+<template>
+    <view class='container'>
+        <baseContainer title="大事记" :needMenuCenter.sync="needMenuCenter">
+            <view slot="content-detail" class="event-log">
+                <view class="event-log-header">
+                    <text>共{{timeLineItems.length}}条记录</text>
+                    <text class="add-log-btn" style="background: {{themeColor}}"
+                        @tap="handleAddLog">添加</text>
+                </view>
+
+                <view class="event-time-line">
+                    <view class="time-line-item" wx:for="{{timeLineItems}}" wx:for-item="item"
+                        wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
+                        data-index="{{index}}">
+                        <view class="time-line-bar">
+                            <view class="time-line-dot"></view>
+                        </view>
+                        <view class="time-line-item-header">
+                            <image src="/assets/images/common/time-icon.png" />
+                            <text>{{item.time}}</text>
+                            <text class="baby-age">{{item.babyAge}}</text>
+                        </view>
+                        <view class="time-line-item-content">
+                            <view>{{item.detail}}</view>
+                            <view class="time-line-item-img">
+                                <image wx:for="{{item.pic}}" wx:for-item="picItem"
+                                    wx:for-index="picIndex" wx:key="{{picIndex}}" src="{{picItem}}"
+                                    data-item="{{item}}" data-index="{{picIndex}}"
+                                    @tap="handlePic" />
+                            </view>
+                            <view class="comment-list">
+                                <view class="comment-list-item" wx:for="{{item.commentList}}"
+                                    wx:for-item="commentItem" wx:for-index="commentIndex"
+                                    wx:key="{{commentIndex}}">
+                                    <text>{{commentItem.userName}}：</text>
+                                    <text>{{commentItem.content}}</text>
+                                </view>
+                                <input class="comment-fill" value=""
+                                    placeholder="{{!item.commentList || item.commentList.length === 0 ? '快来抢沙发' : '我也说一句'}}" />
+                                <!-- <view class="comment-fill">
+                            {{!item.commentList || item.commentList.length === 0 ? "快来抢沙发" : "我也说一句"}}
+                        </view> -->
+                            </view>
+                        </view>
+
+                    </view>
+                </view>
+            </view>
+        </baseContainer>
+
+    </view>
+</template>
+
+<style lang="less" src="./eventLog.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import { connect } from 'wepy-redux';
+import CommonFunc from 'utils/common-func';
+import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
+import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
+
+@connect(
+    {
+        gender(state) {
+            return state.userInfo.gender;
+        }
+    },
+    {}
+)
+export default class EventLog extends wepy.page {
+    config = {
+        navigationBarTitleText: 'event',
+        disableScroll: true
+    };
+    components = {
+        baseContainer: BaseContainer,
+        baseNotice: BaseNotice
+    };
+    data = {
+        themeColor: '#ff85bc',
+        needMenuCenter: true,
+        timeLineItems: [
+            {
+                time: '2018-10-03',
+                babyAge: '0个月1天',
+                detail: '宝宝今天出生啦！',
+                pic: [
+                    'https://img.zcool.cn/community/031cbda57c9116b0000018c1b8ad5d9.jpg@520w_390h_1c_1e_1o_100sh.jpg',
+                    'https://img.zcool.cn/community/04a89b57b2ad120000012e7eddc3d7.jpg@160w_160h_1c_1e_1o_100sh.jpg',
+                    'https://img.zcool.cn/community/0076a45ab1c754a801218207ce0b56.jpg@160w_160h_1c_1e_1o_100sh.jpg',
+                    'https://img.zcool.cn/community/01cc2d5c62bcb4a801203d2256331f.jpg@520w_390h_1c_1e_1o_100sh.jpg'
+                ],
+                commentList: [
+                    {
+                        userName: '爸爸',
+                        content: '你终于出来了'
+                    },
+                    {
+                        userName: '妈妈',
+                        content: '好不容把你弄出来了'
+                    }
+                ]
+            },
+            {
+                time: '2019-10-03',
+                babyAge: '1周岁',
+                detail: '宝宝今天一周岁啦！',
+                pic: [
+                    'https://img.zcool.cn/community/009954599143f3000000212908d662.jpg@520w_390h_1c_1e_1o_100sh.jpg'
+                ]
+            }
+        ]
+    };
+
+    onLoad() {
+        this.themeColor = CommonFunc.setThemeColor(this.gender);
+        this.$apply();
+    }
+
+    async onShow() {}
+
+    async onHide() {}
+
+    onUnload() {}
+
+    watch = {
+        gender(newVal) {
+            this.themeColor = CommonFunc.setThemeColor(newVal);
+            this.$apply();
+        }
+    };
+
+    methods = {
+        handlePic(e) {
+            const { item, index } = e.currentTarget.dataset;
+
+            item.pic &&
+                wx.previewImage({
+                    current: item.pic[index],
+                    urls: item.pic
+                });
+        },
+
+        handleAddLog() {}
+    };
+}
+</script>

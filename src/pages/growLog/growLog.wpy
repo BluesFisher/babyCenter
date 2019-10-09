@@ -1,0 +1,100 @@
+
+<template>
+    <view class='container'>
+        <baseContainer title="成长记录" :needMenuCenter.sync="needMenuCenter">
+            <view slot="content-detail" class="grow-log">
+                <baseTab :navbarList.sync="btnGroup" userClass="btn-group"
+                    :needBottomLine.sync="needTabBottomLine" @tabChange.user="tabChange" />
+                <growLogList wx:if="{{currentTab === 'growList'}}" />
+                <heightCurve wx:else :currentTabCode.sync="currentTab" :yAxisName.sync="yAxisName"
+                    @setCurrentTab.user="setCurrentTab" />
+            </view>
+        </baseContainer>
+
+    </view>
+</template>
+
+<style lang="less" src="./growLog.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+// import dayjs from 'dayjs';
+// import CommonFunc from 'utils/common-func';
+import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
+import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
+import BaseTab from 'components/Base/BaseTab/BaseTab';
+import GrowLogList from 'components/Business/GrowLog/GrowLogList/GrowLogList';
+import GrowLogCurve from 'components/Business/GrowLog/GrowLogCurve/GrowLogCurve';
+
+const GROW_LOG_BTN_KEY = ['growList', 'height', 'weight', 'head'];
+const GROW_LOG_BTN = [
+    {
+        name: '记录列表',
+        dataKey: 'growList',
+        formatFunc: () => {}
+    },
+    {
+        name: '身高曲线',
+        dataKey: 'height',
+        yAxisName: '身高(cm)',
+        formatFunc: () => {}
+    },
+    {
+        name: '体重曲线',
+        dataKey: 'weight',
+        yAxisName: '体重(kg)',
+        formatFunc: () => {}
+    },
+    {
+        name: '头围曲线',
+        dataKey: 'head',
+        yAxisName: '头围(cm)',
+        formatFunc: () => {}
+    }
+];
+
+export default class GrowLog extends wepy.page {
+    config = {
+        navigationBarTitleText: 'Home',
+        disableScroll: true
+    };
+    components = {
+        baseContainer: BaseContainer,
+        baseNotice: BaseNotice,
+        baseTab: BaseTab,
+        growLogList: GrowLogList,
+        heightCurve: GrowLogCurve
+    };
+    data = {
+        needMenuCenter: true,
+        btnGroup: GROW_LOG_BTN,
+        needTabBottomLine: true,
+        currentTab: 'growList',
+        yAxisName: '身高(cm)'
+    };
+
+    onLoad() {}
+
+    async onShow() {}
+
+    async onHide() {}
+
+    onUnload() {}
+
+    methods = {
+        tabChange(changeItem) {
+            const { item } = changeItem;
+            this.currentTab = item.dataKey;
+            this.yAxisName = item.yAxisName;
+        },
+        setCurrentTab(currentTabCode = 'growList') {
+            const index = GROW_LOG_BTN_KEY.indexOf(currentTabCode) || 0;
+
+            this.currentTab = currentTabCode;
+            this.yAxisName = GROW_LOG_BTN[index].yAxisName;
+            this.$invoke('baseTab', 'setInitIndex', index);
+        }
+    };
+}
+</script>

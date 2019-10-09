@@ -1,6 +1,6 @@
 <template>
     <view class='home-container'>
-        <image class='home-back' src='/assets/images/common/home-bak.png' alt="" />
+        <view class='home-back'></view>
 
         <view class="home-header">
             <view class="baby-item" wx:for="{{babyInfo}}" wx:for-item="item" wx:for-index="index"
@@ -30,16 +30,10 @@
 
         <view class="home-hot-news">
 
-            <view class="home-hot-title" style="color: {{themeColor}}">
-                <view class="hot-title-bar" style="background: {{themeColor}}"></view>
-                <text> 热门推荐</text>
-                <view class="hot-title-bar" style="background: {{themeColor}}"></view>
-            </view>
-
             <view class="swiper-container">
                 <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}"
-                    interval="{{interval}}" duration="{{duration}}" previous-margin="100rpx"
-                    next-margin="100rpx" circular indicator-active-color="{{themeColor}}">
+                    interval="{{interval}}" duration="{{duration}}" circular
+                    indicator-active-color="{{themeColor}}">
                     <block wx:for="{{background}}" wx:for-item="item" wx:for-index="index"
                         wx:key="index">
                         <swiper-item>
@@ -53,38 +47,15 @@
 
         </view>
 
-        <view class="home-time-line">
-            <view class="time-line-item" wx:for="{{timeLineItems}}" wx:for-item="item"
+        <view class="home-menu">
+            <view class="home-menu-item" wx:for="{{headerMenu}}" wx:for-item="item"
                 wx:for-index="index" wx:key="{{index}}" data-item="{{item}}" data-index="{{index}}"
-                @tap="handleTimeLine">
-                <view class="time-line-bar">
-                    <view class="time-line-dot"></view>
-                </view>
-                <view class="time-line-item-header">
-                    <image src="/assets/images/common/time-icon.png" />
-                    <text>{{item.time}}</text>
-                    <text class="baby-age">{{item.babyAge}}</text>
-                </view>
-                <view class="time-line-item-content">
-                    <view>{{item.detail}}</view>
-                    <image src="{{item.pic}}" alt="" />
-                    <view class="comment-list">
-                        <view class="comment-list-item" wx:for="{{item.commentList}}"
-                            wx:for-item="commentItem" wx:for-index="commentIndex"
-                            wx:key="{{commentIndex}}">
-                            <text>{{commentItem.userName}}：</text>
-                            <text>{{commentItem.content}}</text>
-                        </view>
-                        <input class="comment-fill" value=""
-                            placeholder="{{!item.commentList || item.commentList.length === 0 ? '快来抢沙发' : '我也说一句'}}" />
-                        <!-- <view class="comment-fill">
-                            {{!item.commentList || item.commentList.length === 0 ? "快来抢沙发" : "我也说一句"}}
-                        </view> -->
-                    </view>
-                </view>
-
+                @tap="handleMenuItem">
+                <image src="{{item.icon}}" alt="" />
+                <view>{{item.title}}</view>
             </view>
         </view>
+
     </view>
 </template>
 
@@ -124,9 +95,9 @@ export default class HomePage extends wepy.component {
         duration: 500,
 
         background: [
-            '/assets/images/baby3.png',
-            '/assets/images/baby2.png',
-            '/assets/images/baby1.png'
+            'http://img5.imgtn.bdimg.com/it/u=1657970879,1204165140&fm=26&gp=0.jpg',
+            'http://img2.imgtn.bdimg.com/it/u=4169466309,909409521&fm=26&gp=0.jpg',
+            'http://img4.imgtn.bdimg.com/it/u=3730307166,2351981660&fm=26&gp=0.jpg'
         ],
 
         babyInfo: [
@@ -144,6 +115,19 @@ export default class HomePage extends wepy.component {
             //     gender: '男',
             //     relationShip: []
             // }
+        ],
+
+        headerMenu: [
+            {
+                title: '大事记',
+                icon: '/assets/images/home/event-log.png',
+                url: '/pages/eventLog/eventLog'
+            },
+            {
+                title: '成长记录',
+                icon: '/assets/images/home/grow-log.png',
+                url: '/pages/growLog/growLog'
+            }
         ],
 
         timeLineItems: [
@@ -191,8 +175,19 @@ export default class HomePage extends wepy.component {
     };
 
     methods = {
-        handleBabyItem() {},
-        handleTimeLine() {}
+        handleBabyItem(e) {
+            wepy.navigateTo({
+                url: '/pages/babyInfo/babyInfo'
+            });
+        },
+        handleMenuItem(e) {
+            const { item } = e.currentTarget.dataset;
+
+            item.url &&
+                wepy.navigateTo({
+                    url: item.url
+                });
+        }
     };
 
     setInforScroll() {

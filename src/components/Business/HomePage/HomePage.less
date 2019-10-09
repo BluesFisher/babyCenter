@@ -1,14 +1,21 @@
-@home-back-height: 444rpx;
+@home-back-height: 300rpx;
 
 .home-container {
     height: 100%;
     overflow: auto;
     position: relative;
     -webkit-overflow-scrolling: touch;
+    // background: rgba(255, 158, 158, .1);
+    // padding: 0 20rpx;
 
     .home-back {
+        position: absolute;
+        left: 0;
         width: 100%;
         height: @home-back-height;
+        background: rgba(255, 158, 158, 1);
+        border-bottom-left-radius: 20rpx;
+        border-bottom-right-radius: 20rpx;
     }
 
     .home-header {
@@ -16,7 +23,7 @@
         width: calc(100% - 60rpx);
         display: flex;
         margin: 0 30rpx;
-        top: 250rpx;
+        top: calc(@home-back-height - 200rpx);
         left: 0;
         color: #fff;
         font-weight: 600;
@@ -63,7 +70,7 @@
     .home-header-inform {
         position: absolute;
         left: 0;
-        top: 380rpx;
+        top: calc(@home-back-height - 70rpx);
         margin: 0 60rpx;
         color: #fff;
         font-size: 26rpx;
@@ -102,38 +109,50 @@
     }
 
     .home-header-mask {
-        background: linear-gradient(transparent 0%, transparent 10%, rgba(0, 0, 0, .2) 30%);
+        background: linear-gradient(transparent 0%, transparent 10%, rgba(255, 255, 0, 0.1) 100%);
         width: 100%;
+        left: 0;
         top: 0;
         height: @home-back-height;
         position: absolute;
     }
 
+    .home-menu {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        color: #aaa;
+        font-size: 22rpx;
+        padding: 20rpx;
+        background: #fff;
+        border-radius: 10rpx;
+        margin-top: 20rpx;
+
+        .home-menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            image {
+                height: 70rpx;
+                width: 70rpx;
+                margin: 10rpx 40rpx;
+            }
+        }
+    }
+
     .home-hot-news {
         width: 100%;
-        background: #fff;
+        background: transparent;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-
-        .home-hot-title {
-            font-size: 34rpx;
-            margin-top: 20rpx;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-
-            .hot-title-bar {
-                width: 70rpx;
-                height: 12rpx;
-                border-radius: 10rpx;
-                margin: 0 30rpx;
-            }
-        }
+        margin-top: calc(@home-back-height + 20rpx);
 
         .swiper-container {
-            height: 400rpx;
+            height: 300rpx;
             width: 100%;
 
             swiper {
@@ -146,112 +165,10 @@
                 display: flex;
                 justify-content: center;
 
-
                 image {
-                    margin-top: 20rpx;
-                    height: 80%;
-                    width: 90%;
-                    border-radius: 10rpx;
-                    box-shadow: 0 0 16rpx 4rpx rgba(0, 0, 0, 0.4)
-                }
-            }
-        }
-    }
-
-    .home-time-line {
-        padding: 24rpx;
-        display: flex;
-        flex-direction: column;
-
-        .time-line-item {
-            margin-top: 20rpx;
-            position: relative;
-
-            .time-line-bar {
-                position: absolute;
-                background: #ccc;
-                width: 4rpx;
-                height: calc(100% - 70rpx);
-                top: 60rpx;
-                left: 18rpx;
-
-                .time-line-dot {
-                    position: absolute;
-                    height: 16rpx;
-                    width: 16rpx;
-                    border-radius: 50%;
-                    background: #f89d26;
-                    top: 64rpx;
-                    left: -6rpx;
-                }
-            }
-
-            .time-line-item-header {
-                display: flex;
-                align-items: center;
-
-                image {
-                    height: 40rpx;
-                    width: 40rpx;
-                    margin-right: 30rpx;
-                }
-
-                .baby-age {
-                    margin-left: 20rpx;
-                    color: #aaa;
-                    font-size: 26rpx;
-                }
-            }
-
-            .time-line-item-content {
-                margin-top: 20rpx;
-                margin-left: 60rpx;
-                background: #fff;
-                border-radius: 10rpx;
-                padding: 20rpx;
-                display: flex;
-                flex-direction: column;
-                align-content: center;
-                justify-content: space-between;
-                box-shadow: 0 4rpx 10rpx 0 rgba(182, 180, 180, 0.50);
-                position: relative;
-
-
-                &:after {
-                    border: 20rpx solid transparent;
-                    border-right: 16rpx solid #FFF;
-                    position: absolute;
-                    content: "";
-                    top: 60rpx;
-                    margin-top: -10rpx;
-                    right: 100%;
-                }
-
-                image {
-                    margin-top: 10rpx;
-                    height: 400rpx;
+                    height: 100%;
                     width: 100%;
-                    border-radius: 10rpx;
-                }
-
-                .comment-list {
-                    display: flex;
-                    flex-direction: column;
-                    color: #aaa;
-                    font-size: 24rpx;
-
-                    .comment-list-item {
-
-                        margin-top: 10rpx;
-                    }
-
-                    .comment-fill {
-                        color: #aaa;
-                        margin-top: 20rpx;
-                        border-radius: 4rpx;
-                        padding: 2rpx 20rpx;
-                        border: 2rpx dashed #aaa;
-                    }
+                    // border-radius: 10rpx;
                 }
             }
         }
