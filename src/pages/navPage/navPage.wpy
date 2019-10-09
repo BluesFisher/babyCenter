@@ -93,6 +93,13 @@ export default class NavPage extends wepy.page {
         tabBar: HEAD_NAV_GROUP
     };
 
+    onShareAppMessage(res) {
+        return {
+            title: 'babyCenter',
+            path: '/pages/index'
+        };
+    }
+
     onLoad() {
         const { statusBarHeight } = wepy.getSystemInfoSync();
         const rpxHeight = statusBarHeight / 2;

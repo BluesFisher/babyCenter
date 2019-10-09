@@ -95,9 +95,9 @@ export default class HomePage extends wepy.component {
         duration: 500,
 
         background: [
-            '/assets/images/baby3.png',
-            '/assets/images/baby2.png',
-            '/assets/images/baby1.png'
+            'http://img5.imgtn.bdimg.com/it/u=1657970879,1204165140&fm=26&gp=0.jpg',
+            'http://img2.imgtn.bdimg.com/it/u=4169466309,909409521&fm=26&gp=0.jpg',
+            'http://img4.imgtn.bdimg.com/it/u=3730307166,2351981660&fm=26&gp=0.jpg'
         ],
 
         babyInfo: [
@@ -120,12 +120,12 @@ export default class HomePage extends wepy.component {
         headerMenu: [
             {
                 title: '大事记',
-                icon: '/assets/images/navtab/home-male.png',
+                icon: '/assets/images/home/event-log.png',
                 url: '/pages/eventLog/eventLog'
             },
             {
                 title: '成长记录',
-                icon: '/assets/images/navtab/home-male.png',
+                icon: '/assets/images/home/grow-log.png',
                 url: '/pages/growLog/growLog'
             }
         ],
