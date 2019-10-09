@@ -40,8 +40,9 @@ export default class extends wepy.app {
             'pages/userInfo/userInfo', // 个人信息
             'pages/babyInfo/babyInfo', // 宝宝信息
             'pages/myAttention/myAttention', // 我的关注
-            'pages/collectInfo/collectInfo' // 我的收藏
-            // 'pages/growLog/growLog' // 成长记录
+            'pages/collectInfo/collectInfo', // 我的收藏
+            'pages/growLog/growLog', // 成长记录
+            'pages/eventLog/eventLog' // 大事记
         ]
     };
 

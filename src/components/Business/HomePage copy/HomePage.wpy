@@ -1,6 +1,6 @@
 <template>
     <view class='home-container'>
-        <view class='home-back'></view>
+        <image class='home-back' src='/assets/images/common/home-bak.png' alt="" />
 
         <view class="home-header">
             <view class="baby-item" wx:for="{{babyInfo}}" wx:for-item="item" wx:for-index="index"
@@ -30,10 +30,16 @@
 
         <view class="home-hot-news">
 
+            <view class="home-hot-title" style="color: {{themeColor}}">
+                <view class="hot-title-bar" style="background: {{themeColor}}"></view>
+                <text> 热门推荐</text>
+                <view class="hot-title-bar" style="background: {{themeColor}}"></view>
+            </view>
+
             <view class="swiper-container">
                 <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}"
-                    interval="{{interval}}" duration="{{duration}}" circular
-                    indicator-active-color="{{themeColor}}">
+                    interval="{{interval}}" duration="{{duration}}" previous-margin="100rpx"
+                    next-margin="100rpx" circular indicator-active-color="{{themeColor}}">
                     <block wx:for="{{background}}" wx:for-item="item" wx:for-index="index"
                         wx:key="index">
                         <swiper-item>
@@ -47,15 +53,38 @@
 
         </view>
 
-        <view class="home-menu">
-            <view class="home-menu-item" wx:for="{{headerMenu}}" wx:for-item="item"
+        <view class="home-time-line">
+            <view class="time-line-item" wx:for="{{timeLineItems}}" wx:for-item="item"
                 wx:for-index="index" wx:key="{{index}}" data-item="{{item}}" data-index="{{index}}"
-                @tap="handleMenuItem">
-                <image src="{{item.icon}}" alt="" />
-                <view>{{item.title}}</view>
+                @tap="handleTimeLine">
+                <view class="time-line-bar">
+                    <view class="time-line-dot"></view>
+                </view>
+                <view class="time-line-item-header">
+                    <image src="/assets/images/common/time-icon.png" />
+                    <text>{{item.time}}</text>
+                    <text class="baby-age">{{item.babyAge}}</text>
+                </view>
+                <view class="time-line-item-content">
+                    <view>{{item.detail}}</view>
+                    <image src="{{item.pic}}" alt="" />
+                    <view class="comment-list">
+                        <view class="comment-list-item" wx:for="{{item.commentList}}"
+                            wx:for-item="commentItem" wx:for-index="commentIndex"
+                            wx:key="{{commentIndex}}">
+                            <text>{{commentItem.userName}}：</text>
+                            <text>{{commentItem.content}}</text>
+                        </view>
+                        <input class="comment-fill" value=""
+                            placeholder="{{!item.commentList || item.commentList.length === 0 ? '快来抢沙发' : '我也说一句'}}" />
+                        <!-- <view class="comment-fill">
+                            {{!item.commentList || item.commentList.length === 0 ? "快来抢沙发" : "我也说一句"}}
+                        </view> -->
+                    </view>
+                </view>
+
             </view>
         </view>
-
     </view>
 </template>
 
@@ -117,19 +146,6 @@ export default class HomePage extends wepy.component {
             // }
         ],
 
-        headerMenu: [
-            {
-                title: '大事记',
-                icon: '/assets/images/navtab/home-male.png',
-                url: '/pages/eventLog/eventLog'
-            },
-            {
-                title: '成长记录',
-                icon: '/assets/images/navtab/home-male.png',
-                url: '/pages/growLog/growLog'
-            }
-        ],
-
         timeLineItems: [
             {
                 time: '2018-10-03',
@@ -175,19 +191,8 @@ export default class HomePage extends wepy.component {
     };
 
     methods = {
-        handleBabyItem(e) {
-            wepy.navigateTo({
-                url: '/pages/babyInfo/babyInfo'
-            });
-        },
-        handleMenuItem(e) {
-            const { item } = e.currentTarget.dataset;
-
-            item.url &&
-                wepy.navigateTo({
-                    url: item.url
-                });
-        }
+        handleBabyItem() {},
+        handleTimeLine() {}
     };
 
     setInforScroll() {

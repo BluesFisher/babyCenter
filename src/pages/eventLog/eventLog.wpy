@@ -1,0 +1,130 @@
+
+<template>
+    <view class='container'>
+        <baseContainer title="大事记" :needMenuCenter.sync="needMenuCenter">
+            <view slot="content-detail" class="event-log">
+                <view class="event-log-header">
+                    <text>共{{timeLineItems.length}}条记录</text>
+                    <text class="add-log-btn" style="background: {{themeColor}}"
+                        @tap="handleAddLog">添加</text>
+                </view>
+
+                <view class="event-time-line">
+                    <view class="time-line-item" wx:for="{{timeLineItems}}" wx:for-item="item"
+                        wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
+                        data-index="{{index}}" @tap="handleTimeLine">
+                        <view class="time-line-bar">
+                            <view class="time-line-dot"></view>
+                        </view>
+                        <view class="time-line-item-header">
+                            <image src="/assets/images/common/time-icon.png" />
+                            <text>{{item.time}}</text>
+                            <text class="baby-age">{{item.babyAge}}</text>
+                        </view>
+                        <view class="time-line-item-content">
+                            <view>{{item.detail}}</view>
+                            <image src="{{item.pic}}" alt="" />
+                            <view class="comment-list">
+                                <view class="comment-list-item" wx:for="{{item.commentList}}"
+                                    wx:for-item="commentItem" wx:for-index="commentIndex"
+                                    wx:key="{{commentIndex}}">
+                                    <text>{{commentItem.userName}}：</text>
+                                    <text>{{commentItem.content}}</text>
+                                </view>
+                                <input class="comment-fill" value=""
+                                    placeholder="{{!item.commentList || item.commentList.length === 0 ? '快来抢沙发' : '我也说一句'}}" />
+                                <!-- <view class="comment-fill">
+                            {{!item.commentList || item.commentList.length === 0 ? "快来抢沙发" : "我也说一句"}}
+                        </view> -->
+                            </view>
+                        </view>
+
+                    </view>
+                </view>
+            </view>
+        </baseContainer>
+
+    </view>
+</template>
+
+<style lang="less" src="./eventLog.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import { connect } from 'wepy-redux';
+import CommonFunc from 'utils/common-func';
+import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
+import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
+
+@connect(
+    {
+        gender(state) {
+            return state.userInfo.gender;
+        }
+    },
+    {}
+)
+export default class EventLog extends wepy.page {
+    config = {
+        navigationBarTitleText: 'event',
+        disableScroll: true
+    };
+    components = {
+        baseContainer: BaseContainer,
+        baseNotice: BaseNotice
+    };
+    data = {
+        themeColor: '#ff85bc',
+        needMenuCenter: true,
+        timeLineItems: [
+            {
+                time: '2018-10-03',
+                babyAge: '0个月1天',
+                detail: '宝宝今天出生啦！',
+                pic: '/assets/images/baby1.png',
+                commentList: [
+                    {
+                        userName: '爸爸',
+                        content: '你终于出来了'
+                    },
+                    {
+                        userName: '妈妈',
+                        content: '好不容把你弄出来了'
+                    }
+                ]
+            },
+            {
+                time: '2019-10-03',
+                babyAge: '1周岁',
+                detail: '宝宝今天一周岁啦！',
+                pic: '/assets/images/baby1.png'
+            }
+        ]
+    };
+
+    onLoad() {
+        this.themeColor = CommonFunc.setThemeColor(this.gender);
+        this.$apply();
+    }
+
+    async onShow() {}
+
+    async onHide() {}
+
+    onUnload() {}
+
+    watch = {
+        gender(newVal) {
+            this.themeColor = CommonFunc.setThemeColor(newVal);
+            this.$apply();
+        }
+    };
+
+    methods = {
+        handleTimeLine() {},
+
+        handleAddLog() {}
+    };
+}
+</script>
