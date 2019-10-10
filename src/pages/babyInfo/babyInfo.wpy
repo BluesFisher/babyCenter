@@ -6,7 +6,7 @@
                     wx:for="{{babyInfo}}" wx:for-item="item" wx:for-index="index" wx:key="{{index}}"
                     data-item="{{item}}" data-index="{{index}}" catchtap="handleInfoItem"
                     bindtouchstart="itemTouchStart" bindtouchend="itemTouchEnd">
-                    <image class="baby-info-icon" src="{{item.icon}}" alt="" />
+                    <image mode="aspectFill" class="baby-info-icon" src="{{item.icon}}" alt="" />
                     <view class="baby-info-detail">
                         <view class="baby-info-name">
                             <text>{{item.name}}</text>

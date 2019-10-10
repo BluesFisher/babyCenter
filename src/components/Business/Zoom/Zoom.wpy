@@ -8,8 +8,8 @@
                             wx:for-index="index" wx:key="{{index}}">
                             <view class="zoom-artical-item-header">
                                 <view class="artical-author-name">
-                                    <image class="artical-author-icon" src="{{item.author.icon}}"
-                                        alt="" />
+                                    <image mode="aspectFill" class="artical-author-icon"
+                                        src="{{item.author.icon}}" alt="" />
                                     {{item.author.name}}
                                 </view>
                                 <view
@@ -18,11 +18,11 @@
                             </view>
                             <view class="zoom-artical-item-pic">
                                 <view class="artical-pic-left">
-                                    <image src="{{item.picShow[0]}}" alt="" />
+                                    <image mode="aspectFill" src="{{item.picShow[0]}}" alt="" />
                                 </view>
                                 <view class="artical-pic-right">
-                                    <image src="{{item.picShow[1]}}" alt="" />
-                                    <image src="{{item.picShow[2]}}" alt="" />
+                                    <image mode="aspectFill" src="{{item.picShow[1]}}" alt="" />
+                                    <image mode="aspectFill" src="{{item.picShow[2]}}" alt="" />
                                 </view>
                             </view>
                             <view class="zoom-artical-item-content">
@@ -65,7 +65,8 @@ import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 const ARTICAL_ITEMS = [
     {
         author: {
-            icon: '../../assets/images/common/user-icon.png',
+            icon:
+                'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=347508467,3785403878&fm=26&gp=0.jpg',
             name: '萌娃妈妈',
             isFocus: false
         },
@@ -86,7 +87,8 @@ const ARTICAL_ITEMS = [
 
     {
         author: {
-            icon: '../../assets/images/common/user-icon.png',
+            icon:
+                'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=347508467,3785403878&fm=26&gp=0.jpg',
             name: '萌娃爸爸',
             isFocus: true
         },

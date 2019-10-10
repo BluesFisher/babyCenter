@@ -7,7 +7,7 @@
         <view class="vtoast">
             <view class="vtoast-mask"></view>
             <view class="vtoast-loading" animation="{{loadingAnimationData}}">
-                <image class="vtoast-loading-gif" src="../../assets/images/common/load.gif" />
+                <!-- <image class="vtoast-loading-gif" src="../../assets/images/common/load.gif" /> -->
             </view>
             <view class="vtoast-toast" animation="{{toastAnimationData}}">
                 <image class="vtoast-toast-img"

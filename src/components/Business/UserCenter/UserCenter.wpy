@@ -4,7 +4,8 @@
             <view slot="content-detail" class="user-center">
                 <view class="user-detail-header" @tap="goUserInfo"
                     style="background: {{backgroundHeader}}">
-                    <image class='user-icon' src='{{avatarUrl}}' alt='' @tap.stop="bindUserIcon" />
+                    <image mode="aspectFill" class='user-icon' src='{{avatarUrl}}' alt=''
+                        @tap.stop="bindUserIcon" />
                     <view class="user-detail-info">
                         <view class="user-name">BLUES</view>
                         <view class="user-level">Lv1</view>

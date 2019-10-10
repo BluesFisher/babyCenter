@@ -30,7 +30,7 @@
 
                         <view wx:elif="{{item.type==='image'}}" class='user-info-icon'
                             data-index="{{index}}" data-item="{{item}}" @tap="bindUserMenuChange">
-                            <image src='{{item.value}}' alt='' />
+                            <image mode="aspectFill" src='{{item.value}}' alt='' />
                         </view>
 
                         <input wx:elif="{{item.type==='input'}}" value="{{item.value}}"

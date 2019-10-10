@@ -3,7 +3,7 @@
         <view wx:for="{{navbarList}}" wx:for-item="item" wx:for-index="index" wx:key="{{index}}"
             class="tab-item {{currentTabIndex === index ? 'tab-active' : ''}}" @tap="bindNavbarTap"
             data-index="{{index}}" data-item="{{item}}"
-            style="color: {{currentTabIndex === index ? themeColor : '#333'}}">
+            style="color: {{currentTabIndex === index ? themeColor : '#333'}}; width: {{100 / navbarList.length}}%">
             {{ item.name }}
             <view wx:if="{{needBottomLine && currentTabIndex === index}}" class="tab-border"
                 style="border-bottom: {{needBottomLine && currentTabIndex === index ? borderBottomColor : ''}}" />

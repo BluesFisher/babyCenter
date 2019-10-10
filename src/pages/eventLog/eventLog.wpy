@@ -3,6 +3,8 @@
     <view class='container'>
         <baseContainer title="大事记" :needMenuCenter.sync="needMenuCenter">
             <view slot="content-detail" class="event-log">
+                <baseTab :navbarList.sync="btnGroup" userClass="btn-group"
+                    :needBottomLine.sync="needTabBottomLine" @tabChange.user="tabChange" />
                 <view class="event-log-header">
                     <text>共{{timeLineItems.length}}条记录</text>
                     <text class="add-log-btn" style="background: {{themeColor}}"
@@ -22,26 +24,39 @@
                             <text class="baby-age">{{item.babyAge}}</text>
                         </view>
                         <view class="time-line-item-content">
-                            <view>{{item.detail}}</view>
-                            <view class="time-line-item-img">
-                                <image wx:for="{{item.pic}}" wx:for-item="picItem"
-                                    wx:for-index="picIndex" wx:key="{{picIndex}}" src="{{picItem}}"
-                                    data-item="{{item}}" data-index="{{picIndex}}"
-                                    @tap="handlePic" />
-                            </view>
-                            <view class="comment-list">
-                                <view class="comment-list-item" wx:for="{{item.commentList}}"
-                                    wx:for-item="commentItem" wx:for-index="commentIndex"
-                                    wx:key="{{commentIndex}}">
-                                    <text>{{commentItem.userName}}：</text>
-                                    <text>{{commentItem.content}}</text>
+                            <view class="item-content-detail" wx:for="{{item.logItem}}"
+                                wx:for-item="logItem" wx:for-index="logIndex" wx:key="{{logIndex}}">
+                                <view class="item-detail-author">
+                                    <image lazy-load mode="aspectFill"
+                                        src="{{logItem.author.icon}}" />
                                 </view>
-                                <input class="comment-fill" value=""
-                                    placeholder="{{!item.commentList || item.commentList.length === 0 ? '快来抢沙发' : '我也说一句'}}" />
-                                <!-- <view class="comment-fill">
-                            {{!item.commentList || item.commentList.length === 0 ? "快来抢沙发" : "我也说一句"}}
-                        </view> -->
+
+                                <view class="time-line-item-detail">
+                                    <text
+                                        class="item-detail-author-name">{{logItem.author.name}}</text>
+                                    <view class="item-detail-text">{{logItem.detail}}</view>
+                                    <view class="time-line-item-img">
+                                        <image lazy-load mode="aspectFill" wx:for="{{logItem.pic}}"
+                                            wx:for-item="picItem" wx:for-index="picIndex"
+                                            wx:key="{{picIndex}}" src="{{picItem}}"
+                                            data-item="{{logItem}}" data-index="{{picIndex}}"
+                                            @tap="handlePic" />
+                                    </view>
+                                    <view class="comment-list">
+                                        <view class="comment-list-item"
+                                            wx:for="{{logItem.commentList}}"
+                                            wx:for-item="commentItem" wx:for-index="commentIndex"
+                                            wx:key="{{commentIndex}}">
+                                            <text>{{commentItem.userName}}：</text>
+                                            <text>{{commentItem.content}}</text>
+                                        </view>
+                                        <input class="comment-fill" value=""
+                                            placeholder="{{!logItem.commentList || logItem.commentList.length === 0 ? '快来抢沙发' : '我也说一句'}}" />
+                                    </view>
+                                </view>
+
                             </view>
+
                         </view>
 
                     </view>
@@ -61,31 +76,30 @@ import { connect } from 'wepy-redux';
 import CommonFunc from 'utils/common-func';
 import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
+import BaseTab from 'components/Base/BaseTab/BaseTab';
 
-@connect(
+const EVENT_LOG_BTN = [
     {
-        gender(state) {
-            return state.userInfo.gender;
-        }
+        name: '哈尼',
+        formatFunc: () => {}
     },
-    {}
-)
-export default class EventLog extends wepy.page {
-    config = {
-        navigationBarTitleText: 'event',
-        disableScroll: true
-    };
-    components = {
-        baseContainer: BaseContainer,
-        baseNotice: BaseNotice
-    };
-    data = {
-        themeColor: '#ff85bc',
-        needMenuCenter: true,
-        timeLineItems: [
+    {
+        name: '卤鸭',
+        formatFunc: () => {}
+    }
+];
+
+const BABY1 = [
+    {
+        time: '2018-10-03',
+        babyAge: '0个月1天',
+        logItem: [
             {
-                time: '2018-10-03',
-                babyAge: '0个月1天',
+                author: {
+                    icon:
+                        'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=347508467,3785403878&fm=26&gp=0.jpg',
+                    name: '萌娃妈妈'
+                },
                 detail: '宝宝今天出生啦！',
                 pic: [
                     'https://img.zcool.cn/community/031cbda57c9116b0000018c1b8ad5d9.jpg@520w_390h_1c_1e_1o_100sh.jpg',
@@ -105,14 +119,85 @@ export default class EventLog extends wepy.page {
                 ]
             },
             {
-                time: '2019-10-03',
-                babyAge: '1周岁',
+                author: {
+                    icon:
+                        'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2112694706,1016932601&fm=26&gp=0.jpg',
+                    name: '萌娃爸爸'
+                },
+                detail: '喜得贵女',
+                pic: [
+                    'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1193060419,496496896&fm=26&gp=0.jpg'
+                ]
+            }
+        ]
+    },
+    {
+        time: '2019-10-03',
+        babyAge: '1周岁',
+        logItem: [
+            {
+                author: {
+                    icon:
+                        'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=347508467,3785403878&fm=26&gp=0.jpg',
+                    name: '萌娃妈妈'
+                },
                 detail: '宝宝今天一周岁啦！',
                 pic: [
                     'https://img.zcool.cn/community/009954599143f3000000212908d662.jpg@520w_390h_1c_1e_1o_100sh.jpg'
                 ]
             }
         ]
+    }
+];
+const BABY2 = [
+    {
+        time: '2019-10-03',
+        babyAge: '1周岁',
+        logItem: [
+            {
+                author: {
+                    icon:
+                        'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=347508467,3785403878&fm=26&gp=0.jpg',
+                    name: '萌娃妈妈'
+                },
+                detail: '宝宝今天一周岁啦！',
+                pic: [
+                    'https://img.zcool.cn/community/009954599143f3000000212908d662.jpg@520w_390h_1c_1e_1o_100sh.jpg'
+                ]
+            }
+        ]
+    }
+];
+
+const TIME_LINE_ITEMS = {
+    哈尼: BABY1,
+    卤鸭: BABY2
+};
+@connect(
+    {
+        gender(state) {
+            return state.userInfo.gender;
+        }
+    },
+    {}
+)
+export default class EventLog extends wepy.page {
+    config = {
+        navigationBarTitleText: 'event',
+        disableScroll: true
+    };
+    components = {
+        baseContainer: BaseContainer,
+        baseNotice: BaseNotice,
+        baseTab: BaseTab
+    };
+    data = {
+        themeColor: '#ff85bc',
+        needMenuCenter: true,
+        btnGroup: EVENT_LOG_BTN,
+        needTabBottomLine: true,
+        currentBaby: EVENT_LOG_BTN[0].name,
+        timeLineItems: TIME_LINE_ITEMS['哈尼']
     };
 
     onLoad() {
@@ -134,8 +219,14 @@ export default class EventLog extends wepy.page {
     };
 
     methods = {
+        tabChange(changeItem) {
+            const { item } = changeItem;
+            this.timeLineItems = TIME_LINE_ITEMS[item.name];
+        },
         handlePic(e) {
             const { item, index } = e.currentTarget.dataset;
+
+            console.log(item);
 
             item.pic &&
                 wx.previewImage({
