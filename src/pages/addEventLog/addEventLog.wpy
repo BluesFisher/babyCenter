@@ -1,0 +1,119 @@
+<template>
+    <view class='container'>
+        <baseContainer title="发表大事记" :needMenuCenter.sync="needMenuCenter">
+            <view slot="content-detail" class="add-event-log">
+                <view class="add-event-header">
+                    <view class="cancel-btn" @tap="bindCancel">取消</view>
+                    <view class="confirm-btn" @tap="bindConfirm">确定</view>
+                </view>
+
+                <view class="add-event-content">
+                    <textarea auto-focus bindinput="textareaInput" placeholder="这一刻你想记录的..."
+                        maxlength="300"></textarea>
+
+                    <view class="event-pic-container">
+                        <view class="event-pic-item" wx:for="{{eventPic}}" wx:for-item="item"
+                            wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
+                            data-index="{{index}}">
+                            <image mode="aspectFill" src="{{item}}" alt="" data-item="{{item}}"
+                                data-index="{{index}}" @tap="handleShowPic" />
+                            <image class="delete-icon" data-item="{{item}}" data-index="{{index}}"
+                                @tap="deletePic" src="/assets/images/eventLog/delete.png" />
+
+                        </view>
+                        <view class="event-pic-item" wx:if="{{eventPic.length < 9}}">
+                            <image src="/assets/images/eventLog/add.png" @tap="addImage" />
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </baseContainer>
+    </view>
+</template>
+
+<style lang="less" src="./addEventLog.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import CommonFunc from 'utils/common-func';
+import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
+
+const MAX_PIC_NUM = 9;
+
+export default class AddEventLog extends wepy.page {
+    config = {
+        navigationBarTitleText: 'Home',
+        disableScroll: true
+    };
+    components = {
+        baseContainer: BaseContainer
+    };
+    data = {
+        needMenuCenter: true,
+        eventPic: [
+            'https://img.zcool.cn/community/031cbda57c9116b0000018c1b8ad5d9.jpg@520w_390h_1c_1e_1o_100sh.jpg',
+            'https://img.zcool.cn/community/04a89b57b2ad120000012e7eddc3d7.jpg@160w_160h_1c_1e_1o_100sh.jpg',
+            'https://img.zcool.cn/community/0076a45ab1c754a801218207ce0b56.jpg@160w_160h_1c_1e_1o_100sh.jpg',
+            'https://img.zcool.cn/community/01cc2d5c62bcb4a801203d2256331f.jpg@520w_390h_1c_1e_1o_100sh.jpg'
+        ]
+    };
+
+    onLoad(options) {}
+
+    async onShow() {}
+
+    async onHide() {}
+
+    onUnload() {}
+
+    methods = {
+        async bindCancel() {
+            const { res } = await CommonFunc.wepyFunc('showModal', {
+                title: '提示',
+                content: '确认退出编辑？'
+            });
+
+            if (res.confirm) {
+                wepy.navigateBack({
+                    delta: 1
+                });
+            }
+        },
+        bindConfirm() {},
+        textareaInput(e) {
+            console.log(e.detail.value);
+        },
+        async deletePic(e) {
+            const { index } = e.currentTarget.dataset;
+
+            const { res } = await CommonFunc.wepyFunc('showModal', {
+                title: '提示',
+                content: '确认删除该图片？'
+            });
+
+            if (res.confirm) {
+                this.eventPic.splice(index, 1);
+                this.$apply();
+            }
+        },
+        handleShowPic(e) {
+            const { item } = e.currentTarget.dataset;
+            item &&
+                wepy.previewImage({
+                    current: item,
+                    urls: this.eventPic
+                });
+        },
+        async addImage() {
+            const { code, res } = await CommonFunc.wepyFunc('chooseImage', {
+                count: MAX_PIC_NUM - this.eventPic.length
+            });
+            if (code === 0) {
+                this.eventPic = [...this.eventPic, ...res.tempFilePaths];
+                this.$apply();
+            }
+        }
+    };
+}
+</script>

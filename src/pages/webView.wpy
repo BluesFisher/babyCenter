@@ -1,7 +1,6 @@
 <template>
-    <view>
-        <web-view wx:if="{{show}}" src="{{url}}" binderror="loaderror"></web-view>
-    </view>
+    <web-view wx:if="{{show}}" src="{{url}}" binderror="loaderror"></web-view>
+
 </template>
 
 <script>

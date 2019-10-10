@@ -18,7 +18,7 @@ export default class extends wepy.app {
         window: {
             backgroundTextStyle: 'light',
             navigationBarTitleText: '',
-            navigationBarBackgroundColor: 'transparent',
+            navigationBarBackgroundColor: '#ff85bc',
             navigationBarTextStyle: 'white',
             backgroundColorTop: 'transparent',
             navigationStyle: 'custom'
@@ -42,7 +42,8 @@ export default class extends wepy.app {
             'pages/myAttention/myAttention', // 我的关注
             'pages/collectInfo/collectInfo', // 我的收藏
             'pages/growLog/growLog', // 成长记录
-            'pages/eventLog/eventLog' // 大事记
+            'pages/eventLog/eventLog', // 大事记
+            'pages/addEventLog/addEventLog' // 添加大事记
         ]
     };
 

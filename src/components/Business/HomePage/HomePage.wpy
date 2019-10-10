@@ -67,7 +67,8 @@ import wepy from 'wepy';
 import { connect } from 'wepy-redux';
 // import CommonFunc from 'utils/common-func';
 
-const defaultUserIcon = '../../assets/images/common/default-female.png';
+const defaultFemaleIcon = '../../assets/images/common/default-female.png';
+const defaultMaleIcon = '../../assets/images/common/default-male.png';
 const INFOR_MOVE_STEP = 2; // px
 const INFOR_INIT_POS = 230; // px
 
@@ -102,19 +103,19 @@ export default class HomePage extends wepy.component {
 
         babyInfo: [
             {
-                icon: defaultUserIcon,
+                icon: defaultFemaleIcon,
                 name: '哈尼',
                 birthday: '1岁03天',
                 gender: '女',
                 relationShip: []
+            },
+            {
+                icon: defaultMaleIcon,
+                name: '卤鸭',
+                birthday: '1岁03天',
+                gender: '男',
+                relationShip: []
             }
-            // {
-            //     icon: defaultUserIcon,
-            //     name: '哈尼',
-            //     birthday: '1岁03天',
-            //     gender: '男',
-            //     relationShip: []
-            // }
         ],
 
         headerMenu: [

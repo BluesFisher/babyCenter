@@ -225,17 +225,19 @@ export default class EventLog extends wepy.page {
         },
         handlePic(e) {
             const { item, index } = e.currentTarget.dataset;
-
-            console.log(item);
-
             item.pic &&
-                wx.previewImage({
+                wepy.previewImage({
                     current: item.pic[index],
                     urls: item.pic
                 });
         },
 
-        handleAddLog() {}
+        handleAddLog() {
+            // CommonFunc.gotoWebViewPage('http://localhost/addEventLog');
+            wepy.navigateTo({
+                url: '/pages/addEventLog/addEventLog'
+            });
+        }
     };
 }
 </script>

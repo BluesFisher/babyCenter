@@ -133,6 +133,13 @@ export default class BabyInfo extends wepy.page {
                 birthday: '2018-10-03',
                 gender: '女',
                 relationShip: []
+            },
+            {
+                icon: defaultMaleIcon,
+                name: '卤鸭',
+                birthday: '2018-10-03',
+                gender: '男',
+                relationShip: []
             }
         ],
         babyEdit: CommonFunc.deepCopy(BABY_EDIT),
