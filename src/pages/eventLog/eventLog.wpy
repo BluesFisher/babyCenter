@@ -3,9 +3,9 @@
     <view class='container'>
         <baseContainer title="大事记" :needMenuCenter.sync="needMenuCenter">
             <view slot="content-detail" class="event-log">
-                <baseTab :navbarList.sync="btnGroup" userClass="btn-group"
-                    :needBottomLine.sync="needTabBottomLine" @tabChange.user="tabChange" />
-                <view class="event-log-header">
+
+                <babyHeader @babyChange.user="babyChange" />
+                <view class="add-log-header">
                     <text>共{{timeLineItems.length}}条记录</text>
                     <text class="add-log-btn" style="background: {{themeColor}}"
                         @tap="handleAddLog">添加</text>
@@ -76,18 +76,7 @@ import { connect } from 'wepy-redux';
 import CommonFunc from 'utils/common-func';
 import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
-import BaseTab from 'components/Base/BaseTab/BaseTab';
-
-const EVENT_LOG_BTN = [
-    {
-        name: '哈尼',
-        formatFunc: () => {}
-    },
-    {
-        name: '卤鸭',
-        formatFunc: () => {}
-    }
-];
+import BabyHeader from 'components/Business/BabyHeader/BabyHeader';
 
 const BABY1 = [
     {
@@ -169,10 +158,7 @@ const BABY2 = [
     }
 ];
 
-const TIME_LINE_ITEMS = {
-    哈尼: BABY1,
-    卤鸭: BABY2
-};
+const TIME_LINE_ITEMS = [BABY1, BABY2];
 @connect(
     {
         gender(state) {
@@ -189,15 +175,13 @@ export default class EventLog extends wepy.page {
     components = {
         baseContainer: BaseContainer,
         baseNotice: BaseNotice,
-        baseTab: BaseTab
+        babyHeader: BabyHeader
     };
     data = {
         themeColor: '#ff85bc',
         needMenuCenter: true,
-        btnGroup: EVENT_LOG_BTN,
         needTabBottomLine: true,
-        currentBaby: EVENT_LOG_BTN[0].name,
-        timeLineItems: TIME_LINE_ITEMS['哈尼']
+        timeLineItems: TIME_LINE_ITEMS[0]
     };
 
     onLoad() {
@@ -219,9 +203,8 @@ export default class EventLog extends wepy.page {
     };
 
     methods = {
-        tabChange(changeItem) {
-            const { item } = changeItem;
-            this.timeLineItems = TIME_LINE_ITEMS[item.name];
+        babyChange(index) {
+            this.timeLineItems = TIME_LINE_ITEMS[index];
         },
         handlePic(e) {
             const { item, index } = e.currentTarget.dataset;

@@ -1,0 +1,43 @@
+.baby-header {
+    width: 100%;
+    color: #000;
+    background: #fff;
+    z-index: 10;
+    border-bottom: 2rpx solid rgba(255, 255, 255, .6);
+
+    .baby-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        width: 100%;
+        padding: 20rpx 40rpx;
+
+        .baby-info-icon {
+            height: 90rpx;
+            width: 90rpx;
+            border-radius: 50%;
+            margin-right: 30rpx;
+        }
+
+        .baby-info-detail {
+            flex: 1;
+
+            .baby-info-name {
+                font-size: 30rpx;
+                display: flex;
+                align-items: center;
+
+                image {
+                    height: 30rpx;
+                    width: 30rpx;
+                    margin-left: 4rpx;
+                }
+            }
+
+            .baby-info-birthday {
+                font-size: 26rpx;
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 <template>
     <view class="grow-log-container" @tap="containerTap">
 
-        <view class="grow-log-header">
+        <view class="add-log-header">
             <text>共{{growInfo.length}}条记录</text>
             <text class="add-log-btn" style="background: {{themeColor}}"
                 @tap="handleAddLog">添加</text>

@@ -160,7 +160,7 @@ export default class HomePage extends wepy.component {
     async onLoad() {
         this.themeColor = this.gender === '男' ? '#80d7fe' : '#ff85bc';
         this.$apply();
-        // this.setInforScroll();
+        this.setInforScroll();
     }
 
     async onHide() {

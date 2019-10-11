@@ -31,7 +31,7 @@
             <view class="pop-edit-content">
                 <view class="pop-edit-title">宝宝信息</view>
                 <view class='pop-edit-icon' @tap="chooseIcon">
-                    <image src='{{editIcon}}' alt='' />
+                    <image mode="aspectFill" src='{{editIcon}}' alt='' />
                     <text>点击设置头像</text>
                 </view>
                 <view class="user-menu">

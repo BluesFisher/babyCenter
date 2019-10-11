@@ -7,8 +7,17 @@
                     <view class="confirm-btn" @tap="bindConfirm">确定</view>
                 </view>
 
+                <view class="base-menu-item">
+                    <view class="base-menu-label">记录日期</view>
+                    <picker mode="date" value="{{eventDate}}" end="{{nowDate}}"
+                        @change="bindDateChange">
+                        <text class="base-menu-value">{{ eventDate }}</text>
+                    </picker>
+                    <view class="down-arrow menu-arrow"></view>
+                </view>
+
                 <view class="add-event-content">
-                    <textarea auto-focus bindinput="textareaInput" placeholder="这一刻你想记录的..."
+                    <textarea bindinput="textareaInput" placeholder="这一刻你想记录的..."
                         maxlength="300"></textarea>
 
                     <view class="event-pic-container">
@@ -36,6 +45,7 @@
 
 <script>
 import wepy from 'wepy';
+import dayjs from 'dayjs';
 import CommonFunc from 'utils/common-func';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 
@@ -51,6 +61,8 @@ export default class AddEventLog extends wepy.page {
     };
     data = {
         needMenuCenter: true,
+        nowDate: dayjs().format('YYYY-MM-DD'),
+        eventDate: dayjs().format('YYYY-MM-DD'),
         eventPic: [
             'https://img.zcool.cn/community/031cbda57c9116b0000018c1b8ad5d9.jpg@520w_390h_1c_1e_1o_100sh.jpg',
             'https://img.zcool.cn/community/04a89b57b2ad120000012e7eddc3d7.jpg@160w_160h_1c_1e_1o_100sh.jpg',
@@ -81,6 +93,9 @@ export default class AddEventLog extends wepy.page {
             }
         },
         bindConfirm() {},
+        bindDateChange(e) {
+            this.eventDate = e.detail.value;
+        },
         textareaInput(e) {
             console.log(e.detail.value);
         },

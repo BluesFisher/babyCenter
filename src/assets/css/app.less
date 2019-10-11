@@ -88,53 +88,53 @@ page {
         padding-bottom: 30rpx;
         font-size: 28rpx;
         width: 100%;
+    }
 
-        .base-menu-item {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20rpx 30rpx;
-            border-bottom: 1rpx solid rgb(238, 238, 238, .8);
+    .base-menu-item {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20rpx 30rpx;
+        border-bottom: 1rpx solid rgb(238, 238, 238, .8);
 
-            .base-menu-label {
-                font-size: 30rpx;
-                min-width: 120rpx;
-            }
+        .base-menu-label {
+            font-size: 30rpx;
+            min-width: 120rpx;
+        }
 
-            .user-info-icon {
-                padding: 0 40rpx;
+        .user-info-icon {
+            padding: 0 40rpx;
 
-                image {
-                    height: 120rpx;
-                    width: 120rpx;
-                    border-radius: 10rpx;
-                }
-            }
-
-            .user-info-icon,
-            picker,
-            input {
-                width: 500rpx;
-                text-align: right;
-            }
-
-            input {
-                padding: 0 40rpx;
-                box-sizing: border-box;
-                color: #aaa;
-            }
-
-            .base-menu-value {
-                flex: 1;
-                padding: 0 40rpx;
-                color: #aaa;
+            image {
+                height: 120rpx;
+                width: 120rpx;
+                border-radius: 10rpx;
             }
         }
 
-        .base-border-bottom {
-            border-bottom: 14rpx solid rgb(241, 241, 241, .4);
+        .user-info-icon,
+        picker,
+        input {
+            width: 500rpx;
+            text-align: right;
         }
+
+        input {
+            padding: 0 40rpx;
+            box-sizing: border-box;
+            color: #aaa;
+        }
+
+        .base-menu-value {
+            flex: 1;
+            padding: 0 40rpx;
+            color: #aaa;
+        }
+    }
+
+    .base-border-bottom {
+        border-bottom: 14rpx solid rgb(241, 241, 241, .4);
     }
 
     .menu-arrow {
@@ -289,5 +289,24 @@ page {
         margin-top: 0;
         background: #fff;
         box-shadow: 0 0 4rpx 1rpx rgba(173, 171, 171, 0.5)
+    }
+
+    .add-log-header {
+        text-align: right;
+        padding: 20rpx 30rpx 0 30rpx;
+        font-size: 26rpx;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20rpx;
+
+        .add-log-btn {
+            font-size: 30rpx;
+            background: #ff85bc;
+            color: #fff;
+            padding: 6rpx 20rpx;
+            border-radius: 30rpx;
+        }
+
     }
 }

@@ -2,21 +2,6 @@
     <view class='container'>
         <baseContainer title="个人信息" :needMenuCenter.sync="needMenuCenter">
             <view slot="content-detail" class="user-info">
-                <!-- <view class="user-info-header">
-                    <image class='user-info-icon' src='{{avatarUrl}}' alt=''
-                        @tap="chooseUserIcon" />
-
-                    <view class="user-level">Lv1</view>
-
-                    <view class="user-info-operate">
-                        <view class="base-operate-item" wx:for="{{baseOperate}}" wx:for-item="item"
-                            wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
-                            @tap="bindOperate">
-                            <view class="base-operate-label">{{item.label}}</view>
-                            <view class="base-operate-value">{{item.value}}</view>
-                        </view>
-                    </view>
-                </view> -->
 
                 <view class="user-menu">
                     <view class="base-menu-item" wx:for="{{userMenu}}" wx:for-item="item"

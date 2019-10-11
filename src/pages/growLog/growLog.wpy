@@ -3,6 +3,7 @@
     <view class='container'>
         <baseContainer title="成长记录" :needMenuCenter.sync="needMenuCenter">
             <view slot="content-detail" class="grow-log">
+                <babyHeader @babyChange.user="babyChange" />
                 <baseTab :navbarList.sync="btnGroup" userClass="btn-group"
                     :needBottomLine.sync="needTabBottomLine" @tabChange.user="tabChange" />
                 <growLogList wx:if="{{currentTab === 'growList'}}" />
@@ -26,6 +27,7 @@ import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 import BaseTab from 'components/Base/BaseTab/BaseTab';
 import GrowLogList from 'components/Business/GrowLog/GrowLogList/GrowLogList';
 import GrowLogCurve from 'components/Business/GrowLog/GrowLogCurve/GrowLogCurve';
+import BabyHeader from 'components/Business/BabyHeader/BabyHeader';
 
 const GROW_LOG_BTN_KEY = ['growList', 'height', 'weight', 'head'];
 const GROW_LOG_BTN = [
@@ -62,6 +64,7 @@ export default class GrowLog extends wepy.page {
     components = {
         baseContainer: BaseContainer,
         baseNotice: BaseNotice,
+        babyHeader: BabyHeader,
         baseTab: BaseTab,
         growLogList: GrowLogList,
         heightCurve: GrowLogCurve
@@ -83,6 +86,7 @@ export default class GrowLog extends wepy.page {
     onUnload() {}
 
     methods = {
+        babyChange(index) {},
         tabChange(changeItem) {
             const { item } = changeItem;
             this.currentTab = item.dataKey;

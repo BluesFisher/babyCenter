@@ -1,0 +1,82 @@
+<template>
+
+    <picker class="baby-header" range="{{babyRange}}" range-key="label" @change="bindBabyChange">
+        <view class="baby-item">
+            <image mode="aspectFill" class="baby-info-icon" src="{{babyInfo.icon}}" alt="" />
+            <view class="baby-info-detail">
+                <view class="baby-info-name">
+                    <text>{{babyInfo.name}}</text>
+                    <image
+                        src="{{babyInfo.gender === '女' ? '/assets/images/common/female.png' : '/assets/images/common/male.png'}}"
+                        alt="" />
+                </view>
+                <view class="baby-info-birthday">{{babyInfo.birthday}}</view>
+            </view>
+
+            <view class="down-arrow menu-arrow"></view>
+        </view>
+
+    </picker>
+
+</template>
+
+<style lang="less" src="./BabyHeader.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import { connect } from 'wepy-redux';
+
+const defaultFemaleIcon = '../../assets/images/common/default-female.png';
+const defaultMaleIcon = '../../assets/images/common/default-male.png';
+const BABY_LIST = [
+    {
+        icon: defaultFemaleIcon,
+        name: '哈尼',
+        birthday: '1岁03天',
+        gender: '女',
+        relationShip: []
+    },
+    {
+        icon: defaultMaleIcon,
+        name: '卤鸭',
+        birthday: '1岁03天',
+        gender: '男',
+        relationShip: []
+    }
+];
+
+@connect(
+    {
+        gender(state) {
+            return state.userInfo.gender;
+        }
+    },
+    {}
+)
+export default class BabyHeader extends wepy.component {
+    data = {
+        babyRange: [
+            {
+                value: '0',
+                label: '哈尼'
+            },
+            {
+                value: '1',
+                label: '卤鸭'
+            }
+        ],
+        babyInfo: BABY_LIST[0]
+    };
+
+    async onLoad() {}
+
+    methods = {
+        bindBabyChange(e) {
+            const { value } = e.detail;
+            this.babyInfo = BABY_LIST[value];
+            this.$emit('babyChange', value);
+        }
+    };
+}
+</script>
