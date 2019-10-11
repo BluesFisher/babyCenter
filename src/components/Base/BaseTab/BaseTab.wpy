@@ -17,12 +17,14 @@
 <script>
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
-import CommonFunc from 'utils/common-func';
 
 @connect(
     {
         gender(state) {
             return state.userInfo.gender;
+        },
+        themeColor(state) {
+            return state.userInfo.themeColor;
         }
     },
     {}
@@ -48,13 +50,11 @@ export default class BaseTab extends wepy.component {
     };
 
     data = {
-        themeColor: '#ff85bc',
         currentTabIndex: 0
     };
 
     onLoad() {
         this.currentTabIndex = this.initIndex;
-        this.themeColor = CommonFunc.setThemeColor(this.gender);
         this.$apply();
     }
 
@@ -67,10 +67,6 @@ export default class BaseTab extends wepy.component {
     watch = {
         initIndex(newVal) {
             this.currentTabIndex = newVal;
-            this.$apply();
-        },
-        gender(newVal) {
-            this.themeColor = CommonFunc.setThemeColor(newVal);
             this.$apply();
         }
     };

@@ -4,7 +4,8 @@
             <view slot="content-detail" class="add-event-log">
                 <view class="add-event-header">
                     <view class="cancel-btn" @tap="bindCancel">取消</view>
-                    <view class="confirm-btn" @tap="bindConfirm">确定</view>
+                    <view class="confirm-btn" style="background: {{themeColor}}" @tap="bindConfirm">
+                        确定</view>
                 </view>
 
                 <view class="base-menu-item">
@@ -45,12 +46,21 @@
 
 <script>
 import wepy from 'wepy';
+import { connect } from 'wepy-redux';
 import dayjs from 'dayjs';
 import CommonFunc from 'utils/common-func';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 
 const MAX_PIC_NUM = 9;
 
+@connect(
+    {
+        themeColor(state) {
+            return state.userInfo.themeColor;
+        }
+    },
+    {}
+)
 export default class AddEventLog extends wepy.page {
     config = {
         navigationBarTitleText: 'Home',

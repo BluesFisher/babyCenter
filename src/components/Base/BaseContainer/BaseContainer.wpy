@@ -1,7 +1,7 @@
 <template>
     <view class="content-container">
         <view class="content-header"
-            style="background: {{backgroundSelf}}; height: {{contentHeight}}rpx">
+            style="background: {{themeColor}}; height: {{contentHeight}}rpx">
             <view class="content-title" style="color: {{titleColor}}; margin-top: {{titleTop}}rpx">
                 {{ title }}</view>
         </view>
@@ -30,6 +30,9 @@ import CommonFunc from 'utils/common-func';
     {
         gender(state) {
             return state.userInfo.gender;
+        },
+        themeColor(state) {
+            return state.userInfo.themeColor;
         }
     },
     {}
@@ -54,7 +57,6 @@ export default class BaseContainer extends wepy.component {
         }
     };
     data = {
-        backgroundSelf: '#ff85bc',
         contentHeight: 140,
         titleTop: 30,
         menuTop: 50
@@ -67,17 +69,9 @@ export default class BaseContainer extends wepy.component {
         this.contentHeight += rpxHeight;
         statusBarHeight > 40 && (this.menuTop += 30 + rpxHeight);
         this.titleTop += rpxHeight;
-        this.backgroundSelf = CommonFunc.setThemeColor(this.gender);
 
         this.$apply();
     }
-
-    watch = {
-        gender(newVal) {
-            this.backgroundSelf = CommonFunc.setThemeColor(newVal);
-            this.$apply();
-        }
-    };
 
     methods = {
         goBack() {

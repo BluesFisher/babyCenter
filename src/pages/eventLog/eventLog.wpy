@@ -73,7 +73,7 @@
 <script>
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
-import CommonFunc from 'utils/common-func';
+// import CommonFunc from 'utils/common-func';
 import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 import BabyHeader from 'components/Business/BabyHeader/BabyHeader';
@@ -163,6 +163,9 @@ const TIME_LINE_ITEMS = [BABY1, BABY2];
     {
         gender(state) {
             return state.userInfo.gender;
+        },
+        themeColor(state) {
+            return state.userInfo.themeColor;
         }
     },
     {}
@@ -178,29 +181,18 @@ export default class EventLog extends wepy.page {
         babyHeader: BabyHeader
     };
     data = {
-        themeColor: '#ff85bc',
         needMenuCenter: true,
         needTabBottomLine: true,
         timeLineItems: TIME_LINE_ITEMS[0]
     };
 
-    onLoad() {
-        this.themeColor = CommonFunc.setThemeColor(this.gender);
-        this.$apply();
-    }
+    onLoad() {}
 
     async onShow() {}
 
     async onHide() {}
 
     onUnload() {}
-
-    watch = {
-        gender(newVal) {
-            this.themeColor = CommonFunc.setThemeColor(newVal);
-            this.$apply();
-        }
-    };
 
     methods = {
         babyChange(index) {

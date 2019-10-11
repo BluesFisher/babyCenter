@@ -106,6 +106,9 @@ const BABY_EDIT = [
     {
         gender(state) {
             return state.userInfo.gender;
+        },
+        themeColor(state) {
+            return state.userInfo.themeColor;
         }
     },
     {}
@@ -121,7 +124,6 @@ export default class BabyInfo extends wepy.page {
     };
     data = {
         needMenuCenter: true,
-        themeColor: '#ff85bc',
         isPopEditShow: false,
         genderPicker: ['男', '女'],
         touchDetail: [],
@@ -147,17 +149,7 @@ export default class BabyInfo extends wepy.page {
         editIcon: null
     };
 
-    onLoad() {
-        this.themeColor = CommonFunc.setThemeColor(this.gender);
-        this.$apply();
-    }
-
-    watch = {
-        gender(newVal) {
-            this.themeColor = CommonFunc.setThemeColor(newVal);
-            this.$apply();
-        }
-    };
+    onLoad() {}
 
     async onShow() {}
 
@@ -226,7 +218,7 @@ export default class BabyInfo extends wepy.page {
                     !editValue.birthday ||
                     !editValue.gender
                 ) {
-                    CommonFunc.showFailedTip('信息不完整');
+                    CommonFunc.showTip('信息不完整');
                     return;
                 }
 

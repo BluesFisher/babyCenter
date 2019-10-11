@@ -26,6 +26,9 @@
 <script>
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
+import { GENDER_INFO } from 'store/reducers/user-info';
+import { GENDER_CODE } from 'utils/const-group';
+import CommonFunc from 'utils/common-func';
 import BaseTab from 'components/Base/BaseTab/BaseTab';
 import HomePage from 'components/Business/HomePage/HomePage';
 import GrowLog from 'components/Business/GrowLog/GrowLog';
@@ -41,14 +44,6 @@ const HEAD_NAV_GROUP = [
         srcDefault: '/assets/images/navtab/home-default.png',
         formatFunc: () => {}
     },
-    // {
-    //     name: '成长记录',
-    //     dataKey: 'growLog',
-    //     srcFemale: '/assets/images/navtab/log-female.png',
-    //     srcMale: '/assets/images/navtab/log-male.png',
-    //     srcDefault: '/assets/images/navtab/log-default.png',
-    //     formatFunc: () => {}
-    // },
     {
         name: '圈子',
         dataKey: 'zoom',
@@ -71,9 +66,12 @@ const HEAD_NAV_GROUP = [
     {
         gender(state) {
             return state.userInfo.gender;
+        },
+        baseInfo(state) {
+            return state.userInfo.baseInfo;
         }
     },
-    {}
+    { GENDER_INFO }
 )
 export default class NavPage extends wepy.page {
     config = {
@@ -100,11 +98,14 @@ export default class NavPage extends wepy.page {
         };
     }
 
-    onLoad() {
+    async onLoad() {
         const { statusBarHeight } = wepy.getSystemInfoSync();
         const rpxHeight = statusBarHeight / 2;
 
         statusBarHeight > 40 && (this.userCenterTop += 30 + rpxHeight);
+        this.methods.GENDER_INFO({
+            gender: GENDER_CODE[this.baseInfo.gender || 0]
+        });
         this.$apply();
     }
 
@@ -119,6 +120,10 @@ export default class NavPage extends wepy.page {
 
     methods = {
         bindTabClick(e) {
+            if (!this.baseInfo.nickName) {
+                CommonFunc.showTip('请先登录/注册', 'none');
+                return;
+            }
             const { index } = e.currentTarget.dataset;
             const item = this.tabBar[index];
             this.currentTabIndex = index;

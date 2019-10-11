@@ -216,6 +216,14 @@ const CommonFunc = {
     },
 
     // page func
+    async getStorage(key = 'rawData') {
+        const { code, res } = await CommonFunc.wepyFunc('getStorage', {
+            key
+        });
+
+        return code === 0 ? JSON.parse(res.data) : {};
+    },
+
     getCurrentPagePath: (filter = true) => {
         // eslint-disable-next-line no-undef
         let pages = getCurrentPages();
@@ -246,9 +254,14 @@ const CommonFunc = {
         });
     },
 
-    showFailedTip: (title = '操作失败', duration = 2000) => {
+    showTip: (
+        title = '操作失败',
+        image = '/assets/images/common/failure_toast.png',
+        duration = 2000
+    ) => {
+        const iconShow = image.startsWith('/') ? { image } : { icon: image };
         wepy.showToast({
-            image: '/assets/images/common/failure_toast.png',
+            ...iconShow,
             title,
             duration
         });
@@ -375,7 +388,7 @@ const CommonFunc = {
         let res = await CommonFunc.wepyFunc('openSetting');
         if (res.code === 0) res = await CommonFunc.wepyFunc('getSetting');
         if (!res.res.authSetting['scope.writePhotosAlbum']) {
-            CommonFunc.showFailedTip('授权失败');
+            CommonFunc.showTip('授权失败');
         } else {
             callback && callback();
         }

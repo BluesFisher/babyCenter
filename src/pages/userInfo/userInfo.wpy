@@ -49,7 +49,8 @@
 <script>
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
-import { GENDER_INFO } from 'store/reducers/user-info';
+import { GENDER_INFO, BASE_INFO } from 'store/reducers/user-info';
+import { GENDER_CODE } from 'utils/const-group';
 import dayjs from 'dayjs';
 import CommonFunc from 'utils/common-func';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
@@ -57,15 +58,14 @@ import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 const genderItems = [
     {
         value: '0',
-        label: '男'
+        label: '女'
     },
     {
         value: '1',
-        label: '女'
+        label: '男'
     }
 ];
-const avatarUrl =
-    'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLicnOHTicNpPGPd25fJKCJwKTHTFk7fvrCeoalxd5z0FicVicO9jicooeqsmL6IWK3I5MrmZXJRqCcHUA/132';
+
 const BASE_OPERATE = [
     {
         label: '获赞',
@@ -88,17 +88,19 @@ const BASE_OPERATE = [
 const USER_MENU = [
     {
         label: '头像',
-        value: avatarUrl,
+        value: '',
         type: 'image'
     },
     {
         label: '昵称',
-        value: 'BLUSE',
+        value: '',
+        code: 'nickName',
         type: 'input'
     },
     {
         label: '性别',
         value: '',
+        code: 'gender',
         range: genderItems,
         type: 'pickerGender'
     },
@@ -118,6 +120,8 @@ const USER_MENU = [
         type: 'pickerDate'
     }
 ];
+const ICON_INDEX = 0;
+const NICK_NAME_INDEX = 1;
 const GENDER_INDEX = 2;
 
 @connect(
@@ -126,7 +130,7 @@ const GENDER_INDEX = 2;
             return state.userInfo.gender;
         }
     },
-    { GENDER_INFO }
+    { GENDER_INFO, BASE_INFO }
 )
 export default class UserInfo extends wepy.page {
     config = {
@@ -137,8 +141,8 @@ export default class UserInfo extends wepy.page {
         baseContainer: BaseContainer
     };
     data = {
+        baseInfo: {},
         needMenuCenter: true,
-        avatarUrl,
         baseOperate: BASE_OPERATE,
         userMenu: USER_MENU,
         nowDate: dayjs()
@@ -149,8 +153,14 @@ export default class UserInfo extends wepy.page {
         customItem: '全部'
     };
 
-    onLoad() {
-        this.userMenu[GENDER_INDEX].value = this.gender;
+    async onLoad() {
+        this.baseInfo = await CommonFunc.getStorage();
+        this.userMenu[GENDER_INDEX].value = GENDER_CODE[this.baseInfo.gender];
+        this.userMenu[NICK_NAME_INDEX].value = this.baseInfo.nickName;
+        this.userMenu[ICON_INDEX].value = this.baseInfo.avatarUrl;
+        this.methods.GENDER_INFO({
+            gender: GENDER_CODE[this.baseInfo.gender]
+        });
         this.$apply();
     }
 
@@ -159,6 +169,15 @@ export default class UserInfo extends wepy.page {
     async onHide() {}
 
     onUnload() {}
+
+    watch = {
+        async baseInfo(newVal) {
+            await CommonFunc.wepyFunc('setStorage', {
+                key: 'rawData',
+                data: JSON.stringify(newVal)
+            });
+        }
+    };
 
     methods = {
         bindUserMenuChange(e) {
@@ -172,11 +191,22 @@ export default class UserInfo extends wepy.page {
             this.userMenu[index].value = item.range
                 ? item.range[value].label
                 : value;
-            item.type === 'pickerGender' &&
+            let setBaseInfoValue = this.userMenu[index].value;
+
+            if (item.type === 'pickerGender') {
                 this.methods.GENDER_INFO({
                     gender: this.userMenu[index].value
                 });
-            item.type !== 'input' && this.$apply();
+                setBaseInfoValue = this.userMenu[index].value === '女' ? 0 : 1;
+            }
+            if (item.code) {
+                this.baseInfo[item.code] = setBaseInfoValue;
+                this.methods.BASE_INFO({
+                    baseInfo: this.baseInfo
+                });
+            }
+
+            this.$apply();
         },
         bindRegionChange(e) {
             const { index } = e.currentTarget.dataset;
@@ -196,7 +226,10 @@ export default class UserInfo extends wepy.page {
             sourceType: ['album', 'camera']
         });
         const tempFilePaths = res.tempFilePaths;
-        this.avatarUrl = tempFilePaths[0];
+        this.baseInfo.avatarUrl = tempFilePaths[0];
+        this.methods.BASE_INFO({
+            baseInfo: this.baseInfo
+        });
         this.userMenu[index].value = tempFilePaths[0];
         this.$apply();
     }

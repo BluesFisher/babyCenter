@@ -30,6 +30,35 @@
         padding-bottom: 20rpx;
         border-bottom: 2rpx solid rgba(255, 255, 255, .6);
 
+        .login-item {
+            display: flex;
+            align-items: center;
+            height: 100rpx;
+
+            .login-icon {
+                height: 90rpx;
+                width: 90rpx;
+                border-radius: 50%;
+                margin-right: 10rpx;
+            }
+
+            .login-btn {
+                background: transparent;
+                border-radius: 0;
+                font-size: 26rpx;
+                line-height: 28rpx;
+                color: #FFFFFF;
+                text-align: center;
+                border: none;
+                margin: 0;
+                padding: 0;
+
+                &::after {
+                    border: none;
+                }
+            }
+        }
+
         .baby-item {
             display: inline-block;
             align-items: center;
@@ -46,7 +75,6 @@
             }
 
             .baby-info-detail {
-
                 display: inline-block;
 
                 .baby-info-name {

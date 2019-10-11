@@ -3,11 +3,11 @@
         <baseContainer title="我的">
             <view slot="content-detail" class="user-center">
                 <view class="user-detail-header" @tap="goUserInfo"
-                    style="background: {{backgroundHeader}}">
-                    <image mode="aspectFill" class='user-icon' src='{{avatarUrl}}' alt=''
+                    style="background: {{themeColor}}">
+                    <image mode="aspectFill" class='user-icon' src='{{baseInfo.avatarUrl}}' alt=''
                         @tap.stop="bindUserIcon" />
                     <view class="user-detail-info">
-                        <view class="user-name">BLUES</view>
+                        <view class="user-name">{{baseInfo.nickName}}</view>
                         <view class="user-level">Lv1</view>
                     </view>
                     <image class='user-config' src='/assets/images/common/back.png' alt='' />
@@ -46,8 +46,6 @@ import { wxLogin } from 'utils/api/login-api';
 import CommonFunc from 'utils/common-func';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 
-const avatarUrl =
-    'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLicnOHTicNpPGPd25fJKCJwKTHTFk7fvrCeoalxd5z0FicVicO9jicooeqsmL6IWK3I5MrmZXJRqCcHUA/132';
 const BASE_OPERATE = [
     {
         label: '我的宝宝',
@@ -104,21 +102,21 @@ const USER_MENU = [
     {
         gender(state) {
             return state.userInfo.gender;
+        },
+        themeColor(state) {
+            return state.userInfo.themeColor;
+        },
+        baseInfo(state) {
+            return state.userInfo.baseInfo;
         }
     },
     {}
 )
 export default class UserCenter extends wepy.component {
-    config = {
-        navigationBarTitleText: 'Home',
-        disableScroll: true
-    };
     components = {
         baseContainer: BaseContainer
     };
     data = {
-        backgroundHeader: '#ff85bc',
-        avatarUrl,
         baseOperate: BASE_OPERATE,
         userMenu: USER_MENU
     };
@@ -132,7 +130,6 @@ export default class UserCenter extends wepy.component {
                 data: openid
             });
         }
-        this.backgroundHeader = CommonFunc.setThemeColor(this.gender);
 
         this.$apply();
     }
@@ -143,13 +140,6 @@ export default class UserCenter extends wepy.component {
 
     onUnload() {}
 
-    watch = {
-        gender(newVal) {
-            this.backgroundHeader = CommonFunc.setThemeColor(newVal);
-            this.$apply();
-        }
-    };
-
     methods = {
         goUserInfo() {
             wepy.navigateTo({
@@ -159,16 +149,15 @@ export default class UserCenter extends wepy.component {
         async bindUserIcon(e) {
             try {
                 await CommonFunc.wepyFunc('previewImage', {
-                    current: avatarUrl,
-                    urls: [avatarUrl]
+                    current: this.baseInfo.avatarUrl,
+                    urls: [this.baseInfo.avatarUrl]
                 });
             } catch (error) {
-                CommonFunc.showFailedTip('预览失败，请稍后再试');
+                CommonFunc.showTip('预览失败');
             }
         },
         bindOperate(e) {
             const { item } = e.currentTarget.dataset;
-            console.log(item);
 
             item.url && wepy.navigateTo({ url: item.url });
         },

@@ -3,20 +3,32 @@
         <view class='home-back'></view>
 
         <view class="home-header">
-            <view class="baby-item" wx:for="{{babyInfo}}" wx:for-item="item" wx:for-index="index"
-                wx:key="{{index}}" data-item="{{item}}" data-index="{{index}}"
-                @tap="handleBabyItem">
-                <image mode="aspectFill" class="baby-info-icon" src="{{item.icon}}" alt="" />
-                <view class="baby-info-detail">
-                    <view class="baby-info-name">
-                        <text>{{item.name}}</text>
-                        <image
-                            src="{{item.gender === '女' ? '/assets/images/common/female.png' : '/assets/images/common/male.png'}}"
-                            alt="" />
+            <view wx:if="{{baseInfo.nickName}}">
+                <view class="baby-item" wx:for="{{babyInfo}}" wx:for-item="item"
+                    wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
+                    data-index="{{index}}" @tap="handleBabyItem">
+                    <image mode="aspectFill" class="baby-info-icon" src="{{item.icon}}" alt="" />
+                    <view class="baby-info-detail">
+                        <view class="baby-info-name">
+                            <text>{{item.name}}</text>
+                            <image
+                                src="{{item.gender === '女' ? '/assets/images/common/female.png' : '/assets/images/common/male.png'}}"
+                                alt="" />
+                        </view>
+                        <view class="baby-info-birthday">{{item.birthday}}</view>
                     </view>
-                    <view class="baby-info-birthday">{{item.birthday}}</view>
                 </view>
             </view>
+            <view wx:else>
+                <view class="login-item">
+                    <image mode="aspectFill" class="login-icon"
+                        src="/assets/images/common/default-user.png" alt="" />
+
+                    <button class="login-btn" @getuserinfo="bindGetUserInfo"
+                        open-type="getUserInfo">登录/注册</button>
+                </view>
+            </view>
+
         </view>
         <view class="home-header-inform">
             <image src='/assets/images/common/info.png' alt="" />
@@ -65,7 +77,9 @@
 <script>
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
-// import CommonFunc from 'utils/common-func';
+import { GENDER_INFO, BASE_INFO } from 'store/reducers/user-info';
+import { GENDER_CODE } from 'utils/const-group';
+import CommonFunc from 'utils/common-func';
 
 const defaultFemaleIcon = '../../assets/images/common/default-female.png';
 const defaultMaleIcon = '../../assets/images/common/default-male.png';
@@ -76,14 +90,15 @@ const INFOR_INIT_POS = 230; // px
     {
         gender(state) {
             return state.userInfo.gender;
+        },
+        themeColor(state) {
+            return state.userInfo.themeColor;
         }
     },
-    {}
+    { GENDER_INFO, BASE_INFO }
 )
 export default class HomePage extends wepy.component {
     data = {
-        themeColor: '#ff85bc',
-
         headerMonth: `0${new Date().getMonth() + 1}`.slice(-2),
         headerDate: `0${new Date().getDate()}`.slice(-2),
 
@@ -100,6 +115,8 @@ export default class HomePage extends wepy.component {
             'http://img2.imgtn.bdimg.com/it/u=4169466309,909409521&fm=26&gp=0.jpg',
             'http://img4.imgtn.bdimg.com/it/u=3730307166,2351981660&fm=26&gp=0.jpg'
         ],
+
+        baseInfo: {},
 
         babyInfo: [
             {
@@ -158,7 +175,13 @@ export default class HomePage extends wepy.component {
     };
 
     async onLoad() {
-        this.themeColor = this.gender === '男' ? '#80d7fe' : '#ff85bc';
+        this.baseInfo = await CommonFunc.getStorage();
+        this.methods.GENDER_INFO({
+            gender: GENDER_CODE[this.baseInfo.gender || 0]
+        });
+        this.methods.BASE_INFO({
+            baseInfo: this.baseInfo
+        });
         this.$apply();
         this.setInforScroll();
     }
@@ -168,20 +191,36 @@ export default class HomePage extends wepy.component {
             clearInterval(this.informDetailScrollTimer);
     }
 
-    watch = {
-        gender(newVal) {
-            this.themeColor = newVal === '男' ? '#80d7fe' : '#ff85bc';
-            this.$apply();
-        }
-    };
-
     methods = {
+        async bindGetUserInfo(e) {
+            const { rawData } = e.detail;
+
+            if (rawData && rawData !== JSON.stringify(this.baseInfo)) {
+                this.baseInfo = JSON.parse(rawData);
+                this.methods.GENDER_INFO({
+                    gender: GENDER_CODE[this.baseInfo.gender || 0]
+                });
+                this.methods.BASE_INFO({
+                    baseInfo: this.baseInfo
+                });
+                this.$apply();
+                await CommonFunc.wepyFunc('setStorage', {
+                    key: 'rawData',
+                    data: rawData
+                });
+                CommonFunc.showTip('登录/注册成功', 'none');
+            }
+        },
         handleBabyItem(e) {
             wepy.navigateTo({
                 url: '/pages/babyInfo/babyInfo'
             });
         },
         handleMenuItem(e) {
+            if (!this.baseInfo.nickName) {
+                CommonFunc.showTip('请先登录/注册', 'none');
+                return;
+            }
             const { item } = e.currentTarget.dataset;
 
             item.url &&

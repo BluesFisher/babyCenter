@@ -16,7 +16,7 @@ const COMMON_MTA = {
 
 const DefaultConfig = {
     dev: {
-        domain: 'https://healtht.tengmed.com/data', // 'https://open.tengmed.com', // 'https://opentest.tengmed.com',
+        domain: 'http://49.235.100.196:3000',
         mta: COMMON_MTA,
         raven: {
             url: 'https://24fc07355e784c17ba2bce08a5fc8c8d@sentry.io/1526234',

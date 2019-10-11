@@ -68,11 +68,6 @@ export default class BaseLoading extends wepy.component {
                 this.interval && clearInterval(this.interval);
             }
         }
-        // type(newVal) {
-        //     if (newVal) {
-        //         this.interval && clearInterval(this.interval);
-        //     }
-        // }
     };
 
     onLoad() {

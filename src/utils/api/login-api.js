@@ -8,12 +8,9 @@ export const wxLogin = async () => {
         console.log(res);
 
         if (res.code) {
-            const resLog = await ApiFunc.post(
-                'http://localhost:3000' + loginApi.getWxAuthInfo,
-                {
-                    code: res.code
-                }
-            );
+            const resLog = await ApiFunc.post(loginApi.getWxAuthInfo, {
+                code: res.code
+            });
 
             return resLog.retcode === 0 && resLog.data;
         }
