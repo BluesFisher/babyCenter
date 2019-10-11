@@ -1,1 +1,3 @@
-export const openPlatFormApi = {};
+export const loginApi = {
+    getWxAuthInfo: '/login/getWxAuthInfo'
+};
