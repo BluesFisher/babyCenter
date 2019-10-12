@@ -77,9 +77,15 @@ const CommonFunc = {
         return returnValue;
     },
 
-    getSMSCode: async (phoneNum, isDebug = true) => {
+    getSMSCode: async (phoneNum, onlyCheckPhone = false, isDebug = true) => {
         if (!/^1\d{10}$/.test(phoneNum)) {
             return CommonFunc.commonResult('手机号格式错误');
+        }
+
+        if (onlyCheckPhone) {
+            return {
+                retcode: 0
+            };
         }
 
         // if (!isDebug) {

@@ -18,24 +18,9 @@
                 </view>
 
                 <view class="add-event-content">
-                    <textarea bindinput="textareaInput" placeholder="这一刻你想记录的..."
-                        maxlength="300"></textarea>
-
-                    <view class="event-pic-container">
-                        <view class="event-pic-item" wx:for="{{eventPic}}" wx:for-item="item"
-                            wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
-                            data-index="{{index}}">
-                            <image mode="aspectFill" src="{{item}}" alt="" data-item="{{item}}"
-                                data-index="{{index}}" @tap="handleShowPic" />
-                            <image class="delete-icon" data-item="{{item}}" data-index="{{index}}"
-                                @tap="deletePic" src="/assets/images/eventLog/delete.png" />
-
-                        </view>
-                        <view class="event-pic-item" wx:if="{{eventPic.length < 9}}">
-                            <image src="/assets/images/eventLog/add.png" @tap="addImage" />
-                        </view>
-                    </view>
+                    <basePicAdd :eventPic.sync="eventPic" />
                 </view>
+
             </view>
         </baseContainer>
     </view>
@@ -50,6 +35,7 @@ import { connect } from 'wepy-redux';
 import dayjs from 'dayjs';
 import CommonFunc from 'utils/common-func';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
+import BasePicAdd from 'components/Base/BasePicAdd/BasePicAdd';
 
 const MAX_PIC_NUM = 9;
 
@@ -67,7 +53,8 @@ export default class AddEventLog extends wepy.page {
         disableScroll: true
     };
     components = {
-        baseContainer: BaseContainer
+        baseContainer: BaseContainer,
+        basePicAdd: BasePicAdd
     };
     data = {
         nowDate: dayjs().format('YYYY-MM-DD'),

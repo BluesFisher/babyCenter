@@ -88,7 +88,8 @@ const USER_MENU = [
         openType: 'getPhoneNumber'
     },
     {
-        label: '意见反馈'
+        label: '意见反馈',
+        url: '/pages/feedback/feedback'
     },
     {
         label: '关于我们'

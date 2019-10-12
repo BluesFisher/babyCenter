@@ -1,0 +1,94 @@
+<template>
+
+    <view class="add-pic-content">
+        <textarea bindinput="textareaInput" placeholder="{{placeholder}}"
+            maxlength="300"></textarea>
+
+        <view class="pic-container">
+            <view class="{{usrPicStyle ? usrPicStyle : 'pic-item'}}" wx:for="{{eventPic}}"
+                wx:for-item="item" wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
+                data-index="{{index}}">
+                <image mode="aspectFill" src="{{item}}" alt="" data-item="{{item}}"
+                    data-index="{{index}}" @tap="handleShowPic" />
+                <image class="delete-icon" data-item="{{item}}" data-index="{{index}}"
+                    @tap="deletePic" src="/assets/images/eventLog/delete.png" />
+
+            </view>
+            <view class="pic-item" wx:if="{{eventPic.length < 9}}">
+                <image src="/assets/images/eventLog/add.png" @tap="addImage" />
+            </view>
+        </view>
+    </view>
+</template>
+
+<style lang="less" src="./BasePicAdd.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import CommonFunc from 'utils/common-func';
+
+const MAX_PIC_NUM = 9;
+
+export default class BasePicAdd extends wepy.component {
+    props = {
+        eventPic: {
+            type: Array,
+            default: () => []
+        },
+        placeholder: {
+            type: String,
+            default: '这一刻你想记录的...'
+        },
+        usrPicStyle: {
+            type: String,
+            default: ''
+        }
+    };
+    data = {};
+
+    onLoad(options) {}
+
+    async onShow() {}
+
+    async onHide() {}
+
+    onUnload() {}
+
+    methods = {
+        textareaInput(e) {
+            console.log(e.detail.value);
+        },
+        async deletePic(e) {
+            const { index } = e.currentTarget.dataset;
+
+            const { res } = await CommonFunc.wepyFunc('showModal', {
+                title: '提示',
+                content: '确认删除该图片？'
+            });
+
+            if (res.confirm) {
+                this.eventPic.splice(index, 1);
+                this.$apply();
+            }
+        },
+        handleShowPic(e) {
+            const { item } = e.currentTarget.dataset;
+            item &&
+                wepy.previewImage({
+                    current: item,
+                    urls: this.eventPic
+                });
+        },
+        async addImage() {
+            const { code, res } = await CommonFunc.wepyFunc('chooseImage', {
+                count: MAX_PIC_NUM - this.eventPic.length
+            });
+            if (code === 0) {
+                this.eventPic = [...this.eventPic, ...res.tempFilePaths];
+                this.$apply();
+            }
+        }
+    };
+}
+</script>

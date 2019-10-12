@@ -1,0 +1,124 @@
+<template>
+    <view class='container'>
+        <baseContainer title="意见反馈" :needMenuCenter.sync="needMenuCenter">
+            <view slot="content-detail" class="feed-back">
+                <view class="feed-back-type">
+                    <view class="feed-back-title">请选择您要反馈的问题类型</view>
+                    <view class="feed-back-type-items">
+                        <view class="type-item"
+                            style="{{currentTypeIndex === index ? typeActiveStyle : ''}}"
+                            wx:for="{{feedbackType}}" wx:for-item="item" wx:for-index="index"
+                            wx:key="{{index}}" data-index="{{index}}" data-item="{{item}}"
+                            @tap="handleFeedbackType">
+                            {{ item.name }}
+                        </view>
+                    </view>
+                </view>
+
+                <view class="feed-back-content">
+                    <view class="feed-back-title">反馈内容</view>
+                    <view class="feed-back-detail">
+
+                        <basePicAdd :eventPic.sync="eventPic" :placeholder.sync="placeholder"
+                            usrPicStyle="feedback-detail-pic" />
+                    </view>
+                </view>
+
+                <view class="feed-back-phone">
+                    <view class="feed-back-phone-label">联系方式</view>
+                    <input class="feed-back-phone-input" value="{{phone}}" placeholder="请输入手机号"
+                        bindinput="bindphoneChange" />
+                </view>
+
+                <view class="feed-back-commit"
+                    style="background: {{(isBtnEnabled ? themeColor : '#aaa')}}">提交</view>
+            </view>
+        </baseContainer>
+    </view>
+</template>
+
+<style lang="less" src="./feedback.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import { connect } from 'wepy-redux';
+// import dayjs from 'dayjs';
+// import CommonFunc from 'utils/common-func';
+import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
+import BasePicAdd from 'components/Base/BasePicAdd/BasePicAdd';
+
+const FEEDBACK_TYPE = [
+    {
+        name: '新功能建议'
+    },
+    {
+        name: '功能问题'
+    },
+    {
+        name: '性能问题'
+    },
+    {
+        name: '体验问题'
+    },
+    {
+        name: '服务投诉'
+    }
+];
+
+@connect(
+    {
+        themeColor(state) {
+            return state.userInfo.themeColor;
+        }
+    },
+    {}
+)
+export default class Feedback extends wepy.page {
+    config = {
+        navigationBarTitleText: 'Home',
+        disableScroll: true
+    };
+    components = {
+        baseContainer: BaseContainer,
+        basePicAdd: BasePicAdd
+    };
+    data = {
+        needMenuCenter: true,
+        feedbackType: FEEDBACK_TYPE,
+        currentTypeIndex: 0,
+        placeholder: '请您详细描述一下问题，便于我们更好为您服务',
+        eventPic: [],
+        phone: ''
+    };
+
+    computed = {
+        typeActiveStyle() {
+            return `background: ${this.themeColor}; color: #fff`;
+        },
+        isBtnEnabled() {
+            return /^1\d{10}$/.test(this.phone);
+        }
+    };
+
+    onLoad(options) {}
+
+    async onShow() {}
+
+    async onHide() {}
+
+    onUnload() {}
+
+    methods = {
+        handleFeedbackType(e) {
+            const { index, item } = e.currentTarget.dataset;
+            console.log(index, item);
+            this.currentTypeIndex = index;
+        },
+        bindphoneChange(e) {
+            this.phone = e.detail.value;
+            this.$apply();
+        }
+    };
+}
+</script>

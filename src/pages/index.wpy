@@ -7,7 +7,6 @@
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
 import { BASE_INFO } from 'store/reducers/user-info';
-import CommonFunc from 'utils/common-func';
 import mta from 'assets/js/mta_analysis';
 import Vtoast from 'components/Vtoast/Vtoast';
 import CommonMixin from 'mixins/mix-common';
@@ -48,7 +47,7 @@ export default class Index extends wepy.page {
 
     async toPage() {
         this.$redirect(`navPage/navPage`);
-        // this.$redirect(`eventLog/eventLog`);
+        // this.$redirect(`feedback/feedback`);
     }
 }
 </script>
