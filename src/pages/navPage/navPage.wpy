@@ -39,24 +39,24 @@ const HEAD_NAV_GROUP = [
     {
         name: '首页',
         dataKey: 'home',
-        srcFemale: '/assets/images/navtab/home-female.png',
-        srcMale: '/assets/images/navtab/home-male.png',
+        srcFemale: '/assets/images/female/navtab/home.png',
+        srcMale: '/assets/images/male/navtab/home.png',
         srcDefault: '/assets/images/navtab/home-default.png',
         formatFunc: () => {}
     },
     {
         name: '圈子',
         dataKey: 'zoom',
-        srcFemale: '/assets/images/navtab/zoom-female.png',
-        srcMale: '/assets/images/navtab/zoom-male.png',
+        srcFemale: '/assets/images/female/navtab/zoom.png',
+        srcMale: '/assets/images/male/navtab/zoom.png',
         srcDefault: '/assets/images/navtab/zoom-default.png',
         formatFunc: () => {}
     },
     {
         name: '我的',
         dataKey: 'userCenter',
-        srcFemale: '/assets/images/navtab/user-female.png',
-        srcMale: '/assets/images/navtab/user-male.png',
+        srcFemale: '/assets/images/female/navtab/user.png',
+        srcMale: '/assets/images/male/navtab/user.png',
         srcDefault: '/assets/images/navtab/user-default.png',
         formatFunc: () => {}
     }

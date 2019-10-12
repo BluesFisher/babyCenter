@@ -1,0 +1,120 @@
+.base-info-list {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 40rpx 30rpx;
+    margin-bottom: 20rpx;
+
+    .base-info-list-header {
+        display: flex;
+        justify-content: space-between;
+
+        .list-header-title {
+            font-size: 34rpx;
+        }
+
+        .list-header-more {
+            font-size: 24rpx;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+
+.base-info-list-content {
+
+    .list-content-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30rpx;
+        padding-bottom: 30rpx;
+        border-bottom: 1rpx solid #eee;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        .list-content-item-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 30rpx;
+            margin-right: 40rpx;
+
+            .list-content-item-tips {
+                margin-top: 10rpx;
+                font-size: 24rpx;
+                color: #aaa;
+
+                text {
+                    margin-right: 20rpx;
+                }
+            }
+        }
+
+        .list-content-item-right {
+            image {
+                height: 160rpx;
+                width: 240rpx;
+                border-radius: 10rpx;
+                vertical-align: middle;
+            }
+        }
+
+        .audio-list-item-left {
+            position: relative;
+            height: 160rpx;
+            width: 240rpx;
+
+            image {
+                height: 100%;
+                width: 100%;
+                border-radius: 10rpx;
+            }
+
+            .audio-control {
+                position: absolute;
+                right: 10rpx;
+                bottom: 10rpx;
+                background: #fff;
+                opacity: .9;
+                height: 50rpx;
+                width: 50rpx;
+                border-radius: 50%;
+                text-align: center;
+                box-shadow: 0 0 1rpx 1rpx rgba(173, 171, 171, 0.5);
+
+                image {
+                    height: 30rpx;
+                    width: 30rpx;
+                    vertical-align: middle;
+                }
+            }
+        }
+
+        .audio-list-item-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 24rpx;
+            color: #aaa;
+            margin-left: 40rpx;
+
+            .audio-item-title {
+                font-size: 30rpx;
+                color: #000;
+            }
+
+            .audio-item-author {
+                margin-bottom: 30rpx;
+
+                text {
+                    margin-right: 30rpx;
+                }
+            }
+        }
+    }
+}

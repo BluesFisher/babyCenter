@@ -1,6 +1,6 @@
 <template>
     <view class='container'>
-        <baseContainer title="发表大事记" :needMenuCenter.sync="needMenuCenter">
+        <baseContainer title="发表大事记">
             <view slot="content-detail" class="add-event-log">
                 <view class="add-event-header">
                     <view class="cancel-btn" @tap="bindCancel">取消</view>
@@ -70,7 +70,6 @@ export default class AddEventLog extends wepy.page {
         baseContainer: BaseContainer
     };
     data = {
-        needMenuCenter: true,
         nowDate: dayjs().format('YYYY-MM-DD'),
         eventDate: dayjs().format('YYYY-MM-DD'),
         eventPic: [

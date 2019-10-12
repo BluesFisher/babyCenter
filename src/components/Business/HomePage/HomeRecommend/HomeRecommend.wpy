@@ -1,0 +1,98 @@
+<template>
+    <view class='home-recommend'>
+        <articleInfoList title="文章推荐" :infoList.sync="articleList" />
+        <audioInfoList title="宝宝音乐" :audioList.sync="audioList" />
+
+    </view>
+</template>
+
+<style lang="less" src="./HomeRecommend.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import CommonFunc from 'utils/common-func';
+import BaseInfoList from 'components/Base/BaseInfoList/BaseInfoList';
+
+const PLAY_ICON = '/assets/images/common/play.png';
+
+const ARTICLE_LIST = [
+    {
+        title: '每天5分钟，教你育儿小知识',
+        author: '广告',
+        image:
+            'https://img.zcool.cn/community/009954599143f3000000212908d662.jpg@520w_390h_1c_1e_1o_100sh.jpg',
+        scanNum: 0
+    },
+    {
+        title: '从怀孕到出生，我的宝宝是这样诞生的!',
+        author: '老夫子',
+        image:
+            'https://img.zcool.cn/community/031cbda57c9116b0000018c1b8ad5d9.jpg@520w_390h_1c_1e_1o_100sh.jpg',
+        scanNum: 2300
+    },
+    {
+        title: '长城，让我忘记自己孤身一人，比任何对手都强，乃人生最大的烦恼',
+        author: '凯',
+        image:
+            'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2373235448,604445385&fm=26&gp=0.jpg',
+        scanNum: 4312
+    }
+];
+
+const AUDIO_LIST = [
+    {
+        src:
+            'http://ip.h5.rh01.sycdn.kuwo.cn/c608391fd3a04749ccd878e6833aa7b3/5da17f4d/resource/n3/70/3/3717624639.mp3',
+        image:
+            'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1904174104,1178227250&fm=26&gp=0.jpg',
+        audioCtrl: PLAY_ICON,
+        title: '拔萝卜',
+        author: '儿童歌曲',
+        currentTime: '00:00',
+        duration: '',
+        playNum: 8472
+    },
+    {
+        src:
+            'http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46',
+        image:
+            'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4209281349,2473705813&fm=26&gp=0.jpg',
+        audioCtrl: PLAY_ICON,
+        title: '此时此刻',
+        author: '许巍',
+        currentTime: '00:00',
+        duration: '',
+        playNum: 12
+    },
+
+    {
+        src: 'http://up_mp4.t57.cn/2018/1/03m/13/396131229550.m4a',
+        image:
+            'http://img3.imgtn.bdimg.com/it/u=287949954,2623962387&fm=26&gp=0.jpg',
+        audioCtrl: PLAY_ICON,
+        title: '最美的期待',
+        author: '周笔畅',
+        currentTime: '00:00',
+        duration: '',
+        playNum: 121
+    }
+];
+
+export default class HomeRecommend extends wepy.component {
+    components = {
+        articleInfoList: BaseInfoList,
+        audioInfoList: BaseInfoList
+    };
+    data = {
+        articleList: ARTICLE_LIST,
+        audioList: CommonFunc.deepCopy(AUDIO_LIST)
+    };
+
+    onLoad() {}
+
+    onUnload() {}
+
+    methods = {};
+}
+</script>

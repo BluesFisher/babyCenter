@@ -24,7 +24,6 @@
 <script>
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
-import CommonFunc from 'utils/common-func';
 
 @connect(
     {

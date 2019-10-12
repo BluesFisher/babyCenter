@@ -79,8 +79,8 @@ import BaseNotice from 'components/Base/BaseNotice/BaseNotice';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 
 const defaultUserIcon = '../../assets/images/common/default-user.png';
-const defaultFemaleIcon = '../../assets/images/common/default-female.png';
-const defaultMaleIcon = '../../assets/images/common/default-male.png';
+const defaultFemaleIcon = '../../assets/images/female/common/default.png';
+const defaultMaleIcon = '../../assets/images/male/common/default.png';
 const BABY_EDIT = [
     {
         label: '宝宝姓名',

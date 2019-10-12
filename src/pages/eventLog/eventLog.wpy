@@ -16,10 +16,10 @@
                         wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
                         data-index="{{index}}">
                         <view class="time-line-bar">
-                            <view class="time-line-dot"></view>
+                            <view class="time-line-dot" style="background: {{themeColor}}"></view>
                         </view>
                         <view class="time-line-item-header">
-                            <image src="/assets/images/common/time-icon.png" />
+                            <image src="{{dateSrc}}" />
                             <text>{{item.time}}</text>
                             <text class="baby-age">{{item.babyAge}}</text>
                         </view>
@@ -184,6 +184,14 @@ export default class EventLog extends wepy.page {
         needMenuCenter: true,
         needTabBottomLine: true,
         timeLineItems: TIME_LINE_ITEMS[0]
+    };
+
+    computed = {
+        dateSrc() {
+            return `/assets/images/${
+                this.gender === '男' ? 'male' : 'female'
+            }/common/date.png`;
+        }
     };
 
     onLoad() {}

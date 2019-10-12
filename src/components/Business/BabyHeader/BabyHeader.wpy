@@ -6,9 +6,7 @@
             <view class="baby-info-detail">
                 <view class="baby-info-name">
                     <text>{{babyInfo.name}}</text>
-                    <image
-                        src="{{babyInfo.gender === '女' ? '/assets/images/common/female.png' : '/assets/images/common/male.png'}}"
-                        alt="" />
+                    <image src="{{genderSrc}}" alt="" />
                 </view>
                 <view class="baby-info-birthday">{{babyInfo.birthday}}</view>
             </view>
@@ -27,8 +25,8 @@
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
 
-const defaultFemaleIcon = '../../assets/images/common/default-female.png';
-const defaultMaleIcon = '../../assets/images/common/default-male.png';
+const defaultFemaleIcon = '../../assets/images/female/common/default.png';
+const defaultMaleIcon = '../../assets/images/male/common/default.png';
 const BABY_LIST = [
     {
         icon: defaultFemaleIcon,
@@ -67,6 +65,14 @@ export default class BabyHeader extends wepy.component {
             }
         ],
         babyInfo: BABY_LIST[0]
+    };
+
+    computed = {
+        genderSrc() {
+            return `/assets/images/${
+                this.babyInfo.gender === '女' ? 'female' : 'male'
+            }/common/gender.png`;
+        }
     };
 
     async onLoad() {}

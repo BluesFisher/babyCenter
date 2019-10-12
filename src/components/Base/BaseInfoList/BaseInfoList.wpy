@@ -1,0 +1,165 @@
+<template>
+    <view class="base-info-list">
+        <view class="base-info-list-header">
+            <view class="list-header-title">{{title}}</view>
+            <view class="list-header-more">
+                <text>查看更多</text>
+                <view class="down-arrow menu-arrow"></view>
+            </view>
+        </view>
+
+        <view class="base-info-list-content">
+            <slot name="base-info-list" />
+            <view class="list-content-item" wx:if="{{infoList.length > 0}}" wx:for="{{infoList}}"
+                wx:for-item="item" wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
+                data-index="{{index}}">
+                <view class="list-content-item-left">
+                    <view class="list-content-item-title">{{item.title}}</view>
+                    <view class="list-content-item-tips">
+                        <text>{{item.author}}</text>
+                        <text wx:if="{{item.scanNum > 0}}">{{item.scanNum}}浏览</text>
+                    </view>
+                </view>
+                <view class="list-content-item-right">
+                    <image mode="aspectFill" src="{{item.image}}" />
+                </view>
+            </view>
+
+            <view class="list-content-item" wx:if="{{audioList.length > 0}}" wx:for="{{audioList}}"
+                wx:for-item="item" wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
+                data-index="{{index}}">
+                <view class="audio-list-item-left">
+                    <image mode="aspectFill" src="{{item.image}}" />
+                    <view class="audio-control" data-item="{{item}}" data-index="{{index}}"
+                        @tap="handleAudioCtrl">
+                        <image src="{{item.audioCtrl}}" />
+                    </view>
+                </view>
+                <view class="audio-list-item-right">
+                    <view class="audio-item-title">{{item.title}}</view>
+                    <view class="audio-item-author">
+                        <text>{{item.author}}</text>
+                        <text>{{item.currentTime}}<text
+                                wx:if="{{item.duration}}">/{{item.duration}}</text></text>
+
+                    </view>
+                    <view class="audio-item-tips">已经播放{{item.playNum}}次</view>
+                </view>
+            </view>
+
+        </view>
+    </view>
+</template>
+
+<style lang="less" src="./BaseInfoList.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import dayjs from 'dayjs';
+
+const PLAY_ICON = '/assets/images/common/play.png';
+const PAUSE_ICON = '/assets/images/common/pause.png';
+
+export default class BaseInfoList extends wepy.component {
+    props = {
+        title: {
+            type: String,
+            default: ''
+        },
+        infoList: {
+            type: Array,
+            default: () => []
+        },
+        audioList: {
+            type: Array,
+            default: () => []
+        }
+    };
+    components = {};
+    data = {
+        // 音频data
+        innerAudioContext: null,
+        lastAudioIndex: null,
+        currentAudioTime: '00:00',
+        currentAudioDuration: '00:00'
+    };
+
+    onLoad() {}
+
+    onUnload() {}
+
+    methods = {
+        handleAudioCtrl(e) {
+            const { item, index } = e.currentTarget.dataset;
+
+            // 当点击的是上一次控制的音频
+            if (this.lastAudioIndex === index) {
+                this.setAudioCtrlIcon(index);
+                return;
+            }
+            if (this.innerAudioContext) {
+                this.innerAudioContext.stop();
+                this.innerAudioContext.destroy();
+            }
+
+            // 点击的不是上一次控制的音频
+            this.setAudioCtrlIcon(index, true);
+
+            // 初始化音频播放
+            this.initAudio(index, item);
+        }
+    };
+
+    setAudioCtrlIcon(index = 0, needSetlastCtrl = false) {
+        if (needSetlastCtrl) {
+            if (this.lastAudioIndex !== null) {
+                this.audioList[this.lastAudioIndex].audioCtrl = PLAY_ICON;
+                this.audioList[this.lastAudioIndex].currentTime = '00:00';
+            }
+            this.lastAudioIndex = index;
+        }
+
+        if (this.audioList[index].audioCtrl === PLAY_ICON) {
+            this.audioList[index].audioCtrl = PAUSE_ICON;
+            this.innerAudioContext && this.innerAudioContext.play();
+        } else {
+            this.audioList[index].audioCtrl = PLAY_ICON;
+            this.innerAudioContext && this.innerAudioContext.pause();
+        }
+    }
+
+    initAudio(index, item) {
+        this.innerAudioContext = wepy.createInnerAudioContext();
+        this.innerAudioContext.autoplay = true;
+        this.innerAudioContext.src = item.src;
+        // this.innerAudioContext.startTime = 100;
+
+        this.innerAudioContext.onPlay(() => {
+            console.log('开始播放', item.title);
+        });
+        this.innerAudioContext.onTimeUpdate(() => {
+            const { currentTime, duration } = this.innerAudioContext;
+
+            this.audioList[index].currentTime = dayjs
+                .unix(currentTime)
+                .format('mm:ss');
+            this.audioList[index].duration = dayjs
+                .unix(duration)
+                .format('mm:ss');
+            this.$apply();
+        });
+        this.innerAudioContext.onCanplay(() => {
+            console.log(this.innerAudioContext.duration);
+        });
+        this.innerAudioContext.onEnded(() => {
+            this.audioList[index].audioCtrl = PLAY_ICON;
+            this.audioList[index].currentTime = '00:00';
+            this.$apply();
+        });
+        this.innerAudioContext.onError(res => {
+            console.log(res.errCode, res.errMsg);
+        });
+    }
+}
+</script>

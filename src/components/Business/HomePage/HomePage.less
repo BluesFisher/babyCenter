@@ -61,9 +61,6 @@
 
         .baby-item {
             display: inline-block;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
             margin-right: 30rpx;
 
             .baby-info-icon {
@@ -72,10 +69,12 @@
                 width: 90rpx;
                 border-radius: 50%;
                 margin-right: 10rpx;
+                vertical-align: middle;
             }
 
             .baby-info-detail {
                 display: inline-block;
+                vertical-align: middle;
 
                 .baby-info-name {
                     font-size: 30rpx;
@@ -99,7 +98,7 @@
     .home-header-inform {
         position: absolute;
         left: 0;
-        top: calc(@home-back-height - 60rpx);
+        top: calc(@home-back-height - 65rpx);
         margin: 0 60rpx;
         color: #fff;
         font-size: 26rpx;
@@ -201,5 +200,9 @@
                 }
             }
         }
+    }
+
+    .home-recommend {
+        margin-top: 20rpx;
     }
 }

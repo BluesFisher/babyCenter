@@ -12,7 +12,7 @@
                         <view class="baby-info-name">
                             <text>{{item.name}}</text>
                             <image
-                                src="{{item.gender === '女' ? '/assets/images/common/female.png' : '/assets/images/common/male.png'}}"
+                                src="{{item.gender === '男' ? '/assets/images/male/common/gender.png' : '/assets/images/female/common/gender.png'}}"
                                 alt="" />
                         </view>
                         <view class="baby-info-birthday">{{item.birthday}}</view>
@@ -68,6 +68,11 @@
             </view>
         </view>
 
+        <view class="home-recommend">
+
+            <homeRecommend />
+        </view>
+
     </view>
 </template>
 
@@ -81,8 +86,10 @@ import { GENDER_INFO, BASE_INFO } from 'store/reducers/user-info';
 import { GENDER_CODE } from 'utils/const-group';
 import CommonFunc from 'utils/common-func';
 
-const defaultFemaleIcon = '../../assets/images/common/default-female.png';
-const defaultMaleIcon = '../../assets/images/common/default-male.png';
+import HomeRecommend from './HomeRecommend/HomeRecommend';
+
+const defaultFemaleIcon = '../../assets/images/female/common/default.png';
+const defaultMaleIcon = '../../assets/images/male/common/default.png';
 const INFOR_MOVE_STEP = 2; // px
 const INFOR_INIT_POS = 230; // px
 
@@ -98,6 +105,10 @@ const INFOR_INIT_POS = 230; // px
     { GENDER_INFO, BASE_INFO }
 )
 export default class HomePage extends wepy.component {
+    components = {
+        homeRecommend: HomeRecommend
+    };
+
     data = {
         headerMonth: `0${new Date().getMonth() + 1}`.slice(-2),
         headerDate: `0${new Date().getDate()}`.slice(-2),
@@ -106,7 +117,7 @@ export default class HomePage extends wepy.component {
         informDetailScrollTimer: null,
 
         indicatorDots: true,
-        autoplay: true,
+        autoplay: false, // true,
         interval: 5000,
         duration: 500,
 
@@ -183,7 +194,7 @@ export default class HomePage extends wepy.component {
             baseInfo: this.baseInfo
         });
         this.$apply();
-        this.setInforScroll();
+        // this.setInforScroll();
     }
 
     async onHide() {
