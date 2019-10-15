@@ -68,7 +68,8 @@ const BASE_OPERATE = [
     {
         label: '积分',
         icon: '',
-        value: 20
+        value: 20,
+        url: '/pages/credits/credits'
     }
 ];
 

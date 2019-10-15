@@ -29,13 +29,6 @@
                 wx:for-item="item" wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
                 data-index="{{index}}">
                 <view class="audio-list-item-left">
-                    <image mode="aspectFill" src="{{item.image}}" />
-                    <view class="audio-control" data-item="{{item}}" data-index="{{index}}"
-                        @tap="handleAudioCtrl">
-                        <image src="{{item.audioCtrl}}" />
-                    </view>
-                </view>
-                <view class="audio-list-item-right">
                     <view class="audio-item-title">{{item.title}}</view>
                     <view class="audio-item-author">
                         <text>{{item.author}}</text>
@@ -44,6 +37,13 @@
 
                     </view>
                     <view class="audio-item-tips">已经播放{{item.playNum}}次</view>
+                </view>
+                <view class="audio-list-item-right">
+                    <image mode="aspectFill" src="{{item.image}}" />
+                    <view class="audio-control" data-item="{{item}}" data-index="{{index}}"
+                        @tap="handleAudioCtrl">
+                        <image src="{{item.audioCtrl}}" />
+                    </view>
                 </view>
             </view>
 

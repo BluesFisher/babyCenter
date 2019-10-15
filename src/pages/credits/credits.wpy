@@ -1,0 +1,185 @@
+
+<template>
+    <view class='container'>
+        <baseContainer title="我的积分" :needMenuCenter.sync="needMenuCenter">
+            <view slot="content-detail" class="credits-page">
+                <view class="credits-back" style="background: {{themeColor}}"></view>
+                <view class="credits-content">
+
+                    <view class="credits-header">
+                        <image mode="aspectFill" class='user-icon' src='{{baseInfo.avatarUrl}}'
+                            alt='' @tap.stop="bindUserIcon" />
+                        <view class="credits-sign-info">
+                            <view>您已连续签到<text class="sign-day">{{signDay}}</text>天</view>
+                            <view class="sign-tips">明日签到可获得10积分</view>
+                        </view>
+                        <view class="credits-total">
+                            <image class="credits-image" src="/assets/images/common/credits.png" />
+                            <view>{{creditsNum}}</view>
+                        </view>
+                    </view>
+
+                    <view class="week-sign-list">
+                        <view class="week-sign-list-title">本周签到领积分</view>
+                        <view class="week-sign-list-content">
+                            <view class="week-sign-list-item" wx:for="{{weekSignList}}"
+                                wx:for-item="item" wx:for-index="index" wx:key="{{index}}"
+                                data-index="{{index}}" data-item="{{item}}"
+                                style="background:{{index < signedCount ? themeColor : '#f5f5f5'}}"
+                                @tap="handleSign">
+                                <view class="sing-time"
+                                    style="color: {{index < signedCount ? '#fff' : '#000'}}">
+                                    第{{index+1}}天</view>
+                                <image class="credits-image"
+                                    src="/assets/images/common/credits.png" />
+                                <view class="sing-value"
+                                    style="color: {{index < signedCount ? '#fff' : '#aaa'}}">
+                                    {{item}}积分</view>
+                            </view>
+                            <view class="week-sign-list-item week-last-day-sign" data-index="{{6}}"
+                                @tap="handleSign">
+                                <view class="sing-time"
+                                    style="color: {{7 === signedCount ? '#fff' : '#000'}}">
+                                    第7天</view>
+                                <view class="sing-value"
+                                    style="color: {{7 === signedCount ? '#fff' : '#aaa'}}">
+                                    现金红包</view>
+                                <image src="/assets/images/common/red-packet.png" />
+                            </view>
+                        </view>
+                    </view>
+
+                    <view class="credits-task">
+                        <view class="common-title">积分任务</view>
+                        <view class="credits-task-list">
+                            <view class="credits-task-list-item" wx:for="{{taskList}}"
+                                wx:for-item="item" wx:for-index="index" wx:key="{{index}}"
+                                data-index="{{index}}" data-item="{{item}}">
+                                <image class="task-icon" src="{{item.icon}}" />
+                                <view class="task-info">
+                                    <view>{{item.name}}</view>
+                                    <view class="task-credits-value">
+                                        <image class="task-credits-image"
+                                            src="/assets/images/common/credits.png" />
+                                        <view>{{item.creditsValue}}</view>
+                                    </view>
+                                </view>
+                                <view class="task-state" data-index="{{index}}" data-item="{{item}}"
+                                    @tap="handleTask"
+                                    style="background: {{item.state === 'finished' ? themeColor : '#eee'}}; color: {{item.state === 'finished' ? '#fff' : '#000'}};">
+                                    {{item.state === 'finished' ? '已完成' : '去完成'}}
+                                </view>
+                            </view>
+                        </view>
+
+                    </view>
+                </view>
+            </view>
+        </baseContainer>
+    </view>
+</template>
+
+<style lang="less" src="./credits.less"></style>
+
+
+<script>
+import wepy from 'wepy';
+import { connect } from 'wepy-redux';
+// import dayjs from 'dayjs';
+import CommonFunc from 'utils/common-func';
+import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
+
+const WEEK_SING_LIST = [10, 20, 20, 10, 10, 10];
+const TASK_LIST = [
+    {
+        icon: '/assets/images/common/task.png',
+        name: '每日签到',
+        creditsValue: 10,
+        state: 'begin'
+    },
+    {
+        icon: '/assets/images/common/task.png',
+        name: '分享文章/照片给微信好友',
+        creditsValue: 20,
+        state: 'begin',
+        url: '/pages/navPage/navPage'
+    },
+    {
+        icon: '/assets/images/common/task.png',
+        name: '完成宝宝成长记录',
+        creditsValue: 20,
+        state: 'begin',
+        url: '/pages/growLog/growLog'
+    },
+    {
+        icon: '/assets/images/common/task.png',
+        name: '在线听宝宝音乐',
+        creditsValue: 20,
+        state: 'begin',
+        url: '/pages/navPage/navPage'
+    }
+];
+
+@connect(
+    {
+        themeColor(state) {
+            return state.userInfo.themeColor;
+        },
+        baseInfo(state) {
+            return state.userInfo.baseInfo;
+        }
+    },
+    {}
+)
+export default class Credits extends wepy.page {
+    components = {
+        baseContainer: BaseContainer
+    };
+    data = {
+        needMenuCenter: true,
+        signDay: 1,
+        signedCount: 2,
+        creditsNum: 520,
+        isSigned: false,
+        weekSignList: WEEK_SING_LIST,
+        taskList: CommonFunc.deepCopy(TASK_LIST)
+    };
+
+    computed = {};
+
+    onLoad(options) {}
+
+    async onShow() {}
+
+    async onHide() {}
+
+    onUnload() {}
+
+    methods = {
+        handleSign(e) {
+            const { index } = e.currentTarget.dataset;
+
+            if (index >= this.signedCount && this.isSigned) {
+                CommonFunc.showTip('今天您已签到过', 'none', 1000);
+                return;
+            }
+
+            if (index !== this.signedCount) {
+                if (index > this.signedCount) {
+                    CommonFunc.showTip('请按顺序签到', 'none', 1000);
+                }
+
+                return;
+            }
+            this.taskList[0].state = 'finished';
+            this.isSigned = true;
+            this.signedCount += 1;
+        },
+        handleTask(e) {
+            const { item } = e.currentTarget.dataset;
+
+            item.url && wepy.navigateTo({ url: item.url });
+        }
+    };
+}
+</script>

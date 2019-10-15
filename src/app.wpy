@@ -44,7 +44,8 @@ export default class extends wepy.app {
             'pages/growLog/growLog', // 成长记录
             'pages/eventLog/eventLog', // 大事记
             'pages/addEventLog/addEventLog', // 添加大事记
-            'pages/feedback/feedback' // 意见反馈
+            'pages/feedback/feedback', // 意见反馈
+            'pages/credits/credits' // 我的积分
         ]
     };
 

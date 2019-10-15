@@ -65,7 +65,7 @@ export default class BaseContainer extends wepy.component {
         const { statusBarHeight } = wepy.getSystemInfoSync();
         const rpxHeight = statusBarHeight / 2;
 
-        this.contentHeight += rpxHeight;
+        this.contentHeight += rpxHeight + (statusBarHeight > 40 ? 20 : 0);
         statusBarHeight > 40 && (this.menuTop += 30 + rpxHeight);
         this.titleTop += rpxHeight;
 

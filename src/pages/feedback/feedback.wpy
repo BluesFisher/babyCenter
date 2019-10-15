@@ -31,7 +31,7 @@
                 </view>
 
                 <view class="feed-back-commit"
-                    style="background: {{(isBtnEnabled ? themeColor : '#aaa')}}">提交</view>
+                    style="background: {{(isBtnEnabled ? themeColor : '#ccc')}}">提交</view>
             </view>
         </baseContainer>
     </view>

@@ -42,8 +42,7 @@ const ARTICLE_LIST = [
 
 const AUDIO_LIST = [
     {
-        src:
-            'http://ip.h5.rh01.sycdn.kuwo.cn/c608391fd3a04749ccd878e6833aa7b3/5da17f4d/resource/n3/70/3/3717624639.mp3',
+        src: 'http://up_mp4.t57.cn/2017/1/05m/09/298092032442.m4a',
         image:
             'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1904174104,1178227250&fm=26&gp=0.jpg',
         audioCtrl: PLAY_ICON,
