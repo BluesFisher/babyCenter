@@ -11,7 +11,7 @@
                             alt='' @tap.stop="bindUserIcon" />
                         <view class="credits-sign-info">
                             <view>您已连续签到<text class="sign-day">{{signedCount}}</text>天</view>
-                            <view class="sign-tips">明日签到可获得10积分</view>
+                            <view class="sign-tips">明日签到可获得{{weekSignList[signedCount]}}积分</view>
                         </view>
                         <view class="credits-total">
                             <image class="credits-image" src="/assets/images/common/credits.png" />
@@ -20,7 +20,9 @@
                     </view>
 
                     <view class="week-sign-list">
-                        <view class="week-sign-list-title">本周签到领积分</view>
+                        <view class="week-sign-list-title">
+                            <view></view>本周签到领积分
+                        </view>
                         <view class="week-sign-list-content">
                             <view class="week-sign-list-item" wx:for="{{weekSignList}}"
                                 wx:for-item="item" wx:for-index="index" wx:key="{{index}}"
@@ -50,7 +52,9 @@
                     </view>
 
                     <view class="credits-task">
-                        <view class="common-title">积分任务</view>
+                        <view class="common-title">
+                            <view></view>积分任务
+                        </view>
                         <view class="credits-task-list">
                             <view class="credits-task-list-item" wx:for="{{taskList}}"
                                 wx:for-item="item" wx:for-index="index" wx:key="{{index}}"

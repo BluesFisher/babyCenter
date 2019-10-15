@@ -156,7 +156,7 @@ export default class UserInfo extends wepy.page {
     async onLoad() {
         this.baseInfo = await CommonFunc.getStorage();
         this.userMenu[GENDER_INDEX].value =
-            GENDER_CODE[this.baseInfo.gender || 0];
+            GENDER_CODE[+this.baseInfo.gender || 0];
         this.userMenu[NICK_NAME_INDEX].value = this.baseInfo.nickName;
         this.userMenu[ICON_INDEX].value = this.baseInfo.avatarUrl;
         this.methods.GENDER_INFO({
