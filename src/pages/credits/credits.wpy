@@ -10,7 +10,7 @@
                         <image mode="aspectFill" class='user-icon' src='{{baseInfo.avatarUrl}}'
                             alt='' @tap.stop="bindUserIcon" />
                         <view class="credits-sign-info">
-                            <view>您已连续签到<text class="sign-day">{{signDay}}</text>天</view>
+                            <view>您已连续签到<text class="sign-day">{{signedCount}}</text>天</view>
                             <view class="sign-tips">明日签到可获得10积分</view>
                         </view>
                         <view class="credits-total">
@@ -137,7 +137,6 @@ export default class Credits extends wepy.page {
     };
     data = {
         needMenuCenter: true,
-        signDay: 1,
         signedCount: 2,
         creditsNum: 520,
         isSigned: false,
