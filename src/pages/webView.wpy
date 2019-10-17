@@ -5,8 +5,18 @@
 
 <script>
 import wepy from 'wepy';
+import { connect } from 'wepy-redux';
 import mta from 'assets/js/mta_analysis';
+import CommonFunc from 'utils/common-func';
 
+@connect(
+    {
+        themeColor(state) {
+            return state.userInfo.themeColor;
+        }
+    },
+    {}
+)
 export default class webView extends wepy.page {
     data = {
         show: true,
@@ -15,8 +25,16 @@ export default class webView extends wepy.page {
 
     async onLoad(options) {
         mta.Page.init();
+
+        await CommonFunc.wepyFunc('setNavigationBarColor', {
+            frontColor: '#ffffff',
+            backgroundColor: this.themeColor
+        });
+
         const { url } = options;
-        this.url = decodeURIComponent(url);
+        this.url = decodeURIComponent(
+            `${url}?themeColor=${this.themeColor.substring(1)}&vconsole=1`
+        );
 
         this.$apply();
     }

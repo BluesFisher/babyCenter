@@ -90,7 +90,7 @@ const USER_MENU = [
     },
     {
         label: '意见反馈',
-        url: '/pages/feedback/feedback'
+        url: 'http://49.235.100.196:3001/feedback' // '/pages/feedback/feedback'
     },
     {
         label: '关于我们'
@@ -160,8 +160,15 @@ export default class UserCenter extends wepy.component {
         },
         bindOperate(e) {
             const { item } = e.currentTarget.dataset;
-
-            item.url && wepy.navigateTo({ url: item.url });
+            if (item.url) {
+                if (item.url.startsWith('http')) {
+                    CommonFunc.gotoWebViewPage(item.url);
+                    return;
+                }
+                wepy.navigateTo({
+                    url: item.url
+                });
+            }
         },
         bindgetphonenumber(e) {
             console.log(e);
