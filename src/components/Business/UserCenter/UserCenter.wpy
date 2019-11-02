@@ -2,8 +2,7 @@
     <view class='container'>
         <baseContainer title="我的">
             <view slot="content-detail" class="user-center">
-                <view class="user-detail-header" @tap="goUserInfo"
-                    style="background: {{themeColor}}">
+                <view class="user-detail-header" @tap="goUserInfo" style="background: {{themeColor}}">
                     <image mode="aspectFill" class='user-icon' src='{{baseInfo.avatarUrl}}' alt=''
                         @tap.stop="bindUserIcon" />
                     <view class="user-detail-info">
@@ -14,17 +13,15 @@
                 </view>
                 <view class="user-base-operate">
                     <view class="base-operate-item" wx:for="{{baseOperate}}" wx:for-item="item"
-                        wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
-                        @tap="bindOperate">
+                        wx:for-index="index" wx:key="{{index}}" data-item="{{item}}" @tap="bindOperate">
                         <view class="base-operate-label">{{item.label}}</view>
                         <view class="base-operate-value">{{item.value}}</view>
                     </view>
                 </view>
 
                 <view class="user-menu">
-                    <view wx:for="{{userMenu}}" wx:for-item="item" wx:for-index="index"
-                        wx:key="{{index}}" data-item="{{item}}" @tap="bindOperate"
-                        class="base-menu-item {{item.needBottom ? 'base-border-bottom' : ''}}">
+                    <view wx:for="{{userMenu}}" wx:for-item="item" wx:for-index="index" wx:key="{{index}}"
+                        data-item="{{item}}" @tap="bindOperate" class="base-menu-item {{item.needBottom ? 'base-border-bottom' : ''}}">
                         <view class="base-menu-label">{{item.label}}</view>
                         <button wx:if="{{item.type === 'openBtn'}}" open-type="{{item.openType}}"
                             bindgetphonenumber="bindgetphonenumber">{{item.value}}</button>
@@ -42,137 +39,138 @@
 <script>
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
-import { wxLogin } from 'utils/api/login-api';
+import { wxLogin, getUserInfo } from 'utils/api/login-api';
 import CommonFunc from 'utils/common-func';
 import BaseContainer from 'components/Base/BaseContainer/BaseContainer';
 
 const BASE_OPERATE = [
-    {
-        label: '我的宝宝',
-        icon: '',
-        value: 1,
-        url: '/pages/babyInfo/babyInfo'
-    },
-    {
-        label: '关注',
-        icon: '',
-        value: 2,
-        url: '/pages/myAttention/myAttention'
-    },
-    {
-        label: '粉丝',
-        icon: '',
-        value: 12,
-        url: '/pages/myAttention/myAttention?type=fans'
-    },
-    {
-        label: '积分',
-        icon: '',
-        value: 20,
-        url: '/pages/credits/credits'
-    }
+  {
+    label: '我的宝宝',
+    icon: '',
+    value: 1,
+    url: '/pages/babyInfo/babyInfo'
+  },
+  {
+    label: '关注',
+    icon: '',
+    value: 2,
+    url: '/pages/myAttention/myAttention'
+  },
+  {
+    label: '粉丝',
+    icon: '',
+    value: 12,
+    url: '/pages/myAttention/myAttention?type=fans'
+  },
+  {
+    label: '积分',
+    icon: '',
+    value: 20,
+    url: '/pages/credits/credits'
+  }
 ];
 
 const USER_MENU = [
-    {
-        label: '我的文章'
-    },
-    {
-        label: '我的收藏',
-        url: '/pages/collectInfo/collectInfo',
-        needBottom: true
-    },
-    {
-        label: '绑定手机号',
-        value: '13612817762',
-        type: 'openBtn',
-        openType: 'getPhoneNumber'
-    },
-    {
-        label: '意见反馈',
-        url: 'http://49.235.100.196:3001/feedback' // '/pages/feedback/feedback'
-    },
-    {
-        label: '关于我们'
-    },
-    {
-        label: '隐私政策'
-    }
+  {
+    label: '我的文章'
+  },
+  {
+    label: '我的收藏',
+    url: '/pages/collectInfo/collectInfo',
+    needBottom: true
+  },
+  {
+    label: '绑定手机号',
+    value: '13612817762',
+    type: 'openBtn',
+    openType: 'getPhoneNumber'
+  },
+  {
+    label: '意见反馈',
+    url: 'http://49.235.100.196:3001/feedback' // '/pages/feedback/feedback'
+  },
+  {
+    label: '关于我们'
+  },
+  {
+    label: '隐私政策'
+  }
 ];
 
 @connect(
-    {
-        gender(state) {
-            return state.userInfo.gender;
-        },
-        themeColor(state) {
-            return state.userInfo.themeColor;
-        },
-        baseInfo(state) {
-            return state.userInfo.baseInfo;
-        }
+  {
+    gender(state) {
+      return state.userInfo.gender;
     },
-    {}
+    themeColor(state) {
+      return state.userInfo.themeColor;
+    },
+    baseInfo(state) {
+      return state.userInfo.baseInfo;
+    }
+  },
+  {}
 )
 export default class UserCenter extends wepy.component {
-    components = {
-        baseContainer: BaseContainer
-    };
-    data = {
-        baseOperate: BASE_OPERATE,
-        userMenu: USER_MENU
-    };
+  components = {
+    baseContainer: BaseContainer
+  };
+  data = {
+    baseOperate: BASE_OPERATE,
+    userMenu: USER_MENU
+  };
 
-    async onLoad() {
-        const { openid } = await wxLogin();
-        console.log('openid', openid);
-        if (openid) {
-            await CommonFunc.wepyFunc('setStorage', {
-                key: 'openId',
-                data: openid
-            });
-        }
-
-        this.$apply();
+  async onLoad() {
+    const { openid } = await wxLogin();
+    console.log('openid', openid);
+    if (openid) {
+      await CommonFunc.wepyFunc('setStorage', {
+        key: 'openId',
+        data: openid
+      });
+      await getUserInfo(openid);
     }
 
-    async onShow() {}
+    await getUserInfo('12');
+  }
 
-    async onHide() {}
+  async onShow() {}
 
-    onUnload() {}
+  async onHide() {}
 
-    methods = {
-        goUserInfo() {
-            wepy.navigateTo({
-                url: '/pages/userInfo/userInfo'
-            });
-        },
-        async bindUserIcon(e) {
-            try {
-                await CommonFunc.wepyFunc('previewImage', {
-                    current: this.baseInfo.avatarUrl,
-                    urls: [this.baseInfo.avatarUrl]
-                });
-            } catch (error) {
-                CommonFunc.showTip('预览失败');
-            }
-        },
-        bindOperate(e) {
-            const { item } = e.currentTarget.dataset;
-            if (item.url) {
-                if (item.url.startsWith('http')) {
-                    CommonFunc.gotoWebViewPage(item.url);
-                    return;
-                }
-                wepy.navigateTo({
-                    url: item.url
-                });
-            }
-        },
-        bindgetphonenumber(e) {
-            console.log(e);
+  onUnload() {}
+
+  methods = {
+    goUserInfo() {
+      wepy.navigateTo({
+        url: '/pages/userInfo/userInfo'
+      });
+    },
+    async bindUserIcon(e) {
+      try {
+        await CommonFunc.wepyFunc('previewImage', {
+          current: this.baseInfo.avatarUrl,
+          urls: [this.baseInfo.avatarUrl]
+        });
+      } catch (error) {
+        CommonFunc.showTip('预览失败');
+      }
+    },
+    bindOperate(e) {
+      const { item } = e.currentTarget.dataset;
+      if (item.url) {
+        if (item.url.startsWith('http')) {
+          CommonFunc.gotoWebViewPage(item.url);
+          return;
         }
-    };
+        wepy.navigateTo({
+          url: item.url
+        });
+      }
+    },
+    bindgetphonenumber(e) {
+      console.log(e);
+    }
+  };
 }
 </script>

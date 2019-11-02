@@ -4,15 +4,13 @@
 
         <view class="home-header">
             <view wx:if="{{baseInfo.nickName}}">
-                <view class="baby-item" wx:for="{{babyInfo}}" wx:for-item="item"
-                    wx:for-index="index" wx:key="{{index}}" data-item="{{item}}"
-                    data-index="{{index}}" @tap="handleBabyItem">
+                <view class="baby-item" wx:for="{{babyInfo}}" wx:for-item="item" wx:for-index="index"
+                    wx:key="{{index}}" data-item="{{item}}" data-index="{{index}}" @tap="handleBabyItem">
                     <image mode="aspectFill" class="baby-info-icon" src="{{item.icon}}" alt="" />
                     <view class="baby-info-detail">
                         <view class="baby-info-name">
                             <text>{{item.name}}</text>
-                            <image
-                                src="{{item.gender === '男' ? '/assets/images/male/common/gender.png' : '/assets/images/female/common/gender.png'}}"
+                            <image src="{{item.gender === '男' ? '/assets/images/male/common/gender.png' : '/assets/images/female/common/gender.png'}}"
                                 alt="" />
                         </view>
                         <view class="baby-info-birthday">{{item.birthday}}</view>
@@ -21,11 +19,10 @@
             </view>
             <view wx:else>
                 <view class="login-item">
-                    <image mode="aspectFill" class="login-icon"
-                        src="/assets/images/common/default-user.png" alt="" />
+                    <image mode="aspectFill" class="login-icon" src="/assets/images/common/default-user.png"
+                        alt="" />
 
-                    <button class="login-btn" @getuserinfo="bindGetUserInfo"
-                        open-type="getUserInfo">登录/注册</button>
+                    <button class="login-btn" @getuserinfo="bindGetUserInfo" open-type="getUserInfo">登录/注册</button>
                 </view>
             </view>
 
@@ -33,8 +30,7 @@
         <view class="home-header-inform">
             <image src='/assets/images/common/info.png' alt="" />
             <view class="inform-title">
-                <text style="margin-left: {{informMargin}}px" id="inforTitleDetail"
-                    class="inform-title-detail">快来邀请萌娃的家人一起记录宝宝的成长吧！</text>
+                <text style="margin-left: {{informMargin}}px" id="inforTitleDetail" class="inform-title-detail">快来邀请萌娃的家人一起记录宝宝的成长吧！</text>
             </view>
             <view class="inform-btn">去邀请</view>
         </view>
@@ -43,11 +39,9 @@
         <view class="home-hot-news">
 
             <view class="swiper-container">
-                <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}"
-                    interval="{{interval}}" duration="{{duration}}" circular
-                    indicator-active-color="{{themeColor}}">
-                    <block wx:for="{{background}}" wx:for-item="item" wx:for-index="index"
-                        wx:key="index">
+                <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}"
+                    duration="{{duration}}" circular indicator-active-color="{{themeColor}}">
+                    <block wx:for="{{background}}" wx:for-item="item" wx:for-index="index" wx:key="index">
                         <swiper-item>
                             <view class="swiper-item">
                                 <image src="{{item}}" />
@@ -60,9 +54,8 @@
         </view>
 
         <view class="home-menu">
-            <view class="home-menu-item" wx:for="{{headerMenu}}" wx:for-item="item"
-                wx:for-index="index" wx:key="{{index}}" data-item="{{item}}" data-index="{{index}}"
-                @tap="handleMenuItem">
+            <view class="home-menu-item" wx:for="{{headerMenu}}" wx:for-item="item" wx:for-index="index"
+                wx:key="{{index}}" data-item="{{item}}" data-index="{{index}}" @tap="handleMenuItem">
                 <image src="{{item.icon}}" alt="" />
                 <view>{{item.title}}</view>
             </view>
@@ -85,6 +78,7 @@ import { connect } from 'wepy-redux';
 import { GENDER_INFO, BASE_INFO } from 'store/reducers/user-info';
 import { GENDER_CODE } from 'utils/const-group';
 import CommonFunc from 'utils/common-func';
+import { addUser } from 'utils/api/login-api';
 
 import HomeRecommend from './HomeRecommend/HomeRecommend';
 
@@ -94,167 +88,177 @@ const INFOR_MOVE_STEP = 2; // px
 const INFOR_INIT_POS = 230; // px
 
 @connect(
-    {
-        gender(state) {
-            return state.userInfo.gender;
-        },
-        themeColor(state) {
-            return state.userInfo.themeColor;
-        }
+  {
+    gender(state) {
+      return state.userInfo.gender;
     },
-    { GENDER_INFO, BASE_INFO }
+    themeColor(state) {
+      return state.userInfo.themeColor;
+    }
+  },
+  { GENDER_INFO, BASE_INFO }
 )
 export default class HomePage extends wepy.component {
-    components = {
-        homeRecommend: HomeRecommend
-    };
+  components = {
+    homeRecommend: HomeRecommend
+  };
 
-    data = {
-        headerMonth: `0${new Date().getMonth() + 1}`.slice(-2),
-        headerDate: `0${new Date().getDate()}`.slice(-2),
+  data = {
+    headerMonth: `0${new Date().getMonth() + 1}`.slice(-2),
+    headerDate: `0${new Date().getDate()}`.slice(-2),
 
-        informMargin: 0,
-        informDetailScrollTimer: null,
+    informMargin: 0,
+    informDetailScrollTimer: null,
 
-        indicatorDots: true,
-        autoplay: false, // true,
-        interval: 5000,
-        duration: 500,
+    indicatorDots: true,
+    autoplay: false, // true,
+    interval: 5000,
+    duration: 500,
 
-        background: [
-            'http://img5.imgtn.bdimg.com/it/u=1657970879,1204165140&fm=26&gp=0.jpg',
-            'http://img2.imgtn.bdimg.com/it/u=4169466309,909409521&fm=26&gp=0.jpg',
-            'http://img4.imgtn.bdimg.com/it/u=3730307166,2351981660&fm=26&gp=0.jpg'
-        ],
+    background: [
+      'http://img5.imgtn.bdimg.com/it/u=1657970879,1204165140&fm=26&gp=0.jpg',
+      'http://img2.imgtn.bdimg.com/it/u=4169466309,909409521&fm=26&gp=0.jpg',
+      'http://img4.imgtn.bdimg.com/it/u=3730307166,2351981660&fm=26&gp=0.jpg'
+    ],
 
-        baseInfo: {},
+    baseInfo: {},
 
-        babyInfo: [
-            {
-                icon: defaultFemaleIcon,
-                name: '哈尼',
-                birthday: '1岁03天',
-                gender: '女',
-                relationShip: []
-            },
-            {
-                icon: defaultMaleIcon,
-                name: '卤鸭',
-                birthday: '1岁03天',
-                gender: '男',
-                relationShip: []
-            }
-        ],
+    babyInfo: [
+      {
+        icon: defaultFemaleIcon,
+        name: '哈尼',
+        birthday: '1岁03天',
+        gender: '女',
+        relationShip: []
+      },
+      {
+        icon: defaultMaleIcon,
+        name: '卤鸭',
+        birthday: '1岁03天',
+        gender: '男',
+        relationShip: []
+      }
+    ],
 
-        headerMenu: [
-            {
-                title: '大事记',
-                icon: '/assets/images/home/event-log.png',
-                url: '/pages/eventLog/eventLog'
-            },
-            {
-                title: '成长记录',
-                icon: '/assets/images/home/grow-log.png',
-                url: '/pages/growLog/growLog'
-            }
-        ],
+    headerMenu: [
+      {
+        title: '大事记',
+        icon: '/assets/images/home/event-log.png',
+        url: '/pages/eventLog/eventLog'
+      },
+      {
+        title: '成长记录',
+        icon: '/assets/images/home/grow-log.png',
+        url: '/pages/growLog/growLog'
+      }
+    ],
 
-        timeLineItems: [
-            {
-                time: '2018-10-03',
-                babyAge: '0个月1天',
-                detail: '宝宝今天出生啦！',
-                pic: '/assets/images/baby1.png',
-                commentList: [
-                    {
-                        userName: '爸爸',
-                        content: '你终于出来了'
-                    },
-                    {
-                        userName: '妈妈',
-                        content: '好不容把你弄出来了'
-                    }
-                ]
-            },
-            {
-                time: '2019-10-03',
-                babyAge: '1周岁',
-                detail: '宝宝今天一周岁啦！',
-                pic: '/assets/images/baby1.png'
-            }
+    timeLineItems: [
+      {
+        time: '2018-10-03',
+        babyAge: '0个月1天',
+        detail: '宝宝今天出生啦！',
+        pic: '/assets/images/baby1.png',
+        commentList: [
+          {
+            userName: '爸爸',
+            content: '你终于出来了'
+          },
+          {
+            userName: '妈妈',
+            content: '好不容把你弄出来了'
+          }
         ]
-    };
+      },
+      {
+        time: '2019-10-03',
+        babyAge: '1周岁',
+        detail: '宝宝今天一周岁啦！',
+        pic: '/assets/images/baby1.png'
+      }
+    ]
+  };
 
-    async onLoad() {
-        this.baseInfo = await CommonFunc.getStorage();
+  async onLoad() {
+    this.baseInfo = await CommonFunc.getStorage();
+    this.methods.GENDER_INFO({
+      gender: GENDER_CODE[this.baseInfo.gender || 0]
+    });
+    this.methods.BASE_INFO({
+      baseInfo: this.baseInfo
+    });
+    this.$apply();
+    // this.setInforScroll();
+  }
+
+  async onHide() {
+    this.informDetailScrollTimer && clearInterval(this.informDetailScrollTimer);
+  }
+
+  methods = {
+    async bindGetUserInfo(e) {
+      const { rawData } = e.detail;
+
+      if (rawData && rawData !== JSON.stringify(this.baseInfo)) {
+        this.baseInfo = JSON.parse(rawData);
         this.methods.GENDER_INFO({
-            gender: GENDER_CODE[this.baseInfo.gender || 0]
+          gender: GENDER_CODE[this.baseInfo.gender || 0]
         });
         this.methods.BASE_INFO({
-            baseInfo: this.baseInfo
+          baseInfo: this.baseInfo
         });
         this.$apply();
-        // this.setInforScroll();
+        await CommonFunc.wepyFunc('setStorage', {
+          key: 'rawData',
+          data: rawData
+        });
+        await this.addUserToServer(rawData);
+        CommonFunc.showTip('登录/注册成功', 'none');
+      }
+    },
+    handleBabyItem(e) {
+      wepy.navigateTo({
+        url: '/pages/babyInfo/babyInfo'
+      });
+    },
+    handleMenuItem(e) {
+      if (!this.baseInfo.nickName) {
+        CommonFunc.showTip('请先登录/注册', 'none');
+        return;
+      }
+      const { item } = e.currentTarget.dataset;
+
+      item.url &&
+        wepy.navigateTo({
+          url: item.url
+        });
     }
+  };
 
-    async onHide() {
-        this.informDetailScrollTimer &&
-            clearInterval(this.informDetailScrollTimer);
-    }
+  async addUserToServer(params) {
+    const res = await addUser({
+      openId: '12',
+      unionId: '34',
+      userName: 'yu'
+    });
 
-    methods = {
-        async bindGetUserInfo(e) {
-            const { rawData } = e.detail;
+    console.log('addUserToServer', res);
+  }
 
-            if (rawData && rawData !== JSON.stringify(this.baseInfo)) {
-                this.baseInfo = JSON.parse(rawData);
-                this.methods.GENDER_INFO({
-                    gender: GENDER_CODE[this.baseInfo.gender || 0]
-                });
-                this.methods.BASE_INFO({
-                    baseInfo: this.baseInfo
-                });
-                this.$apply();
-                await CommonFunc.wepyFunc('setStorage', {
-                    key: 'rawData',
-                    data: rawData
-                });
-                CommonFunc.showTip('登录/注册成功', 'none');
-            }
-        },
-        handleBabyItem(e) {
-            wepy.navigateTo({
-                url: '/pages/babyInfo/babyInfo'
-            });
-        },
-        handleMenuItem(e) {
-            if (!this.baseInfo.nickName) {
-                CommonFunc.showTip('请先登录/注册', 'none');
-                return;
-            }
-            const { item } = e.currentTarget.dataset;
-
-            item.url &&
-                wepy.navigateTo({
-                    url: item.url
-                });
-        }
-    };
-
-    setInforScroll() {
-        const query = wx.createSelectorQuery();
-        query
-            .select('#inforTitleDetail')
-            .boundingClientRect(rect => {
-                this.informDetailScrollTimer = setInterval(() => {
-                    this.informMargin -= INFOR_MOVE_STEP;
-                    if (this.informMargin < -rect.width) {
-                        this.informMargin = INFOR_INIT_POS;
-                    }
-                    this.$apply();
-                }, 160);
-            })
-            .exec();
-    }
+  setInforScroll() {
+    const query = wx.createSelectorQuery();
+    query
+      .select('#inforTitleDetail')
+      .boundingClientRect(rect => {
+        this.informDetailScrollTimer = setInterval(() => {
+          this.informMargin -= INFOR_MOVE_STEP;
+          if (this.informMargin < -rect.width) {
+            this.informMargin = INFOR_INIT_POS;
+          }
+          this.$apply();
+        }, 160);
+      })
+      .exec();
+  }
 }
 </script>

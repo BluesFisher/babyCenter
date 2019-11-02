@@ -12,42 +12,42 @@ import Vtoast from 'components/Vtoast/Vtoast';
 import CommonMixin from 'mixins/mix-common';
 
 @connect(
-    {
-        baseInfo(state) {
-            return state.userInfo.baseInfo;
-        }
-    },
-    { BASE_INFO }
+  {
+    baseInfo(state) {
+      return state.userInfo.baseInfo;
+    }
+  },
+  { BASE_INFO }
 )
 export default class Index extends wepy.page {
-    config = {
-        navigationBarTitleText: ''
-    };
-    components = {
-        toast: Vtoast
-    };
-    mixins = [CommonMixin];
+  config = {
+    navigationBarTitleText: ''
+  };
+  components = {
+    toast: Vtoast
+  };
+  mixins = [CommonMixin];
 
-    async onLoad(options) {
-        // this.mixShowLoading();
+  async onLoad(options) {
+    // this.mixShowLoading();
 
-        mta.Page.init();
-        mta.Event.stat('index_page_init', { id: 1 });
+    mta.Page.init();
+    mta.Event.stat('index_page_init', { id: 1 });
 
-        // 缓存入口options
-        let { globalData } = this.mixGetApp();
-        const sysInfo = wepy.getSystemInfoSync();
+    // 缓存入口options
+    let { globalData } = this.mixGetApp();
+    const sysInfo = wepy.getSystemInfoSync();
 
-        globalData['indexOptions'] = options;
-        globalData['windowWidth'] = sysInfo.windowWidth;
-        globalData['sysInfo'] = sysInfo;
+    globalData['indexOptions'] = options;
+    globalData['windowWidth'] = sysInfo.windowWidth;
+    globalData['sysInfo'] = sysInfo;
 
-        this.toPage();
-    }
+    this.toPage();
+  }
 
-    async toPage() {
-        this.$redirect(`navPage/navPage`);
-        // this.$redirect(`credits/credits`);
-    }
+  async toPage() {
+    this.$redirect(`navPage/navPage`);
+    // this.$redirect(`credits/credits`);
+  }
 }
 </script>

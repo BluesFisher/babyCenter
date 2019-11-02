@@ -7,12 +7,10 @@
             <userCenter wx:if="{{currentTabIndex === 2}}" :currentPage.sync="currentPage" />
         </view>
         <cover-view class="bottom-tab-bar">
-            <cover-view
-                class="tab-bar-item {{currentTabIndex === index ? gender === '男' ? 'tab-active-male' : 'tab-active-female' : ''}}"
+            <cover-view class="tab-bar-item {{currentTabIndex === index ? gender === '男' ? 'tab-active-male' : 'tab-active-female' : ''}}"
                 wx:for="{{tabBar}}" wx:for-item="item" wx:for-index="index" wx:key="{{item.name}}"
                 data-index="{{index}}" @tap="bindTabClick">
-                <cover-image
-                    src="{{currentTabIndex === index ? gender === '男' ? item.srcMale : item.srcFemale : item.srcDefault}}"
+                <cover-image src="{{currentTabIndex === index ? gender === '男' ? item.srcMale : item.srcFemale : item.srcDefault}}"
                     alt="" />
                 <cover-view>{{ item.name }}</cover-view>
             </cover-view>
@@ -36,99 +34,98 @@ import Zoom from 'components/Business/Zoom/Zoom';
 import UserCenter from 'components/Business/UserCenter/UserCenter';
 
 const HEAD_NAV_GROUP = [
-    {
-        name: '首页',
-        dataKey: 'home',
-        srcFemale: '/assets/images/female/navtab/home.png',
-        srcMale: '/assets/images/male/navtab/home.png',
-        srcDefault: '/assets/images/navtab/home-default.png',
-        formatFunc: () => {}
-    },
-    {
-        name: '圈子',
-        dataKey: 'zoom',
-        srcFemale: '/assets/images/female/navtab/zoom.png',
-        srcMale: '/assets/images/male/navtab/zoom.png',
-        srcDefault: '/assets/images/navtab/zoom-default.png',
-        formatFunc: () => {}
-    },
-    {
-        name: '我的',
-        dataKey: 'userCenter',
-        srcFemale: '/assets/images/female/navtab/user.png',
-        srcMale: '/assets/images/male/navtab/user.png',
-        srcDefault: '/assets/images/navtab/user-default.png',
-        formatFunc: () => {}
-    }
+  {
+    name: '首页',
+    dataKey: 'home',
+    srcFemale: '/assets/images/female/navtab/home.png',
+    srcMale: '/assets/images/male/navtab/home.png',
+    srcDefault: '/assets/images/navtab/home-default.png',
+    formatFunc: () => {}
+  },
+  {
+    name: '圈子',
+    dataKey: 'zoom',
+    srcFemale: '/assets/images/female/navtab/zoom.png',
+    srcMale: '/assets/images/male/navtab/zoom.png',
+    srcDefault: '/assets/images/navtab/zoom-default.png',
+    formatFunc: () => {}
+  },
+  {
+    name: '我的',
+    dataKey: 'userCenter',
+    srcFemale: '/assets/images/female/navtab/user.png',
+    srcMale: '/assets/images/male/navtab/user.png',
+    srcDefault: '/assets/images/navtab/user-default.png',
+    formatFunc: () => {}
+  }
 ];
 
 @connect(
-    {
-        gender(state) {
-            return state.userInfo.gender;
-        },
-        baseInfo(state) {
-            return state.userInfo.baseInfo;
-        }
+  {
+    gender(state) {
+      return state.userInfo.gender;
     },
-    { GENDER_INFO }
+    baseInfo(state) {
+      return state.userInfo.baseInfo;
+    }
+  },
+  { GENDER_INFO }
 )
 export default class NavPage extends wepy.page {
-    config = {
-        navigationBarTitleText: 'Home',
-        disableScroll: true
-    };
-    components = {
-        baseTab: BaseTab,
-        growLog: GrowLog,
-        userCenter: UserCenter,
-        homePage: HomePage,
-        zoom: Zoom
-    };
-    data = {
-        currentTabIndex: 0,
-        currentPage: 'baseData',
-        tabBar: HEAD_NAV_GROUP
-    };
+  config = {
+    navigationBarTitleText: 'Home',
+    disableScroll: true
+  };
+  components = {
+    baseTab: BaseTab,
+    growLog: GrowLog,
+    userCenter: UserCenter,
+    homePage: HomePage,
+    zoom: Zoom
+  };
+  data = {
+    currentTabIndex: 0,
+    currentPage: 'baseData',
+    tabBar: HEAD_NAV_GROUP
+  };
 
-    onShareAppMessage(res) {
-        return {
-            title: 'babyCenter',
-            path: '/pages/index'
-        };
+  onShareAppMessage(res) {
+    return {
+      title: 'babyCenter',
+      path: '/pages/index'
+    };
+  }
+
+  async onLoad() {
+    const { statusBarHeight } = wepy.getSystemInfoSync();
+    const rpxHeight = statusBarHeight / 2;
+
+    statusBarHeight > 40 && (this.userCenterTop += 30 + rpxHeight);
+    this.methods.GENDER_INFO({
+      gender: GENDER_CODE[this.baseInfo.gender || 0]
+    });
+    this.$apply();
+  }
+
+  async onShow() {}
+
+  async onHide() {
+    this.informDetailScrollTimer && clearInterval(this.informDetailScrollTimer);
+  }
+
+  onUnload() {}
+
+  methods = {
+    bindTabClick(e) {
+      if (!this.baseInfo.nickName) {
+        CommonFunc.showTip('请先登录/注册', 'none');
+        return;
+      }
+      const { index } = e.currentTarget.dataset;
+      const item = this.tabBar[index];
+      this.currentTabIndex = index;
+      this.currentPage = item.dataKey;
     }
-
-    async onLoad() {
-        const { statusBarHeight } = wepy.getSystemInfoSync();
-        const rpxHeight = statusBarHeight / 2;
-
-        statusBarHeight > 40 && (this.userCenterTop += 30 + rpxHeight);
-        this.methods.GENDER_INFO({
-            gender: GENDER_CODE[this.baseInfo.gender || 0]
-        });
-        this.$apply();
-    }
-
-    async onShow() {}
-
-    async onHide() {
-        this.informDetailScrollTimer &&
-            clearInterval(this.informDetailScrollTimer);
-    }
-
-    onUnload() {}
-
-    methods = {
-        bindTabClick(e) {
-            if (!this.baseInfo.nickName) {
-                CommonFunc.showTip('请先登录/注册', 'none');
-                return;
-            }
-            const { index } = e.currentTarget.dataset;
-            const item = this.tabBar[index];
-            this.currentTabIndex = index;
-            this.currentPage = item.dataKey;
-        }
-    };
+  };
 }
 </script>

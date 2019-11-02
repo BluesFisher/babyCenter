@@ -62,7 +62,7 @@ export default class GrowLogCurve extends wepy.component {
         baseChart: BaseChart
     };
     data = {
-        retmsg: '',
+        msg: '',
         isLoading: true,
         dataInit: false,
 
